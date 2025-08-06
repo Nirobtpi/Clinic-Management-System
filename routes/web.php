@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminLoginController;
-use App\Http\Controllers\Admin\ProfileController;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\AppointmentControlle;
+use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,5 +21,10 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
 
     // profile route
     Route::get('profile',[ProfileController::class,'profile'])->name('admin.profile');
-    Route::put('profile/update',[ProfileController::class,'update'])->name('admin.profile.update');
+    Route::put('profile/update/{id}',[ProfileController::class,'update'])->name('admin.profile.update');
+    Route::put('password/update/{id}',[ProfileController::class,'passwordUpdate'])->name('admin.password.update');
+
+    Route::resource('appointment',AppointmentControlle::class);
+    Route::resource('departments',DepartmentController::class);
+
 });

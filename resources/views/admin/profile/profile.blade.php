@@ -93,7 +93,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('admin.profile.update', Auth::guard('admin')->user()->id) }}" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
                                             <div class="row form-row">
@@ -206,23 +206,25 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Change Password</h5>
+                        <h5 class="card-title">{{ __('Change Password') }}</h5>
                         <div class="row">
                             <div class="col-md-10 col-lg-6">
-                                <form>
+                                <form action="{{ route('admin.password.update', Auth::guard('admin')->user()->id) }}" method="post">
+                                    @csrf
+                                    @method('PUT')
                                     <div class="form-group">
-                                        <label>Old Password</label>
-                                        <input type="password" class="form-control">
+                                        <label>{{ __('Old Password') }}</label>
+                                        <input type="password" name="old_password" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label>New Password</label>
-                                        <input type="password" class="form-control">
+                                        <label>{{ __('New Password') }}</label>
+                                        <input type="password" name="password" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label>Confirm Password</label>
-                                        <input type="password" class="form-control">
+                                        <input type="password" name="password_confirmation" class="form-control">
                                     </div>
-                                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                                    <button class="btn btn-primary" type="submit">{{ __('Save Changes') }}</button>
                                 </form>
                             </div>
                         </div>

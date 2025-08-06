@@ -21,9 +21,12 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/css/feathericon.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('backend/assets/plugins/morris/morris.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('backend/assets/plugins/datatables/datatables.min.css') }}">
+    <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.22.2/dist/sweetalert2.min.css " rel="stylesheet">
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css') }}">
+
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
     @stack('css')
@@ -201,11 +204,11 @@
                             <a href="{{ route('admin.dashboard') }}"><i class="fe fe-home"></i>
                                 <span>Dashboard</span></a>
                         </li>
-                        <li>
-                            <a href="appointment-list.html"><i class="fe fe-layout"></i> <span>Appointments</span></a>
+                        <li class="{{ Route::is('appointment.*') ? 'active' : '' }}">
+                            <a href="{{ route('appointment.index') }}"><i class="fe fe-layout"></i> <span>Appointments</span></a>
                         </li>
-                        <li>
-                            <a href="specialities.html"><i class="fe fe-users"></i> <span>Specialities</span></a>
+                        <li class="{{ Route::is('departments.*') ? 'active' : '' }}">
+                            <a href="{{ route('departments.index') }}"><i class="fe fe-users"></i> <span>Specialities</span></a>
                         </li>
                         <li>
                             <a href="doctor-list.html"><i class="fe fe-user-plus"></i> <span>Doctors</span></a>
@@ -352,7 +355,12 @@
     <script src="{{ asset('backend/assets/plugins/raphael/raphael.min.js') }}"></script>
     <script src="{{ asset('backend/assets/plugins/morris/morris.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/chart.morris.js') }}"></script>
+    <!-- Datatables JS -->
+    <script src="{{ asset('backend/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/plugins/datatables/datatables.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 
     <!-- Custom JS -->
     <script src="{{ asset('backend/assets/js/script.js') }}"></script>
@@ -384,8 +392,10 @@
         toastr.error("{{ $error }}");
         @endforeach
 
+        $('.datatable').DataTable({
+            "bFilter": true,
+        });
     </script>
-
 </body>
 
 </html>

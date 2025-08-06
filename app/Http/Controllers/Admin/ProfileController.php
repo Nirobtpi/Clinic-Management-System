@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Admin\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -12,8 +13,8 @@ class ProfileController extends Controller
         return view("admin.profile.profile");
     }
 
-    public function update(Request $request){
-        $admin=Admin::first();
+    public function update(Request $request,$id){
+        $admin=Admin::findOrFail($id);
 
         $request->validate([
             'name' => ['required'],
@@ -50,4 +51,25 @@ class ProfileController extends Controller
         $notification=['message'=>$notification,'alert-type'=>'success'];
         return redirect()->route("admin.profile")->with($notification);
     }
+
+    public function passwordUpdate(Request $request,$id){
+        $admin = Admin::findOrFail($id);
+        $request->validate([
+            'old_password' => ['required'],
+            'password' => ['required','confirmed'],
+        ]);
+        if(Hash::check($request->old_password,$admin->password)){
+            $admin->update([
+            'password'=>Hash::make($request->password),
+            ]);
+            $notification="Password Updated Successfully";
+            $notification=['message'=>$notification,'alert-type'=>'success'];
+            return redirect()->route("admin.profile")->with($notification);
+        }else{
+            $notification="Old Password Not Match";
+            $notification=['message'=>$notification,'alert-type'=>'error'];
+            return redirect()->back()->with($notification);
+        }
+    }
+
 }
