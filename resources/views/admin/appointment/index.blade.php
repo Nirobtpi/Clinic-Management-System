@@ -6,7 +6,7 @@
         <div class="card">
             <div class="row">
                 <div class="col-sm-12 col px-5">
-                    <a href="{{ route('appointment.create') }}" data-toggle="modal"
+                    <a href="{{ route('appointment.create') }}"
                         class="btn btn-primary float-right mt-2">Add</a>
                 </div>
             </div>

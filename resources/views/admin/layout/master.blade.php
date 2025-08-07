@@ -210,11 +210,11 @@
                         <li class="{{ Route::is('departments.*') ? 'active' : '' }}">
                             <a href="{{ route('departments.index') }}"><i class="fe fe-users"></i> <span>Specialities</span></a>
                         </li>
-                        <li>
-                            <a href="doctor-list.html"><i class="fe fe-user-plus"></i> <span>Doctors</span></a>
+                        <li class="{{ Route::is('doctors.*') ? 'active' : '' }}">
+                            <a href="{{ route('doctors.index') }}"><i class="fe fe-user-plus"></i> <span>Doctors</span></a>
                         </li>
-                        <li>
-                            <a href="patient-list.html"><i class="fe fe-user"></i> <span>Patients</span></a>
+                        <li class="{{ Route::is('users.*') ? 'active' : '' }}">
+                            <a href="{{ route('users.index') }}"><i class="fe fe-user"></i> <span>User</span></a>
                         </li>
                         <li>
                             <a href="reviews.html"><i class="fe fe-star-o"></i> <span>Reviews</span></a>

@@ -1,11 +1,14 @@
 <?php
 
+use App\Models\User;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DoctorsController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\AdminLoginController;
-use App\Http\Controllers\Admin\AppointmentControlle;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 
 Route::get('/', function () {
@@ -24,7 +27,12 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
     Route::put('profile/update/{id}',[ProfileController::class,'update'])->name('admin.profile.update');
     Route::put('password/update/{id}',[ProfileController::class,'passwordUpdate'])->name('admin.password.update');
 
-    Route::resource('appointment',AppointmentControlle::class);
+    Route::resource('appointment',AppointmentController::class);
     Route::resource('departments',DepartmentController::class);
+    Route::resource('doctors',DoctorsController::class);
+    Route::get('doctor/status/{id}', [DoctorsController::class, 'statusUpdate'])->name('doctor.status');
+
+    Route::resource('users', UserController::class);
+    Route::get('user/status/{id}', [UserController::class, 'statusUpdate'])->name('user.status');
 
 });

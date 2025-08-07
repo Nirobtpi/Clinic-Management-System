@@ -7,7 +7,7 @@ use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
-class AppointmentControlle extends Controller
+class AppointmentController extends Controller
 {
     /**
      * Display a listing of the resource.
