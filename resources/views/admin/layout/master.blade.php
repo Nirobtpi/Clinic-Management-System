@@ -204,6 +204,21 @@
                             <a href="{{ route('admin.dashboard') }}"><i class="fe fe-home"></i>
                                 <span>Dashboard</span></a>
                         </li>
+                        <li class="submenu">
+                            <a  href="javascript:void(0);"><i class="fe fe-globe"></i> <span>Country</span> <span
+                                    class="menu-arrow"></span></a>
+                            <ul style="display: {{ Route::is('countries.*') || Route::is('cities.*') || Route::is('states.*') ? 'block' : 'none' }};">
+                                <li class="{{ Route::is('countries.*') ? 'active' : '' }}">
+                                    <a href="{{ route('countries.index') }}"> <span>Country List</span></a>
+                                </li>
+                                <li class="{{ Route::is('cities.*') ? 'active' : '' }}">
+                                    <a href="{{ route('cities.index') }}"> <span>City List</span></a>
+                                </li>
+                                <li class="{{ Route::is('states.*') ? 'active' : '' }}">
+                                    <a href="{{ route('states.index') }}"> <span>State List</span></a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="{{ Route::is('appointment.*') ? 'active' : '' }}">
                             <a href="{{ route('appointment.index') }}"><i class="fe fe-layout"></i> <span>Appointments</span></a>
                         </li>

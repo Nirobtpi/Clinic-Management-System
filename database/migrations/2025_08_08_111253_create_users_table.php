@@ -21,10 +21,9 @@ return new class extends Migration
             $table->string('photo')->nullable();
 
             $table->string('address_line_one')->nullable();
-            $table->string('address_line_two')->nullable();
-            $table->string('city')->nullable();
-            $table->string('state')->nullable();
-            $table->string('country')->nullable();
+            $table->foreignId('city_id')->nullable()->constrained('cities')->references('id')->onDelete('cascade');
+            $table->foreignId('state_id')->nullable()->constrained('states')->references('id')->onDelete('cascade');
+            $table->foreignId('country_id')->nullable()->constrained('countries')->references('id')->onDelete('cascade');
             $table->string('postal_code')->nullable();
 
             $table->string('birthday')->nullable();

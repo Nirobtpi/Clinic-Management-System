@@ -3,7 +3,10 @@
 use App\Models\User;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\StateController;
+use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DoctorsController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\AdminLoginController;
@@ -34,5 +37,10 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
 
     Route::resource('users', UserController::class);
     Route::get('user/status/{id}', [UserController::class, 'statusUpdate'])->name('user.status');
+
+    Route::resource('countries', CountryController::class);
+    Route::resource('cities', CityController::class);
+    Route::resource('states', StateController::class);
+    Route::get('country/{id}/cities', [StateController::class, 'getCityByCountry'])->name('country.cities');
 
 });
