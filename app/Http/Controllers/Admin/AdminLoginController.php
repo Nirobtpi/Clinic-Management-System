@@ -44,6 +44,6 @@ class AdminLoginController extends Controller
         Auth::guard('admin')->logout();
         $notification= 'Logout Successfully';
         $notification=['message'=>$notification,'alert-type'=> 'success'];
-        return redirect()->route('login')->with($notification);
+        return redirect()->route('admin.login')->with($notification);
     }
 }

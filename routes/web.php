@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\User\loginController;
 use App\Models\User;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StateController;
@@ -13,12 +15,22 @@ use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Doctor\DoctorLogInfoController;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/',[DashboardController::class,'index']);
+Route::get('user/login',[loginController::class,'loginPage'])->name('user.login');
+Route::get('user/register',[loginController::class,'registerPage'])->name('user.register');
+Route::get('doctor/register',[DoctorLogInfoController::class,'registerPage'])->name('doctor.register');
+Route::post('doctor/register',[DoctorLogInfoController::class,'register'])->name('doctor.register.post');
+Route::post('user/login',[loginController::class,'login'])->name('user.login.post');
+Route::get('logout',[loginController::class,'logout'])->name('user.logout')->middleware('auth:web');
+
+Route::middleware('auth:web')->prefix('doctor')->group(function () {
+    Route::get('/',[DoctorLogInfoController::class,'dashboard'])->name('doctor.dashboard');
+
 });
 
-Route::get('admin/login',[AdminLoginController::class,'loginPage'])->name('login');
+Route::get('admin/login',[AdminLoginController::class,'loginPage'])->name('admin.login');
 Route::post('admin/login',[AdminLoginController::class,'login'])->name('admin.login.post');
 
 Route::middleware('auth:admin')->prefix('admin')->group(function () {
