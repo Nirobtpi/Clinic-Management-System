@@ -18,11 +18,13 @@
     <!-- Fontawesome CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" />
 
-    <!-- Main CSS -->
+
+
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
 </head>
 
@@ -57,7 +59,7 @@
                     </div>
                     <ul class="main-nav">
                         <li class="active">
-                            <a href="index-2.html">Home</a>
+                            <a href="{{ route('home') }}">Home</a>
                         </li>
                         <li class="">
                             <a href="index-2.html">Doctor List</a>
@@ -83,27 +85,27 @@
                     </li>
                     @endguest
                     @auth
-                        <li class="nav-item dropdown has-arrow logged-item show">
-                                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="true">
-                                    <span class="user-img">
-                                        <img class="rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" width="31" alt="Darren Elder">
-                                    </span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right show">
-                                    <div class="user-header">
-                                        <div class="avatar avatar-sm">
-                                            <img src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image" class="avatar-img rounded-circle">
-                                        </div>
-                                        <div class="user-text">
-                                            <h6>{{ auth()->user()->name }}</h6>
-                                            <p class="text-muted mb-0">{{ auth()->user()->role }}</p>
-                                        </div>
-                                    </div>
-                                    <a class="dropdown-item" href="doctor-dashboard.html">Dashboard</a>
-                                    <a class="dropdown-item" href="doctor-profile-settings.html">Profile Settings</a>
-                                    <a class="dropdown-item" href="{{ route('user.logout') }}">Logout</a>
-                                </div>
-                        </li>
+                        <li class="nav-item dropdown has-arrow logged-item">
+							<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+								<span class="user-img">
+									<img class="rounded-circle" src="{{ asset('frontend/assets/img/doctors/doctor-thumb-02.jpg') }}" width="31" alt="Darren Elder">
+								</span>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right">
+								<div class="user-header">
+									<div class="avatar avatar-sm">
+										<img src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image" class="avatar-img rounded-circle">
+									</div>
+									<div class="user-text">
+										<h6>Darren Elder</h6>
+										<p class="text-muted mb-0">Doctor</p>
+									</div>
+								</div>
+								<a class="dropdown-item" href="{{ Auth::user()->role == 'doctor' ? route('doctor.dashboard') : route('user.dashboard') }}">Dashboard</a>
+								<a class="dropdown-item" href="doctor-profile-settings.html">Profile Settings</a>
+								<a class="dropdown-item" href="{{ route('user.logout') }}">Logout</a>
+							</div>
+						</li>
                     @endauth
                 </ul>
             </nav>
@@ -277,9 +279,18 @@
 
     <!-- Slick JS -->
     <script src="{{ asset('frontend/assets/js/slick.js') }}"></script>
+    <!-- Sticky Sidebar JS -->
+    <script src="{{ asset('frontend/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
+    <script src="{{ asset('frontend/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+
+	<!-- Bootstrap Tagsinput JS -->
+    <script src="{{ asset('frontend/assets/js/profile-settings.js') }}"></script>
 
     <!-- Custom JS -->
     <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
+
      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     @stack('js')
 

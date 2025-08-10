@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\DOctor;
+namespace App\Http\Controllers\Doctor;
 
 use App\Models\User;
 use App\Models\Department;

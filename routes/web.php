@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\User\loginController;
 use App\Models\User;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\User\loginController;
 use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DoctorsController;
@@ -14,10 +14,12 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Doctor\DoctorLogInfoController;
+use App\Http\Controllers\Doctor\DoctorProfileController;
 
-Route::get('/',[DashboardController::class,'index']);
+Route::get('/',[DashboardController::class,'index'])->name('home');
 Route::get('user/login',[loginController::class,'loginPage'])->name('user.login');
 Route::get('user/register',[loginController::class,'registerPage'])->name('user.register');
 Route::get('doctor/register',[DoctorLogInfoController::class,'registerPage'])->name('doctor.register');
@@ -25,10 +27,35 @@ Route::post('doctor/register',[DoctorLogInfoController::class,'register'])->name
 Route::post('user/login',[loginController::class,'login'])->name('user.login.post');
 Route::get('logout',[loginController::class,'logout'])->name('user.logout')->middleware('auth:web');
 
+
+
 Route::middleware('auth:web')->prefix('doctor')->group(function () {
     Route::get('/',[DoctorLogInfoController::class,'dashboard'])->name('doctor.dashboard');
+    Route::get('profile/view',[DoctorProfileController::class,'profile'])->name('doctor.profile');
+
+    Route::get('get-city/{id}',[DoctorProfileController::class,'getCity'])->name('doctor.get.city');
+    Route::get('get-state/{id}',[DoctorProfileController::class,'getState'])->name('doctor.get.state');
+
+    // update profile route
+    Route::put('profile/update/{id}',[DoctorProfileController::class,'update'])->name('doctor.profile.update');
+    Route::post('profile/update/{id}',[DoctorProfileController::class,'DoctorProfileUpdate'])->name('doctor.profile.update.post');
 
 });
+
+
+// user route
+Route::post('user/register',[loginController::class,'register'])->name('user.register.post');
+
+Route::middleware('auth:web')->prefix('user')->group(function () {
+    Route::get('/',[UserDashboardController::class,'dashboard'])->name('user.dashboard');
+
+});
+
+
+
+
+
+// admin route
 
 Route::get('admin/login',[AdminLoginController::class,'loginPage'])->name('admin.login');
 Route::post('admin/login',[AdminLoginController::class,'login'])->name('admin.login.post');
