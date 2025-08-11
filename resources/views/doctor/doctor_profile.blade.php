@@ -214,55 +214,22 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Clinic Info</h4>
-                            @php
-                                $clinicNames = json_decode($doctor_profile->clinic_name) ?? [];
-                                $clinicAddresses = json_decode($doctor_profile->clinic_address) ?? [];
-                            @endphp
-                           @foreach ($clinicNames as $index => $clinic)
                             <div id="clinic-wrapper">
                                 <div class="row form-row clinic-row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Clinic Name</label>
-                                            <input type="text" value="{{ old('clinic_name', $clinic ?? '') }}" class="form-control" name="clinic_name[]">
+                                            <select name="clinic_name[]" id="clinic"  multiple="multiple" class="form-control clinic_name">
+                                                @php
+                                                    $selectedClinics = json_decode($doctor_profile->clinic_id ?? '[]');
+                                                @endphp
+                                                @foreach ($clinics as $clinic)
+                                                    <option value="{{ $clinic->id }}" @if(in_array($clinic->id, $selectedClinics)) selected @endif>{{ $clinic->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Clinic Address</label>
-                                            <input type="text"
-                                                value="{{ old('clinic_address', $clinicAddresses[$index] ?? '') }}"
-                                                class="form-control" name="clinic_address[]">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row clinic-images-wrapper">
-                                            <div class="col-md-8 col-sm-12">
-                                                <div class="form-group ">
-                                                    <label>Clinic Images</label>
-                                                    <input type="file"
-                                                        onchange="document.getElementsByClassName('clinic_images')[0].src = window.URL.createObjectURL(this.files[0])"
-                                                        class="form-control mb-3" name="clinic_images[]">
-                                                    <img class="clinic_images" width="50"
-                                                        src="{{ asset($doctor_profile->clinic_images ?? '') }}" alt="">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-12">
-                                                <a href="javascript:void(0);" class="add-clinic-image"><i
-                                                        class="fa fa-plus-circle"></i> Add More Image</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="javascript:void(0);"  class="remove-clinic mb-3"><i class="fa fa-minus-circle"></i> Remove</a>
                                 </div>
-                            </div>
-                            @endforeach
-
-                            <div class="add-more mt-3">
-                                <a href="javascript:void(0);" class="add-clinic">
-                                    <i class="fa fa-plus-circle"></i> Add More
-                                </a>
-
                             </div>
                         </div>
                     </div>
@@ -273,32 +240,14 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Pricing</h4>
-
-                            <div class="form-group mb-0">
-                                <div id="pricing_select">
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="price_free" name="rating_option"
-                                            class="custom-control-input" value="price_free" checked="">
-                                        <label class="custom-control-label" for="price_free">Free</label>
-                                    </div>
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="price_custom" name="rating_option" value="custom_price"
-                                            class="custom-control-input">
-                                        <label class="custom-control-label" for="price_custom">Custom Price (per
-                                            hour)</label>
+                                <div class="row form-row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Attach Your Price</label>
+                                            <input type="text" name="price" value="{{ old('price', $doctor_profile->custom_price ?? '') }}" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
-
-                            </div>
-
-                            <div class="row custom_price_cont" id="custom_price_cont" style="display: none;">
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" id="custom_rating_input"
-                                        name="custom_rating_count" value="" placeholder="20">
-                                    <small class="form-text text-muted">Custom price you can add</small>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                     <!-- /Pricing -->
@@ -309,7 +258,11 @@
                             <h4 class="card-title">Services and Specialization</h4>
                             <div class="form-group">
                                 <label>Services</label>
-                                <input type="text" class="form-control" id="services" name="services"
+                                @php
+                                    $services = collect(json_decode($doctor_profile->services ?? '[]'));
+                                    $data = implode(', ', $services->pluck('value')->toArray());
+                                @endphp
+                                <input type="text" class="form-control" value="{{ old('services', $data) }}" id="services" name="services"
                                     placeholder="Enter Services">
                             </div>
                         </div>
@@ -323,33 +276,48 @@
                             <div class="education-info">
                                 <div class="row form-row education-cont">
                                     <div class="col-12 col-md-10 col-lg-11">
-                                        <div class="row form-row">
-                                            <div class="col-12 col-md-6 col-lg-4">
-                                                <div class="form-group">
-                                                    <label>Degree</label>
-                                                    <input type="text" class="form-control">
+                                        @php
+                                            $education = json_decode($doctor_profile->degree ?? '[]');
+                                            $college = json_decode($doctor_profile->collage ?? '[]');
+                                            $completion_year = json_decode($doctor_profile->completion_year ?? '[]');
+                                        @endphp
+                                        @foreach ($education as $index => $edu)
+                                        <div class="row form-row nirob align-items-center">
+                                            <div class="col-12 col-md-{{ $index == 0 ? 12 : 10 }}">
+                                                <div class="row form-row align-items-center">
+                                                <div class="col-12 col-md-6 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label>Degree</label>
+                                                        <input type="text" value="{{ old('degree.' . $index, $edu) }}" name="degree[]" class="form-control">
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-6 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label>College/Institute</label>
+                                                        <input type="text" value="{{ old('college.' . $index, $college[$index] ?? '') }}" name="college[]" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-6 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label>Year of Completion</label>
+                                                        <input type="text" value="{{ old('completion_year.' . $index, $completion_year[$index] ?? '') }}" name="completion_year[]" class="form-control">
+                                                    </div>
+                                                </div>
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-md-6 col-lg-4">
-                                                <div class="form-group">
-                                                    <label>College/Institute</label>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-6 col-lg-4">
-                                                <div class="form-group">
-                                                    <label>Year of Completion</label>
-                                                    <input type="text" class="form-control">
-                                                </div>
+                                            <div class="col-md-2">
+                                            <a href="javascript:void(0);" class="btn btn-danger remove {{ $index === 0 ? 'd-none' : '' }}"><i class="far fa-trash-alt"></i></a>
                                             </div>
                                         </div>
+
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
                             <div class="add-more">
                                 <a href="javascript:void(0);" class="add-education"><i class="fa fa-plus-circle"></i>
-                                    Add
-                                    More</a>
+                                    Add More</a>
                             </div>
                         </div>
                     </div>
@@ -366,25 +334,25 @@
                                             <div class="col-12 col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Hospital Name</label>
-                                                    <input type="text" class="form-control">
+                                                    <input type="text" name="hospital_name[]" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-12 col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label>From</label>
-                                                    <input type="text" class="form-control">
+                                                    <input type="date" name="experience_from[]" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-12 col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label>To</label>
-                                                    <input type="text" class="form-control">
+                                                    <input type="date" name="experience_to[]" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-12 col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Designation</label>
-                                                    <input type="text" class="form-control">
+                                                    <input type="text" name="designation[]" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -408,20 +376,19 @@
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
                                             <label>Awards</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="awards[]" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
                                             <label>Year</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="award_year[]" class="form-control">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="add-more">
-                                <a href="javascript:void(0);" class="add-award"><i class="fa fa-plus-circle"></i> Add
-                                    More</a>
+                                <a href="javascript:void(0);" class="add-award"><i class="fa fa-plus-circle"></i> Add More</a>
                             </div>
                         </div>
                     </div>
@@ -436,7 +403,7 @@
                                     <div class="col-12 col-md-10 col-lg-5">
                                         <div class="form-group">
                                             <label>Memberships</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="memberships[]" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -459,13 +426,13 @@
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
                                             <label>Registrations</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="registrations[]" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
                                             <label>Year</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="registration_year[]" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -496,61 +463,13 @@
     var input = document.getElementById('services'); // get raw DOM element
     var tagify = new Tagify(input);
 
-
-    document.querySelector('.add-clinic').addEventListener('click', function () {
-        const wrapper = document.getElementById('clinic-wrapper');
-        const firstClinic = wrapper.querySelector('.clinic-row');
-        const newClinic = firstClinic.cloneNode(true);
-
-        newClinic.querySelectorAll('input').forEach(input => input.value = '');
-        wrapper.appendChild(newClinic);
+    $(document).on('click', '.remove', function () {
+        $(this).closest('.nirob').remove();
     });
 
     $(document).ready(function () {
 
-        $(document).on('click', '.add-clinic-image', function () {
-            var newRow = `
-            <div class="row clinic-image-row mt-2">
-                <div class="col-md-8 col-sm-12">
-                    <div class="form-group">
-                        <label>Clinic Images</label>
-                        <input type="file" class="form-control" name="clinic_images[]">
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-12 d-flex align-items-center">
-                    <a href="javascript:void(0);" class="remove-clinic-image">
-                        <i class="fa fa-times-circle"></i> Remove
-                    </a>
-                </div>
-            </div>`;
-
-            // $('.clinic-images-wrapper').append(newRow);
-            $(this).closest('.clinic-images-wrapper').after(newRow);
-        });
-
-        // Remove image input row
-    //    $(document).on('click', '.remove-clinic', function () {
-    //         $(this).closest('.clinic-row').remove();
-    //     });
-    document.getElementById('clinic-wrapper').addEventListener('click', function(event) {
-        if (event.target.classList.contains('remove-clinic') || event.target.closest('.remove-clinic')) {
-            const clinicRow = event.target.closest('.clinic-row');
-            const wrapper = document.getElementById('clinic-wrapper');
-            const totalRows = wrapper.querySelectorAll('.clinic-row').length;
-
-            if (clinicRow) {
-                if (totalRows > 1) {
-                    clinicRow.remove();
-                } else {
-                    alert('At least one clinic row is required.');
-                }
-            }
-        }
-        });
-
-        $(document).on('click', '.remove-clinic-image', function () {
-            $(this).closest('.clinic-image-row').remove();
-        });
+       $('.clinic_name').select2();
 
         $('#country').on('change', function () {
             let id = $(this).val();

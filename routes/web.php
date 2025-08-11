@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\User\loginController;
 use App\Http\Controllers\Admin\StateController;
+use App\Http\Controllers\Admin\ClinicController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DoctorsController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -81,5 +82,7 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
     Route::resource('cities', CityController::class);
     Route::resource('states', StateController::class);
     Route::get('country/{id}/cities', [StateController::class, 'getCityByCountry'])->name('country.cities');
+
+    Route::resource('clinics', ClinicController::class);
 
 });

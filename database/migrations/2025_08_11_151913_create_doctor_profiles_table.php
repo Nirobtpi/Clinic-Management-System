@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('doctor_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->references('id')->cascadeOnDelete();
-            $table->string('clinic_name')->nullable();
-            $table->string('clinic_address')->nullable();
-            $table->string('clinic_images')->nullable();
+            $table->string('clinic_id')->nullable();
 
-            $table->string('pricing')->nullable();
+            $table->string('free')->nullable();
+            $table->string('custom_price')->nullable();
 
             // Services and Specialization
             $table->string('services')->nullable();
@@ -27,24 +26,24 @@ return new class extends Migration
             // Educaion
             $table->string('degree')->nullable();
             $table->string('collage')->nullable();
-            $table->date('completion_year')->nullable();
+            $table->string('completion_year')->nullable();
 
             // Experience
             $table->string('hospital_name')->nullable();
-            $table->date('from')->nullable();
-            $table->date('to')->nullable();
-            $table->date('designation')->nullable();
+            $table->string('experience_from')->nullable();
+            $table->string('experience_to')->nullable();
+            $table->string('designation')->nullable();
 
             // Awards
             $table->string('awards')->nullable();
-            $table->date('award_year')->nullable();
+            $table->string('award_year')->nullable();
 
             // Memberships
             $table->string('memberships')->nullable();
 
             // Registrations
             $table->string('registrations')->nullable();
-            $table->date('registration_date')->nullable();
+            $table->string('registration_date')->nullable();
 
             $table->timestamps();
         });

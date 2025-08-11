@@ -219,6 +219,9 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="{{ Route::is('clinics.*') ? 'active' : '' }}">
+                            <a href="{{ route('clinics.index') }}"><i class="fe fe-home"></i> <span>Clinics</span></a>
+                        </li>
                         <li class="{{ Route::is('appointment.*') ? 'active' : '' }}">
                             <a href="{{ route('appointment.index') }}"><i class="fe fe-layout"></i> <span>Appointments</span></a>
                         </li>

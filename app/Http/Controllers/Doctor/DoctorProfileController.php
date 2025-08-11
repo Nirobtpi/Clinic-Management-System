@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Models\City;
-use App\Models\DoctorProfile;
 use App\Models\User;
 use App\Models\State;
+use App\Models\Clinic;
 use App\Models\Country;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use App\Models\DoctorProfile;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,9 +21,10 @@ class DoctorProfileController extends Controller
         $countries=Country::where('status','active')->get();
         $cities=City::all();
         $states=State::all();
+        $clinics=Clinic::all();
         $doctor_profile=DoctorProfile::where('user_id', Auth::id())->first();
 
-        return view('doctor.doctor_profile', compact('departments', 'countries', 'cities', 'states', 'doctor_profile'));
+        return view('doctor.doctor_profile', compact('departments', 'countries', 'cities', 'states', 'doctor_profile','clinics'));
     }
     public function getCity($id){
         $cities=City::where('country_id',$id)->get();
@@ -83,19 +85,52 @@ class DoctorProfileController extends Controller
         // return $request->clinic_name;
 
         $doctorProfile = DoctorProfile::where('user_id', $id)->first();
-        $name=json_encode($request->clinic_name);
-        $address=json_encode($request->clinic_address);
+        // return json_encode($request->clinic_name);;
+
         if($doctorProfile){
             $doctorProfile->update([
-                'clinic_name' => $name,
-                'clinic_address' => $address,
+                'clinic_id' => json_encode($request->clinic_name),
+                'custom_price' => $request->price,
+                'services'=>$request->services,
+                'degree'=>json_encode($request->degree),
+                'collage'=>json_encode($request->college),
+                'completion_year'=>json_encode($request->completion_year),
+                'hospital_name'=>json_encode($request->hospital_name),
+                'experience_from'=>json_encode($request->experience_from),
+                'experience_to'=>json_encode($request->experience_to),
+                'designation'=>json_encode($request->designation),
+                'awards'=>json_encode($request->awards),
+                'award_year'=>json_encode($request->award_year),
+                'memberships'=>json_encode($request->memberships),
+                'registrations'=>json_encode($request->registrations),
+                'registration_date'=>json_encode($request->registration_year),
+
             ]);
         }else{
             DoctorProfile::create([
                 'user_id' => $id,
-                'clinic_name' => $name,
-                'clinic_address' => $address,
+                'clinic_id' => json_encode($request->clinic_name),
+                'custom_price' => $request->price,
+                'services'=>$request->services,
+                'degree'=>json_encode($request->degree),
+                'collage'=>json_encode($request->college),
+                'completion_year'=>json_encode($request->completion_year),
+                'hospital_name'=>json_encode($request->hospital_name),
+                'experience_from'=>json_encode($request->experience_from),
+                'experience_to'=>json_encode($request->experience_to),
+                'designation'=>json_encode($request->designation),
+                'awards'=>json_encode($request->awards),
+                'award_year'=>json_encode($request->award_year),
+                'memberships'=>json_encode($request->memberships),
+                'registrations'=>json_encode($request->registrations),
+                'registration_date'=>json_encode($request->registration_year),
             ]);
         }
+
+        $notification = [
+            'message' => 'Profile updated successfully.',
+            'alert-type' => 'success'
+        ];
+        return redirect()->route('doctor.profile')->with($notification);
     }
 }
