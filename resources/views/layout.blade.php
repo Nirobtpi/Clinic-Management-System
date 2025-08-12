@@ -271,6 +271,8 @@
     </div>
     <!-- /Main Wrapper -->
 
+    @yield('modal')
+
     <!-- jQuery -->
     <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
 

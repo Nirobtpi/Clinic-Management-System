@@ -219,12 +219,14 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Clinic Name</label>
-                                            <select name="clinic_name[]" id="clinic"  multiple="multiple" class="form-control clinic_name">
+                                            <select name="clinic_name[]" id="clinic" multiple="multiple"
+                                                class="form-control clinic_name">
                                                 @php
-                                                    $selectedClinics = json_decode($doctor_profile->clinic_id ?? '[]');
+                                                $selectedClinics = json_decode($doctor_profile->clinic_id ?? '[]');
                                                 @endphp
                                                 @foreach ($clinics as $clinic)
-                                                    <option value="{{ $clinic->id }}" @if(in_array($clinic->id, $selectedClinics)) selected @endif>{{ $clinic->name }}</option>
+                                                <option value="{{ $clinic->id }}" @if(in_array($clinic->id,
+                                                    $selectedClinics)) selected @endif>{{ $clinic->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -240,14 +242,16 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Pricing</h4>
-                                <div class="row form-row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Attach Your Price</label>
-                                            <input type="text" name="price" value="{{ old('price', $doctor_profile->custom_price ?? '') }}" class="form-control">
-                                        </div>
+                            <div class="row form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Attach Your Price</label>
+                                        <input type="text" name="price"
+                                            value="{{ old('price', $doctor_profile->custom_price ?? '') }}"
+                                            class="form-control">
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                     <!-- /Pricing -->
@@ -259,11 +263,11 @@
                             <div class="form-group">
                                 <label>Services</label>
                                 @php
-                                    $services = collect(json_decode($doctor_profile->services ?? '[]'));
-                                    $data = implode(', ', $services->pluck('value')->toArray());
+                                $services = collect(json_decode($doctor_profile->services ?? '[]'));
+                                $data = implode(', ', $services->pluck('value')->toArray());
                                 @endphp
-                                <input type="text" class="form-control" value="{{ old('services', $data) }}" id="services" name="services"
-                                    placeholder="Enter Services">
+                                <input type="text" class="form-control" value="{{ old('services', $data) }}"
+                                    id="services" name="services" placeholder="Enter Services">
                             </div>
                         </div>
                     </div>
@@ -277,40 +281,47 @@
                                 <div class="row form-row education-cont">
                                     <div class="col-12 col-md-10 col-lg-11">
                                         @php
-                                            $education = json_decode($doctor_profile->degree ?? '[]');
-                                            $college = json_decode($doctor_profile->collage ?? '[]');
-                                            $completion_year = json_decode($doctor_profile->completion_year ?? '[]');
+                                        $education = json_decode($doctor_profile->degree ?? '[]');
+                                        $college = json_decode($doctor_profile->collage ?? '[]');
+                                        $completion_year = json_decode($doctor_profile->completion_year ?? '[]');
                                         @endphp
                                         @foreach ($education as $index => $edu)
                                         <div class="row form-row nirob align-items-center">
                                             <div class="col-12 col-md-{{ $index == 0 ? 12 : 10 }}">
                                                 <div class="row form-row align-items-center">
-                                                <div class="col-12 col-md-6 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label>Degree</label>
-                                                        <input type="text" value="{{ old('degree.' . $index, $edu) }}" name="degree[]" class="form-control">
+                                                    <div class="col-12 col-md-6 col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Degree</label>
+                                                            <input type="text"
+                                                                value="{{ old('degree.' . $index, $edu) }}"
+                                                                name="degree[]" class="form-control">
 
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-12 col-md-6 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label>College/Institute</label>
-                                                        <input type="text" value="{{ old('college.' . $index, $college[$index] ?? '') }}" name="college[]" class="form-control">
+                                                    <div class="col-12 col-md-6 col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>College/Institute</label>
+                                                            <input type="text"
+                                                                value="{{ old('college.' . $index, $college[$index] ?? '') }}"
+                                                                name="college[]" class="form-control">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-12 col-md-6 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label>Year of Completion</label>
-                                                        <input type="text" value="{{ old('completion_year.' . $index, $completion_year[$index] ?? '') }}" name="completion_year[]" class="form-control">
+                                                    <div class="col-12 col-md-6 col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Year of Completion</label>
+                                                            <input type="text"
+                                                                value="{{ old('completion_year.' . $index, $completion_year[$index] ?? '') }}"
+                                                                name="completion_year[]" class="form-control">
+                                                        </div>
                                                     </div>
-                                                </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
-                                            <a href="javascript:void(0);" class="btn btn-danger remove {{ $index === 0 ? 'd-none' : '' }}"><i class="far fa-trash-alt"></i></a>
+                                                <a href="javascript:void(0);"
+                                                    class="btn btn-danger remove {{ $index === 0 ? 'd-none' : '' }}"><i
+                                                        class="far fa-trash-alt"></i></a>
                                             </div>
                                         </div>
-
                                         @endforeach
                                     </div>
                                 </div>
@@ -327,36 +338,58 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Experience</h4>
+                            @php
+                            $hospital_name = json_decode($doctor_profile?->hospital_name ?? '[]');
+                            $experience_from = json_decode($doctor_profile?->experience_from ?? '[]');
+                            $experience_to = json_decode($doctor_profile?->experience_to ?? '[]');
+                            $designation= json_decode($doctor_profile?->designation ?? '[]');
+                            @endphp
                             <div class="experience-info">
                                 <div class="row form-row experience-cont">
-                                    <div class="col-12 col-md-10 col-lg-11">
+                                    @foreach($hospital_name as $index => $name)
+                                    <div
+                                        class="col-12 col-md-10 col-lg-11 {{ $index === 0 ? '' : 'experience-remove' }}">
                                         <div class="row form-row">
                                             <div class="col-12 col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Hospital Name</label>
-                                                    <input type="text" name="hospital_name[]" class="form-control">
+                                                    <input type="text"
+                                                        value="{{ old('hospital_name.' . $index, $name) }}"
+                                                        name="hospital_name[]" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-12 col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label>From</label>
-                                                    <input type="date" name="experience_from[]" class="form-control">
+                                                    <input type="date"
+                                                        value="{{ old('experience_from.' . $index, $experience_from[$index] ?? '') }}"
+                                                        name="experience_from[]" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-12 col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label>To</label>
-                                                    <input type="date" name="experience_to[]" class="form-control">
+                                                    <input type="date"
+                                                        value="{{ old('experience_to.' . $index, $experience_to[$index] ?? '') }}"
+                                                        name="experience_to[]" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-12 col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Designation</label>
-                                                    <input type="text" name="designation[]" class="form-control">
+                                                    <input type="text"
+                                                        value="{{ old('designation.' . $index, $designation[$index] ?? '') }}"
+                                                        name="designation[]" class="form-control">
                                                 </div>
+                                            </div>
+                                            <div class="col-md-2 align-content-center">
+                                                <a href="javascript:void(0);"
+                                                    class="btn btn-danger remove-experience {{ $index === 0 ? 'd-none' : '' }}"><i
+                                                        class="far fa-trash-alt"></i></a>
                                             </div>
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="add-more">
@@ -371,24 +404,39 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Awards</h4>
+                            @php
+                            $awards=json_decode($doctor_profile?->awards ?? '[]');
+                            $award_year=json_decode($doctor_profile?->award_year ?? '[]');
+                            @endphp
                             <div class="awards-info">
-                                <div class="row form-row awards-cont">
+                                @foreach($awards as $index => $award)
+                                <div class="row form-row awards-con delete">
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
                                             <label>Awards</label>
-                                            <input type="text" name="awards[]" class="form-control">
+                                            <input type="text" value="{{ old('awards.' . $index, $award) }}"
+                                                name="awards[]" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
                                             <label>Year</label>
-                                            <input type="text" name="award_year[]" class="form-control">
+                                            <input type="text"
+                                                value="{{ old('award_year.' . $index, $award_year[$index] ?? '') }}"
+                                                name="award_year[]" class="form-control">
                                         </div>
                                     </div>
+                                    <div class="col-md-2 align-content-center">
+                                        <a href="javascript:void(0);"
+                                            class="btn btn-danger remove-award {{ $index === 0 ? 'd-none' : '' }}"><i
+                                                class="far fa-trash-alt"></i></a>
+                                    </div>
                                 </div>
+                                @endforeach
                             </div>
                             <div class="add-more">
-                                <a href="javascript:void(0);" class="add-award"><i class="fa fa-plus-circle"></i> Add More</a>
+                                <a href="javascript:void(0);" class="add-award"><i class="fa fa-plus-circle"></i> Add
+                                    More</a>
                             </div>
                         </div>
                     </div>
@@ -397,16 +445,27 @@
                     <!-- Memberships -->
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Memberships</h4>
+                            <h4 class="card-title">{{ __('Memberships') }}</h4>
                             <div class="membership-info">
-                                <div class="row form-row membership-cont">
+                                @php
+                                $memberships=json_decode($doctor_profile?->memberships ?? '[]');
+                                @endphp
+                                @foreach($memberships as $index => $membership)
+                                <div class="row form-row membership-cont delete">
                                     <div class="col-12 col-md-10 col-lg-5">
                                         <div class="form-group">
-                                            <label>Memberships</label>
-                                            <input type="text" name="memberships[]" class="form-control">
+                                            <label>{{ __('Memberships') }}</label>
+                                            <input type="text" value="{{ old('memberships.' . $index, $membership) }}"
+                                                name="memberships[]" class="form-control">
                                         </div>
                                     </div>
+                                    <div class="col-md-2 align-content-center">
+                                        <a href="javascript:void(0);"
+                                            class="btn btn-danger remove-membership {{ $index === 0 ? 'd-none' : '' }}"><i
+                                                class="far fa-trash-alt"></i></a>
+                                    </div>
                                 </div>
+                                @endforeach
                             </div>
                             <div class="add-more">
                                 <a href="javascript:void(0);" class="add-membership"><i class="fa fa-plus-circle"></i>
@@ -422,20 +481,37 @@
                         <div class="card-body">
                             <h4 class="card-title">Registrations</h4>
                             <div class="registrations-info">
-                                <div class="row form-row reg-cont">
+                                @php
+                                $registrations=json_decode($doctor_profile?->registrations ?? '[]');
+                                $registration_year=json_decode($doctor_profile?->registration_date ?? '[]');
+                                @endphp
+                                @foreach($registrations as $index => $registration)
+                                <div class="row form-row reg-cont delete">
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
                                             <label>Registrations</label>
-                                            <input type="text" name="registrations[]" class="form-control">
+                                            <input type="text"
+                                                value="{{ old('registrations.' . $index, $registration) }}"
+                                                name="registrations[]" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
                                             <label>Year</label>
-                                            <input type="text" name="registration_year[]" class="form-control">
+                                            <input type="text"
+                                                value="{{ old('registration_year.' . $index, $registration_year[$index] ?? '') }}"
+                                                name="registration_year[]" class="form-control">
                                         </div>
                                     </div>
+
+                                    <div class="col-md-2 align-content-center">
+                                        <a href="javascript:void(0);"
+                                            class="btn btn-danger remove-registration {{ $index === 0 ? 'd-none' : '' }}"><i
+                                                class="far fa-trash-alt"></i></a>
+                                    </div>
+
                                 </div>
+                                @endforeach
                             </div>
                             <div class="add-more">
                                 <a href="javascript:void(0);" class="add-reg"><i class="fa fa-plus-circle"></i> Add
@@ -466,10 +542,22 @@
     $(document).on('click', '.remove', function () {
         $(this).closest('.nirob').remove();
     });
+    $(document).on('click', '.remove-experience', function () {
+        $(this).closest('.experience-remove').remove();
+    });
+    $(document).on('click', '.remove-award', function () {
+        $(this).closest('.delete').remove();
+    });
+    $(document).on('click', '.remove-membership', function () {
+        $(this).closest('.delete').remove();
+    });
+    $(document).on('click', '.remove-registration', function () {
+        $(this).closest('.delete').remove();
+    });
 
     $(document).ready(function () {
 
-       $('.clinic_name').select2();
+        $('.clinic_name').select2();
 
         $('#country').on('change', function () {
             let id = $(this).val();

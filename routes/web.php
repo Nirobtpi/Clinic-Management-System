@@ -19,6 +19,7 @@ use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Doctor\DoctorLogInfoController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
+use App\Http\Controllers\Doctor\ScheduleTimingController;
 
 Route::get('/',[DashboardController::class,'index'])->name('home');
 Route::get('user/login',[loginController::class,'loginPage'])->name('user.login');
@@ -40,6 +41,7 @@ Route::middleware('auth:web')->prefix('doctor')->group(function () {
     // update profile route
     Route::put('profile/update/{id}',[DoctorProfileController::class,'update'])->name('doctor.profile.update');
     Route::post('profile/update/{id}',[DoctorProfileController::class,'DoctorProfileUpdate'])->name('doctor.profile.update.post');
+    Route::resource('schedule', ScheduleTimingController::class);
 
 });
 
