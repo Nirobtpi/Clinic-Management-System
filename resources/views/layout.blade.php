@@ -28,6 +28,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
 </head>
+@php
+    $user=Auth::user();
+@endphp
 
 <body class="{{ Route::is('user.register')|| Route::is('doctor.register') || Route::is('user.login') ? 'account-page':'' }}">
 
@@ -95,15 +98,15 @@
 							<div class="dropdown-menu dropdown-menu-right">
 								<div class="user-header">
 									<div class="avatar avatar-sm">
-										<img src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image" class="avatar-img rounded-circle">
+										<img src="{{ $user->photo == null ? asset('frontend/assets/img/doctors/doctor-thumb-02.jpg') : asset($user->photo) }}" alt="User Image" class="avatar-img rounded-circle">
 									</div>
 									<div class="user-text">
-										<h6>Darren Elder</h6>
-										<p class="text-muted mb-0">Doctor</p>
+										<h6>{{ $user->name }}</h6>
+										<p class="text-muted mb-0">{{ $user->role == 'doctor' ? 'Doctor' : 'Patient' }}</p>
 									</div>
 								</div>
-								<a class="dropdown-item" href="{{ Auth::user()->role == 'doctor' ? route('doctor.dashboard') : route('user.dashboard') }}">Dashboard</a>
-								<a class="dropdown-item" href="doctor-profile-settings.html">Profile Settings</a>
+								<a class="dropdown-item" href="{{ $user->role == 'doctor' ? route('doctor.dashboard') : route('user.dashboard') }}">Dashboard</a>
+								<a class="dropdown-item" href="{{ $user->role == 'doctor' ? route('doctor.profile') : route('user.profile') }}">Profile Settings</a>
 								<a class="dropdown-item" href="{{ route('user.logout') }}">Logout</a>
 							</div>
 						</li>

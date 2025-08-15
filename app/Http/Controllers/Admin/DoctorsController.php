@@ -93,13 +93,14 @@ class DoctorsController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$id,
             'department_id' => 'required|exists:departments,id',
             'address' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         $doctor = User::findOrFail($id);
 
@@ -110,11 +111,11 @@ class DoctorsController extends Controller
         $doctor->department_id = $request->department_id;
         $doctor->status = $request->has('status') ? 'active' : 'inactive'; // Update status based on checkbox
 
-        if($request->hasFile('photo')) {
+        if($request->hasFile('image')) {
             if ($doctor->photo && file_exists(public_path($doctor->photo))) {
                 unlink(public_path($doctor->photo));
             }
-            $image = $request->file('photo');
+            $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('uploads/doctors'), $imageName);
             $doctor->photo = 'uploads/doctors/' . $imageName;

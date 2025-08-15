@@ -3,10 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Doctor\SocialMedia;
+use Illuminate\Support\Facades\App;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\App;
 
 class User extends Authenticatable
 {
@@ -52,5 +53,29 @@ class User extends Authenticatable
 
     public function department(){
         return $this->belongsTo(Department::class,'department_id', 'id');
+    }
+
+    public function socialMedia(){
+        return $this->hasMany(SocialMedia::class);
+    }
+
+    public function city(){
+        return $this->belongsTo(City::class,'city_id');
+    }
+    public function state(){
+        return $this->belongsTo(State::class,'state_id');
+    }
+    public function country(){
+        return $this->belongsTo(Country::class,'country_id');
+    }
+
+    public function getCityNameAttribute(){
+        return $this?->city?->name;
+    }
+    public function getStateNameAttribute(){
+        return $this?->state?->name;
+    }
+    public function getCountryNameAttribute(){
+        return $this?->country?->name;
     }
 }

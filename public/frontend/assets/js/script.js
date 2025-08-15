@@ -150,10 +150,16 @@ Version      : 1.0
 
 	// Add More Hours
 
-    $(".hours-info").on('click','.trash', function () {
-		$(this).closest('.hours-cont').remove();
-		return false;
-    });
+   $(".hours-info").on('click', '.trash', function (e) {
+    e.preventDefault();
+    let totalRows = $(".hours-info .hours-cont").length;
+
+    if (totalRows <= 1) {
+        alert("At least one schedule must remain.");
+        return false;
+    }
+    $(this).closest('.hours-cont').remove();
+});
 
     // $(".add-hours").on('click', function () {
 

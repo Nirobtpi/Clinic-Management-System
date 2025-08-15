@@ -17,9 +17,12 @@ use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Auth\UserController as AuthUserController;
 use App\Http\Controllers\Doctor\DoctorLogInfoController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
 use App\Http\Controllers\Doctor\ScheduleTimingController;
+use App\Http\Controllers\Doctor\SocialMediaController;
+use App\Http\Controllers\User\ProfileController as UserProfileController;
 
 Route::get('/',[DashboardController::class,'index'])->name('home');
 Route::get('user/login',[loginController::class,'loginPage'])->name('user.login');
@@ -31,28 +34,42 @@ Route::get('logout',[loginController::class,'logout'])->name('user.logout')->mid
 
 
 
-Route::middleware('auth:web')->prefix('doctor')->group(function () {
-    Route::get('/',[DoctorLogInfoController::class,'dashboard'])->name('doctor.dashboard');
-    Route::get('profile/view',[DoctorProfileController::class,'profile'])->name('doctor.profile');
+Route::middleware('auth:web')->prefix('auth')->group(function () {
+    Route::group(['prefix' => 'doctor'], function () {
 
-    Route::get('get-city/{id}',[DoctorProfileController::class,'getCity'])->name('doctor.get.city');
-    Route::get('get-state/{id}',[DoctorProfileController::class,'getState'])->name('doctor.get.state');
+        Route::get('/',[DoctorLogInfoController::class,'dashboard'])->name('doctor.dashboard');
+        Route::get('profile/view',[DoctorProfileController::class,'profile'])->name('doctor.profile');
 
-    // update profile route
-    Route::put('profile/update/{id}',[DoctorProfileController::class,'update'])->name('doctor.profile.update');
-    Route::post('profile/update/{id}',[DoctorProfileController::class,'DoctorProfileUpdate'])->name('doctor.profile.update.post');
-    Route::resource('schedule', ScheduleTimingController::class);
+        Route::get('get-city/{id}',[DoctorProfileController::class,'getCity'])->name('doctor.get.city');
+        Route::get('get-state/{id}',[DoctorProfileController::class,'getState'])->name('doctor.get.state');
 
+        // update profile route
+        Route::put('profile/update/{id}',[DoctorProfileController::class,'update'])->name('doctor.profile.update');
+        Route::post('profile/update/{id}',[DoctorProfileController::class,'DoctorProfileUpdate'])->name('doctor.profile.update.post');
+        Route::resource('schedule', ScheduleTimingController::class);
+        Route::get('schedule/update/data/{day}', [ScheduleTimingController::class, 'scheduleUpdate'])->name('schedule.update.data');
+        Route::resource('social-medai',SocialMediaController::class)->names('doctor.socialmedia');
+
+
+    });
+
+    // all user route
+    Route::get('change-password',[AuthUserController::class,'changePasswordPage'])->name('change.password');
+    Route::put('password/update/{id}',[AuthUserController::class,'passwordUpdate'])->name('password.update');
+
+    // user route
+    Route::prefix('user')->group(function () {
+        Route::get('/',[UserDashboardController::class,'dashboard'])->name('user.dashboard');
+        Route::get('profile/view',[UserProfileController::class,'profileView'])->name('user.profile');
+        Route::put('profile/update/{id}',[UserProfileController::class,'profileUpdate'])->name('user.update');
+
+    });
 });
 
 
 // user route
 Route::post('user/register',[loginController::class,'register'])->name('user.register.post');
 
-Route::middleware('auth:web')->prefix('user')->group(function () {
-    Route::get('/',[UserDashboardController::class,'dashboard'])->name('user.dashboard');
-
-});
 
 
 

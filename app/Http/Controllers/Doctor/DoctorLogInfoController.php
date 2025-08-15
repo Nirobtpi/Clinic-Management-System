@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,9 @@ class DoctorLogInfoController extends Controller
     }
 
     public function dashboard(){
+        if(!Auth::check()){
+            return redirect()->route('user.login');
+        }
         return view('doctor.doctor_dashboard');
     }
 

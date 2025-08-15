@@ -161,7 +161,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">City</label>
-                                        <select class="form-control s" disabled name="city" id="city"
+                                        <select class="form-control s"  name="city" id="city"
                                             data-select2-id="1" tabindex="-1" aria-hidden="true">
                                             <option data-select2-id="3">Select</option>
                                             @if(auth()->user()->city_id != null)
@@ -176,7 +176,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">State</label>
-                                        <select class="form-control s" disabled name="state" data-select2-id="1"
+                                        <select class="form-control s" name="state" data-select2-id="1"
                                             id="state" tabindex="-1" aria-hidden="true">
                                             <option data-select2-id="3">Select</option>
                                             @foreach ($states as $state)
@@ -562,7 +562,6 @@
         $('#country').on('change', function () {
             let id = $(this).val();
             let option = $('#city');
-            option.prop('disabled', false)
             let url = "{{ route('doctor.get.city', ':id') }}";
             url = url.replace(":id", id);
             $.ajax({
@@ -587,7 +586,6 @@
         $('#city').on('change', function () {
             let val = $(this).val();
             let option = $('#state');
-            option.prop('disabled', false);
             let url = "{{ route('doctor.get.state', ':id') }}";
             url = url.replace(":id", val);
             $.ajax({

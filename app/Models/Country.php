@@ -17,4 +17,8 @@ class Country extends Model
     {
         return $this->hasMany(State::class, 'country_id', 'id');
     }
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
