@@ -73,7 +73,7 @@
                                                          @else
                                                          <h4 class="card-title d-flex justify-content-between">
                                                                 <span>Time Slots</span>
-                                                                <a class="edit-link"  data-toggle="modal"
+                                                                <a class="edit-link" data-day="Sunday" data-toggle="modal"
                                                                     href="#add_time_slot"><i class="fa fa-plus-circle"></i>
                                                                     Add Slot</a>
                                                             </h4>
@@ -115,7 +115,7 @@
                                                          @else
                                                          <h4 class="card-title d-flex justify-content-between">
                                                                 <span>Time Slots</span>
-                                                                <a class="edit-link"  data-toggle="modal"
+                                                                <a class="edit-link" data-day="Monday" data-toggle="modal"
                                                                     href="#add_time_slot"><i class="fa fa-plus-circle"></i>
                                                                     Add Slot</a>
                                                             </h4>
@@ -160,7 +160,7 @@
                                                          @else
                                                          <h4 class="card-title d-flex justify-content-between">
                                                                 <span>Time Slots</span>
-                                                                <a class="edit-link"  data-toggle="modal"
+                                                                <a class="edit-link" data-day="Tuesday"  data-toggle="modal"
                                                                     href="#add_time_slot"><i class="fa fa-plus-circle"></i>
                                                                     Add Slot</a>
                                                             </h4>
@@ -204,7 +204,7 @@
                                                          @else
                                                          <h4 class="card-title d-flex justify-content-between">
                                                                 <span>Time Slots</span>
-                                                                <a class="edit-link"  data-toggle="modal"
+                                                                <a class="edit-link" data-day="Wednesday"  data-toggle="modal"
                                                                     href="#add_time_slot"><i class="fa fa-plus-circle"></i>
                                                                     Add Slot</a>
                                                             </h4>
@@ -248,7 +248,7 @@
                                                          @else
                                                          <h4 class="card-title d-flex justify-content-between">
                                                                 <span>Time Slots</span>
-                                                                <a class="edit-link"  data-toggle="modal"
+                                                                <a class="edit-link" data-day="Thursday"  data-toggle="modal"
                                                                     href="#add_time_slot"><i class="fa fa-plus-circle"></i>
                                                                     Add Slot</a>
                                                             </h4>
@@ -291,7 +291,7 @@
                                                          @else
                                                          <h4 class="card-title d-flex justify-content-between">
                                                                 <span>Time Slots</span>
-                                                                <a class="edit-link"  data-toggle="modal"
+                                                                <a class="edit-link" data-day="Friday" data-toggle="modal"
                                                                     href="#add_time_slot"><i class="fa fa-plus-circle"></i>
                                                                     Add Slot</a>
                                                             </h4>
@@ -328,13 +328,13 @@
                                                             <h4 class="card-title d-flex justify-content-between">
                                                             <span>Time Slots</span>
                                                             <a class="edit-link updateInfo"
-                                                                href="{{ route('schedule.edit', $sheduels->where('day_of_week','Saturday')->first()->day_of_week) }}" data-day="Wednesday"><i
+                                                                href="{{ route('schedule.edit', $sheduels->where('day_of_week','Saturday')->first()->day_of_week) }}"><i
                                                                     class="fa fa-edit mr-1"></i>Edit</a>
                                                         </h4>
                                                          @else
                                                          <h4 class="card-title d-flex justify-content-between">
                                                                 <span>Time Slots</span>
-                                                                <a class="edit-link"  data-toggle="modal"
+                                                                <a class="edit-link" data-day="Saturday"  data-toggle="modal"
                                                                     href="#add_time_slot"><i class="fa fa-plus-circle"></i>
                                                                     Add Slot</a>
                                                             </h4>
@@ -482,7 +482,7 @@
 
         // })
         $(document).on('click', '.edit-link', function () {
-            let day=$('.get_day').data('day');
+            let day=$(this).data('day');
             $('.day').val(day);
 
 

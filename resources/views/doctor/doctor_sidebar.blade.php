@@ -100,7 +100,7 @@
                     </a>
                 </li>
                 <li class="">
-                    <a href="profile-settings.html">
+                    <a href="{{ route('user.profile') }}">
                         <i class="fas fa-user-cog"></i>
                         <span>Profile Settings</span>
                     </a>

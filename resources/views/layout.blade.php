@@ -115,9 +115,7 @@
             </nav>
         </header>
         <!-- /Header -->
-        @if(auth()->check())
          @yield('breadcrumb')
-        @endif
         <!-- /Home Banner -->
 
         @yield('content')

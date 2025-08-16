@@ -82,8 +82,6 @@ class DoctorProfileController extends Controller
 
     public function DoctorProfileUpdate(Request $request, $id){
 
-        // return $request->clinic_name;
-
         $doctorProfile = DoctorProfile::where('user_id', $id)->first();
         // return json_encode($request->clinic_name);;
 
@@ -104,6 +102,8 @@ class DoctorProfileController extends Controller
                 'memberships'=>json_encode($request->memberships),
                 'registrations'=>json_encode($request->registrations),
                 'registration_date'=>json_encode($request->registration_year),
+                'about_me'=>$request->about_me,
+                'specialization'=>$request->specialization,
 
             ]);
         }else{
@@ -124,6 +124,8 @@ class DoctorProfileController extends Controller
                 'memberships'=>json_encode($request->memberships),
                 'registrations'=>json_encode($request->registrations),
                 'registration_date'=>json_encode($request->registration_year),
+                'about_me'=>$request->about_me,
+                'specialization' =>$request->specialization
             ]);
         }
 

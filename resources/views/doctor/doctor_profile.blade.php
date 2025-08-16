@@ -193,7 +193,7 @@
                     <!-- About Me -->
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">About Me</h4>
+                            <h4 class="card-title">Biography</h4>
                             <div class="form-group mb-0">
                                 <label>Biography</label>
                                 <textarea class="form-control" name="biography"
@@ -211,6 +211,16 @@
                 <form action="{{ route('doctor.profile.update.post', auth()->user()->id) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">About Me</h4>
+                            <div class="form-group mb-0">
+                                <label>About Me</label>
+                                <textarea class="form-control" name="about_me"
+                                    rows="5">{{ $doctor_profile->about_me }}</textarea>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Clinic Info</h4>
@@ -268,6 +278,16 @@
                                 @endphp
                                 <input type="text" class="form-control" value="{{ old('services', $data) }}"
                                     id="services" name="services" placeholder="Enter Services">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Specialization</label>
+                                @php
+                                $specialization = collect( json_decode($doctor_profile->specialization ?? '[]',true));
+                                $data = implode(', ', $specialization->pluck('value')->toArray());
+                                @endphp
+                                <input type="text" class="form-control" value="{{ old('specialization', $data) }}"
+                                    id="specialization" name="specialization" placeholder="Enter Services">
                             </div>
                         </div>
                     </div>
@@ -538,6 +558,8 @@
 <script>
     var input = document.getElementById('services'); // get raw DOM element
     var tagify = new Tagify(input);
+    var input2 = document.getElementById('specialization'); // get raw DOM element
+    var tagify2 = new Tagify(input2);
 
     $(document).on('click', '.remove', function () {
         $(this).closest('.nirob').remove();

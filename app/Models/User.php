@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Doctor\SocialMedia;
 use Illuminate\Support\Facades\App;
+use App\Models\Doctor\ScheduleTiming;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -77,5 +78,14 @@ class User extends Authenticatable
     }
     public function getCountryNameAttribute(){
         return $this?->country?->name;
+    }
+    public function scheduleTimings(){
+        return $this->hasMany(ScheduleTiming::class);
+    }
+    public function profiles(){
+        return $this->hasMany(DoctorProfile::class, 'user_id', 'id');
+    }
+    public function profile(){
+        return $this->hasOne(DoctorProfile::class, 'user_id', 'id');
     }
 }
