@@ -118,7 +118,7 @@
                                         <i class="far fa-clock"></i> Available on {{ implode(', ',$doctor->scheduleTimings->where('is_active','1')->pluck('day_of_week')->toArray()) }} days and off day {{  implode(', ',$doctor->scheduleTimings->where('is_active',0)->pluck('day_of_week')->toArray()) }}
                                     </li>
                                     <li>
-                                        <i class="far fa-money-bill-alt"></i> ${{ implode(', ',$doctor->profiles->where('user_id',$doctor->id)->pluck('custom_price')->toArray())  }}
+                                        <i class="far fa-money-bill-alt"></i> ${{ $doctor?->profile?->custom_price ?? 'Free' }} per visit
                                         <i class="fas fa-info-circle" data-toggle="tooltip" title="Lorem Ipsum"></i>
                                     </li>
                                 </ul>

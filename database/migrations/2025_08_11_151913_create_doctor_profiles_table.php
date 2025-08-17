@@ -39,7 +39,7 @@ return new class extends Migration
             $table->string('award_year')->nullable();
 
             // Memberships
-            $table->string('memberships')->nullable();
+            $table->text('memberships')->nullable();
 
             // Registrations
             $table->string('registrations')->nullable();

@@ -1,4 +1,7 @@
 @extends('layout')
+@push('css')
+<link rel="stylesheet" href="{{ asset('frontend') }}/assets/plugins/fancybox/jquery.fancybox.min.css">
+@endpush
 @section('breadcrumb')
 <x-breadcrumb title=" Doctor Profile" />
 @endsection
@@ -12,13 +15,13 @@
                 <div class="doctor-widget">
                     <div class="doc-info-left">
                         <div class="doctor-img">
-                            <img src="{{ asset($doctor->photo ?? 'frontend/assets/img/doctors/doctor-thumb-02.jpg') }}" class="img-fluid" alt="User Image">
+                            <img src="{{ asset($doctor?->photo ?? 'frontend/assets/img/doctors/doctor-thumb-02.jpg') }}" class="img-fluid" alt="User Image">
                         </div>
                         <div class="doc-info-cont">
-                            <h4 class="doc-name">{{ $doctor->name }}</h4>
-                            <p class="doc-speciality">BDS, MDS - Oral &amp; Maxillofacial Surgery</p>
-                            <p class="doc-department"><img src="{{ asset($doctor->department->logo ?? 'frontend/assets/img/specialities/specialities-01.jpg') }}"
-                                    class="img-fluid" alt="Speciality">{{ $doctor->department->name }}</p>
+                            <h4 class="doc-name">{{ $doctor?->name }}</h4>
+                            <p class="doc-speciality">{{ $doctor->biography ??'BDS, MDS - Oral &amp; Maxillofacial Surgery' }}</p>
+                            <p class="doc-department"><img src="{{ asset($doctor?->department->logo ?? 'frontend/assets/img/specialities/specialities-01.jpg') }}"
+                                    class="img-fluid" alt="Speciality">{{ $doctor?->department->name }}</p>
                             <div class="rating">
                                 <i class="fas fa-star filled"></i>
                                 <i class="fas fa-star filled"></i>
@@ -28,35 +31,24 @@
                                 <span class="d-inline-block average-rating">(35)</span>
                             </div>
                             <div class="clinic-details">
-                                <p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $doctor->address_line_one }} - <a
+                                <p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $doctor?->address_line_one }} - <a
                                         href="javascript:void(0);">Get Directions</a></p>
                                 <ul class="clinic-gallery">
-                                    <li>
-                                        <a href="assets/img/features/feature-01.jpg" data-fancybox="gallery">
-                                            <img src="assets/img/features/feature-01.jpg" alt="Feature">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="assets/img/features/feature-02.jpg" data-fancybox="gallery">
-                                            <img src="assets/img/features/feature-02.jpg" alt="Feature Image">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="assets/img/features/feature-03.jpg" data-fancybox="gallery">
-                                            <img src="assets/img/features/feature-03.jpg" alt="Feature">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="assets/img/features/feature-04.jpg" data-fancybox="gallery">
-                                            <img src="assets/img/features/feature-04.jpg" alt="Feature">
-                                        </a>
-                                    </li>
+                                    @foreach ($clicnics as $clinic)
+                                        @foreach (collect(json_decode($clinic?->images,true))->take(2) as $image)
+                                        <li>
+                                            <a href="{{ asset($image) }}" data-fancybox="gallery">
+                                                <img src="{{ asset($image) }}" alt="Feature">
+                                            </a>
+                                        </li>
+                                        @endforeach
+                                    @endforeach
+
                                 </ul>
                             </div>
                             <div class="clinic-services">
                                 @php
-                                    // $profile=$doctor->profiles->first();
-                                    $services = json_decode($doctor->profile->services,true);
+                                    $services = json_decode($doctor?->profile?->services,true);
                                 @endphp
                                 @if($services)
                                     @foreach ($services as $service)
@@ -72,8 +64,8 @@
                             <ul>
                                 <li><i class="far fa-thumbs-up"></i> 99%</li>
                                 <li><i class="far fa-comment"></i> 35 Feedback</li>
-                                <li><i class="fas fa-map-marker-alt"></i> {{ $doctor->city_name }}, {{ $doctor->country_name }}</li>
-                                <li><i class="far fa-money-bill-alt"></i> ${{ $doctor->profile->custom_price }} per visit </li>
+                                <li><i class="fas fa-map-marker-alt"></i> {{ $doctor?->city_name }}, {{ $doctor?->country_name }}</li>
+                                <li><i class="far fa-money-bill-alt"></i> ${{ $doctor?->profile?->custom_price }} per visit </li>
                             </ul>
                         </div>
                         <div class="doctor-action">
@@ -83,7 +75,7 @@
                             <a href="chat.html" class="btn btn-white msg-btn">
                                 <i class="far fa-comment-alt"></i>
                             </a>
-                            <a href="tel:{{ $doctor->phone }}" class="btn btn-white call-btn"
+                            <a href="tel:{{ $doctor?->phone }}" class="btn btn-white call-btn"
                                >
                                 <i class="fas fa-phone"></i>
                             </a>
@@ -129,18 +121,14 @@
 
                     <!-- Overview Content -->
                     <div role="tabpanel" id="doc_overview" class="tab-pane fade active show">
+                        @if($doctor?->profile)
                         <div class="row">
                             <div class="col-md-12 col-lg-9">
 
                                 <!-- About Details -->
                                 <div class="widget about-widget">
                                     <h4 class="widget-title">About Me</h4>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                        culpa qui officia deserunt mollit anim id est laborum.</p>
+                                    <p>{{ $doctor?->profile?->about_me }}</p>
                                 </div>
                                 <!-- /About Details -->
 
@@ -149,30 +137,28 @@
                                     <h4 class="widget-title">Education</h4>
                                     <div class="experience-box">
                                         <ul class="experience-list">
+                                            @php
+                                                $degrees = json_decode($doctor?->profile?->degree ??'[]',true);
+                                                $completion_year=json_decode($doctor?->profile?->completion_year ?? '[]',true);
+                                            @endphp
+                                            @foreach (json_decode($doctor?->profile?->collage ??'[]',true) as $index => $collage)
                                             <li>
                                                 <div class="experience-user">
                                                     <div class="before-circle"></div>
                                                 </div>
                                                 <div class="experience-content">
                                                     <div class="timeline-content">
-                                                        <a href="#/" class="name">American Dental Medical University</a>
-                                                        <div>BDS</div>
-                                                        <span class="time">1998 - 2003</span>
+                                                        <a href="#/" class="name">
+                                                            {{ $collage }}
+                                                        </a>
+                                                        <div>{{ $degrees[$index] }}</div>
+                                                        <span class="time">{{ $completion_year[$index] }}</span>
+
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li>
-                                                <div class="experience-user">
-                                                    <div class="before-circle"></div>
-                                                </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name">American Dental Medical University</a>
-                                                        <div>MDS</div>
-                                                        <span class="time">2003 - 2005</span>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            @endforeach
+
                                         </ul>
                                     </div>
                                 </div>
@@ -183,40 +169,26 @@
                                     <h4 class="widget-title">Work &amp; Experience</h4>
                                     <div class="experience-box">
                                         <ul class="experience-list">
+                                            @php
+                                                $start_year=json_decode($doctor?->profile?->experience_from ?? '[]',true);
+                                                $end_year=json_decode($doctor?->profile?->experience_to ?? '[]',true);
+                                            @endphp
+                                            @foreach(json_decode($doctor?->profile?->hospital_name ??'[]',true) as $index => $hospital_name)
                                             <li>
                                                 <div class="experience-user">
                                                     <div class="before-circle"></div>
                                                 </div>
                                                 <div class="experience-content">
                                                     <div class="timeline-content">
-                                                        <a href="#/" class="name">Glowing Smiles Family Dental
-                                                            Clinic</a>
-                                                        <span class="time">2010 - Present (5 years)</span>
+                                                        <a href="#/" class="name">{{ $hospital_name }}</a>
+                                                        <span class="time">{{ date('Y', strtotime($start_year[$index])) }} - {{ $end_year[$index] == null ? "" : date('Y', strtotime($end_year[$index])) }}
+                                                           {{ $end_year[$index] == null ? "Present ".'('.number_format(Carbon\Carbon::parse($start_year[$index])->diffInYears(Carbon\Carbon::now())). " years)" : '('.number_format(Carbon\Carbon::parse($start_year[$index])->diffInYears(Carbon\Carbon::now())). " years)" }}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li>
-                                                <div class="experience-user">
-                                                    <div class="before-circle"></div>
-                                                </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name">Comfort Care Dental Clinic</a>
-                                                        <span class="time">2007 - 2010 (3 years)</span>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="experience-user">
-                                                    <div class="before-circle"></div>
-                                                </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name">Dream Smile Dental Practice</a>
-                                                        <span class="time">2005 - 2007 (2 years)</span>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            @endforeach
+
                                         </ul>
                                     </div>
                                 </div>
@@ -227,50 +199,24 @@
                                     <h4 class="widget-title">Awards</h4>
                                     <div class="experience-box">
                                         <ul class="experience-list">
+                                            @php
+                                                $awards_year=json_decode($doctor?->profile?->award_year ?? '[]' ,true);
+                                                $award_deatils=json_decode($doctor?->profile?->memberships ?? '[]' ,true);
+                                            @endphp
+                                            @foreach(json_decode($doctor?->profile?->awards ?? '[]',true) as  $award)
                                             <li>
                                                 <div class="experience-user">
                                                     <div class="before-circle"></div>
                                                 </div>
                                                 <div class="experience-content">
                                                     <div class="timeline-content">
-                                                        <p class="exp-year">July 2019</p>
-                                                        <h4 class="exp-title">Humanitarian Award</h4>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                            Proin a ipsum tellus. Interdum et malesuada fames ac ante
-                                                            ipsum primis in faucibus.</p>
+                                                        <p class="exp-year">{{ $awards_year[$loop?->index] ?? 'N/A' }}</p>
+                                                        <h4 class="exp-title">{{ $award }}</h4>
+                                                        <p>{{ $award_deatils[$loop?->index] ?? 'N/A' }}</p>
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li>
-                                                <div class="experience-user">
-                                                    <div class="before-circle"></div>
-                                                </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <p class="exp-year">March 2011</p>
-                                                        <h4 class="exp-title">Certificate for International Volunteer
-                                                            Service</h4>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                            Proin a ipsum tellus. Interdum et malesuada fames ac ante
-                                                            ipsum primis in faucibus.</p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="experience-user">
-                                                    <div class="before-circle"></div>
-                                                </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <p class="exp-year">May 2008</p>
-                                                        <h4 class="exp-title">The Dental Professional of The Year Award
-                                                        </h4>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                            Proin a ipsum tellus. Interdum et malesuada fames ac ante
-                                                            ipsum primis in faucibus.</p>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            @endforeach
                                         </ul>
                                     </div>
                                 </div>
@@ -280,12 +226,9 @@
                                 <div class="service-list">
                                     <h4>Services</h4>
                                     <ul class="clearfix">
-                                        <li>Tooth cleaning </li>
-                                        <li>Root Canal Therapy</li>
-                                        <li>Implants</li>
-                                        <li>Composite Bonding</li>
-                                        <li>Fissure Sealants</li>
-                                        <li>Surgical Extractions</li>
+                                        @foreach(json_decode($doctor?->profile?->services ??'[]',true) as $service)
+                                        <li>{{ $service['value'] }} </li>
+                                        @endforeach
                                     </ul>
                                 </div>
                                 <!-- /Services List -->
@@ -294,7 +237,7 @@
                                 <div class="service-list">
                                     <h4>Specializations</h4>
                                     <ul class="clearfix">
-                                        @foreach(json_decode($doctor->profile->specialization,true) as $specializ)
+                                        @foreach(json_decode($doctor?->profile?->specialization ?? '[]',true) as $specializ)
                                         <li>{{ $specializ['value'] }}</li>
                                         @endforeach
                                     </ul>
@@ -303,6 +246,14 @@
 
                             </div>
                         </div>
+                        @else
+                        <div class="card card-table flex-fill">
+                            <div class="card-header">
+                                <h4 class="card-title text-center">No Profile Data Found</h4>
+                            </div>
+                        </div>
+                        @endif
+
                     </div>
                     <!-- /Overview Content -->
 
@@ -788,3 +739,6 @@
 </div>
 
 @endsection
+@push('js')
+    <script src="{{ asset('frontend/assets/plugins/fancybox/jquery.fancybox.min.js') }}"></script>
+@endpush

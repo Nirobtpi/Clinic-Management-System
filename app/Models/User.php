@@ -82,10 +82,10 @@ class User extends Authenticatable
     public function scheduleTimings(){
         return $this->hasMany(ScheduleTiming::class);
     }
-    public function profiles(){
-        return $this->hasMany(DoctorProfile::class, 'user_id', 'id');
-    }
     public function profile(){
         return $this->hasOne(DoctorProfile::class, 'user_id', 'id');
+    }
+    public function clinics(){
+        return $this->hasMany(Clinic::class);
     }
 }

@@ -217,7 +217,7 @@
                             <div class="form-group mb-0">
                                 <label>About Me</label>
                                 <textarea class="form-control" name="about_me"
-                                    rows="5">{{ $doctor_profile->about_me }}</textarea>
+                                    rows="5">{{ $doctor_profile?->about_me }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -232,10 +232,10 @@
                                             <select name="clinic_name[]" id="clinic" multiple="multiple"
                                                 class="form-control clinic_name">
                                                 @php
-                                                $selectedClinics = json_decode($doctor_profile->clinic_id ?? '[]');
+                                                $selectedClinics = json_decode($doctor_profile?->clinic_id ?? '[]');
                                                 @endphp
                                                 @foreach ($clinics as $clinic)
-                                                <option value="{{ $clinic->id }}" @if(in_array($clinic->id,
+                                                <option value="{{ $clinic?->id ??'[]' }}" @if(in_array($clinic?->id,
                                                     $selectedClinics)) selected @endif>{{ $clinic->name }}</option>
                                                 @endforeach
                                             </select>
@@ -257,7 +257,7 @@
                                     <div class="form-group">
                                         <label>Attach Your Price</label>
                                         <input type="text" name="price"
-                                            value="{{ old('price', $doctor_profile->custom_price ?? '') }}"
+                                            value="{{ old('price', $doctor_profile?->custom_price ?? '') }}"
                                             class="form-control">
                                     </div>
                                 </div>
@@ -273,20 +273,20 @@
                             <div class="form-group">
                                 <label>Services</label>
                                 @php
-                                $services = collect(json_decode($doctor_profile->services ?? '[]'));
+                                $services = collect(json_decode($doctor_profile?->services ?? '[]'));
                                 $data = implode(', ', $services->pluck('value')->toArray());
                                 @endphp
-                                <input type="text" class="form-control" value="{{ old('services', $data) }}"
+                                <input type="text" class="form-control" value="{{ old('services', $data ?? '') }}"
                                     id="services" name="services" placeholder="Enter Services">
                             </div>
 
                             <div class="form-group">
                                 <label>Specialization</label>
                                 @php
-                                $specialization = collect( json_decode($doctor_profile->specialization ?? '[]',true));
-                                $data = implode(', ', $specialization->pluck('value')->toArray());
+                                $specialization = collect( json_decode($doctor_profile?->specialization ?? '[]',true));
+                                $data = implode(', ', $specialization?->pluck('value')->toArray());
                                 @endphp
-                                <input type="text" class="form-control" value="{{ old('specialization', $data) }}"
+                                <input type="text" class="form-control" value="{{ old('specialization', $data ?? '[]') }}"
                                     id="specialization" name="specialization" placeholder="Enter Services">
                             </div>
                         </div>
@@ -301,11 +301,11 @@
                                 <div class="row form-row education-cont">
                                     <div class="col-12 col-md-10 col-lg-11">
                                         @php
-                                        $education = json_decode($doctor_profile->degree ?? '[]');
-                                        $college = json_decode($doctor_profile->collage ?? '[]');
-                                        $completion_year = json_decode($doctor_profile->completion_year ?? '[]');
+                                        $education = json_decode($doctor_profile?->degree ?? '[]');
+                                        $college = json_decode($doctor_profile?->collage ?? '[]');
+                                        $completion_year = json_decode($doctor_profile?->completion_year ?? '[]');
                                         @endphp
-                                        @foreach ($education as $index => $edu)
+                                        @foreach ($education ?? []  as $index => $edu)
                                         <div class="row form-row nirob align-items-center">
                                             <div class="col-12 col-md-{{ $index == 0 ? 12 : 10 }}">
                                                 <div class="row form-row align-items-center">
@@ -313,7 +313,7 @@
                                                         <div class="form-group">
                                                             <label>Degree</label>
                                                             <input type="text"
-                                                                value="{{ old('degree.' . $index, $edu) }}"
+                                                                value="{{ old('degree.' . $index, $edu ?? '[]') }}"
                                                                 name="degree[]" class="form-control">
 
                                                         </div>
@@ -322,7 +322,7 @@
                                                         <div class="form-group">
                                                             <label>College/Institute</label>
                                                             <input type="text"
-                                                                value="{{ old('college.' . $index, $college[$index] ?? '') }}"
+                                                                value="{{ old('college.' . $index, $college[$index] ?? '[]') }}"
                                                                 name="college[]" class="form-control">
                                                         </div>
                                                     </div>
@@ -330,7 +330,7 @@
                                                         <div class="form-group">
                                                             <label>Year of Completion</label>
                                                             <input type="text"
-                                                                value="{{ old('completion_year.' . $index, $completion_year[$index] ?? '') }}"
+                                                                value="{{ old('completion_year.' . $index, $completion_year[$index] ?? '[]') }}"
                                                                 name="completion_year[]" class="form-control">
                                                         </div>
                                                     </div>
@@ -366,7 +366,7 @@
                             @endphp
                             <div class="experience-info">
                                 <div class="row form-row experience-cont">
-                                    @foreach($hospital_name as $index => $name)
+                                    @foreach($hospital_name ??[] as $index => $name)
                                     <div
                                         class="col-12 col-md-10 col-lg-11 {{ $index === 0 ? '' : 'experience-remove' }}">
                                         <div class="row form-row">
@@ -374,7 +374,7 @@
                                                 <div class="form-group">
                                                     <label>Hospital Name</label>
                                                     <input type="text"
-                                                        value="{{ old('hospital_name.' . $index, $name) }}"
+                                                        value="{{ old('hospital_name.' . $index, $name ?? '[]') }}"
                                                         name="hospital_name[]" class="form-control">
                                                 </div>
                                             </div>
@@ -390,7 +390,7 @@
                                                 <div class="form-group">
                                                     <label>To</label>
                                                     <input type="date"
-                                                        value="{{ old('experience_to.' . $index, $experience_to[$index] ?? '') }}"
+                                                        value="{{ old('experience_to.' . $index, $experience_to[$index] ?? '[]') }}"
                                                         name="experience_to[]" class="form-control">
                                                 </div>
                                             </div>
@@ -429,12 +429,12 @@
                             $award_year=json_decode($doctor_profile?->award_year ?? '[]');
                             @endphp
                             <div class="awards-info">
-                                @foreach($awards as $index => $award)
+                                @foreach($awards ??[] as $index => $award)
                                 <div class="row form-row awards-con delete">
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
                                             <label>Awards</label>
-                                            <input type="text" value="{{ old('awards.' . $index, $award) }}"
+                                            <input type="text" value="{{ old('awards.' . $index, $award ?? '[]') }}"
                                                 name="awards[]" class="form-control">
                                         </div>
                                     </div>
@@ -442,7 +442,7 @@
                                         <div class="form-group">
                                             <label>Year</label>
                                             <input type="text"
-                                                value="{{ old('award_year.' . $index, $award_year[$index] ?? '') }}"
+                                                value="{{ old('award_year.' . $index, $award_year[$index] ?? '[]') }}"
                                                 name="award_year[]" class="form-control">
                                         </div>
                                     </div>
@@ -465,23 +465,23 @@
                     <!-- Memberships -->
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">{{ __('Memberships') }}</h4>
+                            <h4 class="card-title">{{ __('Awards Details') }}</h4>
                             <div class="membership-info">
                                 @php
                                 $memberships=json_decode($doctor_profile?->memberships ?? '[]');
                                 @endphp
-                                @foreach($memberships as $index => $membership)
+                                @foreach($memberships ??[] as $index => $membership)
                                 <div class="row form-row membership-cont delete">
                                     <div class="col-12 col-md-10 col-lg-5">
                                         <div class="form-group">
-                                            <label>{{ __('Memberships') }}</label>
-                                            <input type="text" value="{{ old('memberships.' . $index, $membership) }}"
+                                            <label>{{ __('Award Details') }}</label>
+                                            <input type="text" value="{{ old('memberships.' . $index, $membership ?? '[]') }}"
                                                 name="memberships[]" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2 align-content-center">
                                         <a href="javascript:void(0);"
-                                            class="btn btn-danger remove-membership {{ $index === 0 ? 'd-none' : '' }}"><i
+                                            class="btn btn-danger remove-membership {{ $index === 0 ? 'd-none' : '[]' }}"><i
                                                 class="far fa-trash-alt"></i></a>
                                     </div>
                                 </div>
@@ -505,13 +505,13 @@
                                 $registrations=json_decode($doctor_profile?->registrations ?? '[]');
                                 $registration_year=json_decode($doctor_profile?->registration_date ?? '[]');
                                 @endphp
-                                @foreach($registrations as $index => $registration)
+                                @foreach($registrations ?? [] as $index => $registration)
                                 <div class="row form-row reg-cont delete">
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
                                             <label>Registrations</label>
                                             <input type="text"
-                                                value="{{ old('registrations.' . $index, $registration) }}"
+                                                value="{{ old('registrations.' . $index, $registration ?? '[]') }}"
                                                 name="registrations[]" class="form-control">
                                         </div>
                                     </div>
@@ -519,7 +519,7 @@
                                         <div class="form-group">
                                             <label>Year</label>
                                             <input type="text"
-                                                value="{{ old('registration_year.' . $index, $registration_year[$index] ?? '') }}"
+                                                value="{{ old('registration_year.' . $index, $registration_year[$index] ?? '[]') }}"
                                                 name="registration_year[]" class="form-control">
                                         </div>
                                     </div>
