@@ -62,10 +62,14 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
         Route::get('/',[UserDashboardController::class,'dashboard'])->name('user.dashboard');
         Route::get('profile/view',[UserProfileController::class,'profileView'])->name('user.profile');
         Route::put('profile/update/{id}',[UserProfileController::class,'profileUpdate'])->name('user.update');
-        Route::get('doctor/{id}/proofile/view',[DashboardController::class,'doctorProfileView'])->name('user.doctor.profile');
+
 
     });
 });
+
+Route::prefix('user')->group(function(){
+    Route::get('doctor/{id}/proofile/view',[DashboardController::class,'doctorProfileView'])->name('user.doctor.profile');
+}); 
 
 
 // user route

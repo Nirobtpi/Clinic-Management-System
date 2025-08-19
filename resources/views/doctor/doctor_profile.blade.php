@@ -55,6 +55,11 @@
                                             class="form-control" readonly="">
                                     </div>
                                 </div>
+
+                                <div class="col-md-6">
+                                    <label>Biography</label>
+                                    <input value="{{ auth()->user()->biography }}" class="form-control" name="biography">
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Phone Number</label>
@@ -129,6 +134,13 @@
                                             class="form-control">
                                     </div>
                                 </div>
+                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Addres</label>
+                                        <input type="text" name="address_line_one"
+                                            value="{{ auth()->user()->address_line_one }}" class="form-control">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -136,15 +148,8 @@
                     <!-- Contact Details -->
                     <div class="card contact-card">
                         <div class="card-body">
-                            <h4 class="card-title">Contact Details</h4>
+                            <h4 class="card-title">Country Details</h4>
                             <div class="row form-row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Address Line 1</label>
-                                        <input type="text" name="address_line_one"
-                                            value="{{ auth()->user()->address_line_one }}" class="form-control">
-                                    </div>
-                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Country</label>
@@ -190,17 +195,6 @@
                         </div>
                     </div>
                     <!-- /Contact Details -->
-                    <!-- About Me -->
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Biography</h4>
-                            <div class="form-group mb-0">
-                                <label>Biography</label>
-                                <textarea class="form-control" name="biography"
-                                    rows="5">{{ auth()->user()->biography }}</textarea>
-                            </div>
-                        </div>
-                    </div>
                     <div class="submit-section submit-btn-bottom">
                         <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
                     </div>
@@ -217,7 +211,7 @@
                             <div class="form-group mb-0">
                                 <label>About Me</label>
                                 <textarea class="form-control" name="about_me"
-                                    rows="5">{{ $doctor_profile?->about_me }}</textarea>
+                                    rows="5">{{ old('about_me', $doctor_profile?->about_me) }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -234,10 +228,12 @@
                                                 @php
                                                 $selectedClinics = json_decode($doctor_profile?->clinic_id ?? '[]');
                                                 @endphp
-                                                @foreach ($clinics as $clinic)
-                                                <option value="{{ $clinic?->id ??'[]' }}" @if(in_array($clinic?->id,
+                                                @forelse ($clinics as $clinic)
+                                                <option value="{{ $clinic?->id }}" @if(in_array($clinic?->id,
                                                     $selectedClinics)) selected @endif>{{ $clinic->name }}</option>
-                                                @endforeach
+                                                @empty
+                                                <option value="{{ $clinic?->id}}">{{ $clinic->name }}</option>
+                                                @endforelse
                                             </select>
                                         </div>
                                     </div>
@@ -296,7 +292,7 @@
                     <!-- Education -->
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Education</h4>
+                            <h4 class="card-title">{{ __('Education') }}</h4>
                             <div class="education-info">
                                 <div class="row form-row education-cont">
                                     <div class="col-12 col-md-10 col-lg-11">
@@ -305,7 +301,7 @@
                                         $college = json_decode($doctor_profile?->collage ?? '[]');
                                         $completion_year = json_decode($doctor_profile?->completion_year ?? '[]');
                                         @endphp
-                                        @foreach ($education ?? []  as $index => $edu)
+                                        @forelse ($education ?? []  as $index => $edu)
                                         <div class="row form-row nirob align-items-center">
                                             <div class="col-12 col-md-{{ $index == 0 ? 12 : 10 }}">
                                                 <div class="row form-row align-items-center">
@@ -342,7 +338,32 @@
                                                         class="far fa-trash-alt"></i></a>
                                             </div>
                                         </div>
-                                        @endforeach
+                                        @empty
+                                             <div class="row form-row nirob align-items-center">
+                                            <div class="col-12 col-md-12">
+                                                <div class="row form-row align-items-center">
+                                                    <div class="col-12 col-md-6 col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Degree</label>
+                                                            <input type="text" name="degree[]" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6 col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>College/Institute</label>
+                                                            <input type="text" name="college[]" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6 col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Year of Completion</label>
+                                                            <input type="text" name="completion_year[]" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforelse
                                     </div>
                                 </div>
                             </div>
@@ -366,7 +387,7 @@
                             @endphp
                             <div class="experience-info">
                                 <div class="row form-row experience-cont">
-                                    @foreach($hospital_name ??[] as $index => $name)
+                                    @forelse($hospital_name ??[] as $index => $name)
                                     <div
                                         class="col-12 col-md-10 col-lg-11 {{ $index === 0 ? '' : 'experience-remove' }}">
                                         <div class="row form-row">
@@ -409,7 +430,36 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @endforeach
+                                    @empty
+                                    <div class="col-12 col-md-10 col-lg-11">
+                                        <div class="row form-row">
+                                            <div class="col-12 col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label>Hospital Name</label>
+                                                    <input type="text" name="hospital_name[]" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label>From</label>
+                                                    <input type="date" name="experience_from[]" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label>To</label>
+                                                    <input type="date" name="experience_to[]" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label>Designation</label>
+                                                    <input type="text" name="designation[]" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforelse
                                 </div>
                             </div>
                             <div class="add-more">
@@ -429,7 +479,7 @@
                             $award_year=json_decode($doctor_profile?->award_year ?? '[]');
                             @endphp
                             <div class="awards-info">
-                                @foreach($awards ??[] as $index => $award)
+                                @forelse($awards ??[] as $index => $award)
                                 <div class="row form-row awards-con delete">
                                     <div class="col-12 col-md-5">
                                         <div class="form-group">
@@ -452,7 +502,22 @@
                                                 class="far fa-trash-alt"></i></a>
                                     </div>
                                 </div>
-                                @endforeach
+                                @empty
+                                    <div class="row form-row awards-con delete">
+                                        <div class="col-12 col-md-5">
+                                            <div class="form-group">
+                                                <label>Awards</label>
+                                                <input type="text" name="awards[]" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <div class="form-group">
+                                                <label>Year</label>
+                                                <input type="text" name="award_year[]" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforelse
                             </div>
                             <div class="add-more">
                                 <a href="javascript:void(0);" class="add-award"><i class="fa fa-plus-circle"></i> Add
@@ -470,22 +535,31 @@
                                 @php
                                 $memberships=json_decode($doctor_profile?->memberships ?? '[]');
                                 @endphp
-                                @foreach($memberships ??[] as $index => $membership)
-                                <div class="row form-row membership-cont delete">
-                                    <div class="col-12 col-md-10 col-lg-5">
-                                        <div class="form-group">
-                                            <label>{{ __('Award Details') }}</label>
-                                            <input type="text" value="{{ old('memberships.' . $index, $membership ?? '[]') }}"
-                                                name="memberships[]" class="form-control">
+                                @forelse($memberships ??[] as $index => $membership)
+                                    <div class="row form-row membership-cont delete">
+                                        <div class="col-12 col-md-10 col-lg-5">
+                                            <div class="form-group">
+                                                <label>{{ __('Award Details') }}</label>
+                                                <input type="text" value="{{ old('memberships.' . $index, $membership ?? '[]') }}"
+                                                    name="memberships[]" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 align-content-center">
+                                            <a href="javascript:void(0);"
+                                                class="btn btn-danger remove-membership {{ $index === 0 ? 'd-none' : '[]' }}"><i
+                                                    class="far fa-trash-alt"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 align-content-center">
-                                        <a href="javascript:void(0);"
-                                            class="btn btn-danger remove-membership {{ $index === 0 ? 'd-none' : '[]' }}"><i
-                                                class="far fa-trash-alt"></i></a>
+                                @empty
+                                    <div class="row form-row membership-cont delete">
+                                        <div class="col-12 col-md-10 col-lg-5">
+                                            <div class="form-group">
+                                                <label>{{ __('Award Details') }}</label>
+                                                <input type="text" name="memberships[]" class="form-control">
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                @endforeach
+                                @endforelse
                             </div>
                             <div class="add-more">
                                 <a href="javascript:void(0);" class="add-membership"><i class="fa fa-plus-circle"></i>
@@ -505,33 +579,48 @@
                                 $registrations=json_decode($doctor_profile?->registrations ?? '[]');
                                 $registration_year=json_decode($doctor_profile?->registration_date ?? '[]');
                                 @endphp
-                                @foreach($registrations ?? [] as $index => $registration)
-                                <div class="row form-row reg-cont delete">
-                                    <div class="col-12 col-md-5">
-                                        <div class="form-group">
-                                            <label>Registrations</label>
-                                            <input type="text"
-                                                value="{{ old('registrations.' . $index, $registration ?? '[]') }}"
-                                                name="registrations[]" class="form-control">
+                                @forelse($registrations ?? [] as $index => $registration)
+                                    <div class="row form-row reg-cont delete">
+                                        <div class="col-12 col-md-5">
+                                            <div class="form-group">
+                                                <label>Registrations</label>
+                                                <input type="text"
+                                                    value="{{ old('registrations.' . $index, $registration ?? '') }}"
+                                                    name="registrations[]" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <div class="form-group">
+                                                <label>Year</label>
+                                                <input type="text"
+                                                    value="{{ old('registration_year.' . $index, $registration_year[$index] ?? '') }}"
+                                                    name="registration_year[]" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2 align-content-center">
+                                            <a href="javascript:void(0);"
+                                                class="btn btn-danger remove-registration {{ $index === 0 ? 'd-none' : '' }}"><i
+                                                    class="far fa-trash-alt"></i></a>
+                                        </div>
+
+                                    </div>
+                                @empty
+                                    <div class="row form-row reg-cont delete">
+                                        <div class="col-12 col-md-5">
+                                            <div class="form-group">
+                                                <label>Registrations</label>
+                                                <input type="text" name="registrations[]" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <div class="form-group">
+                                                <label>Year</label>
+                                                <input type="text" name="registration_year[]" class="form-control">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-5">
-                                        <div class="form-group">
-                                            <label>Year</label>
-                                            <input type="text"
-                                                value="{{ old('registration_year.' . $index, $registration_year[$index] ?? '[]') }}"
-                                                name="registration_year[]" class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2 align-content-center">
-                                        <a href="javascript:void(0);"
-                                            class="btn btn-danger remove-registration {{ $index === 0 ? 'd-none' : '' }}"><i
-                                                class="far fa-trash-alt"></i></a>
-                                    </div>
-
-                                </div>
-                                @endforeach
+                                @endforelse
                             </div>
                             <div class="add-more">
                                 <a href="javascript:void(0);" class="add-reg"><i class="fa fa-plus-circle"></i> Add
@@ -592,6 +681,7 @@
                 success: function (data) {
 
                     let html = "";
+                        html+=`<option value="">Select City</option>`;
                     if (data.length > 0) {
                         data.forEach(function (city) {
                             html +=
@@ -615,6 +705,7 @@
                 url: url,
                 success: function (data) {
                     let html = "";
+                    html+=`<option value="">Select State</option>`;
                     if (data.length > 0) {
                         data.forEach(function (state) {
                             html +=

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,5 +23,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::component('components.breadcrumb', 'breadcrumb');
+
+        // PHP এর default timezone set
+        date_default_timezone_set('Asia/Dhaka');
     }
 }

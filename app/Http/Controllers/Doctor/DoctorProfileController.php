@@ -100,13 +100,27 @@ class DoctorProfileController extends Controller
                 'awards'=>json_encode($request->awards),
                 'award_year'=>json_encode($request->award_year),
                 'memberships'=>json_encode($request->memberships),
-                'registrations'=>json_encode($request->registrations),
-                'registration_date'=>json_encode($request->registration_year),
+                'registrations'=>json_encode($request->registrations) ??[],
+                'registration_date'=>json_encode($request->registration_year)??[],
                 'about_me'=>$request->about_me ?? null,
                 'specialization'=>$request->specialization,
 
             ]);
         }else{
+            $request->validate([
+                'clinic_name' => 'required',
+                'services' => 'required',
+                'price'=>'required',
+                'degree' => 'required',
+                'collage.*' => 'required',
+                'completion_year.*' => 'required',
+                'hospital_name.*' => 'required',
+                'designation.*' => 'required',
+                'awards.*' => 'required',
+                'award_year.*' => 'required',
+                'memberships.*' => 'required',
+                'specialization' => 'required',
+            ]);
             DoctorProfile::create([
                 'user_id'          => $id,
                 'clinic_id'        => json_encode($request->clinic_name ?? []),

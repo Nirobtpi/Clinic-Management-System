@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class ScheduleTiming extends Model
 {
     protected $guarded = [];
+    // protected $casts = [
+    //     'start_time' => 'array',
+    //     'end_time' => 'array',
+    // ];
 
     public function doctor()
     {
