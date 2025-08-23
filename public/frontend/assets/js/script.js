@@ -49,7 +49,7 @@ Version      : 1.0
 
 	// Textarea Text Count
 
-	var maxLength = 100;
+	var maxLength = 300;
 	$('#review_desc').on('keyup change', function () {
 		var length = $(this).val().length;
 		 length = maxLength-length;

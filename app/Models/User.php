@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Auth\Review;
 use App\Models\Doctor\SocialMedia;
 use Illuminate\Support\Facades\App;
 use App\Models\Doctor\ScheduleTiming;
@@ -21,6 +22,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $guarded = [];
+
+    protected $appends=['avg_rating'];
 
 
     /**
@@ -87,5 +90,15 @@ class User extends Authenticatable
     }
     public function clinics(){
         return $this->hasMany(Clinic::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(Review::class,'user_id');
+    }
+    public function doctorReviews(){
+        return $this->hasMany(Review::class,'doctor_id');
+    }
+    public function getAvgRatingAttribute(){
+        return $this->doctorReviews()->avg('rating');
     }
 }

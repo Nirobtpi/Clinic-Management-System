@@ -12,6 +12,9 @@ class loginController extends Controller
 {
     public function loginPage()
     {
+        if(Auth::check()){
+            return redirect()->route('home');
+        }
         return view('login');
     }
 

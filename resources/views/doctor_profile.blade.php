@@ -327,9 +327,9 @@
                                                 </p>
                                                 @foreach (json_decode($time->start_time,true) as $i=>$showTitme)
                                                     @if($time->is_active == 1)
-                                                    <p class="timings-times">
-                                                        <span>{{ date('h:i A', strtotime($showTitme)) }} - {{ date('h:i A', strtotime($end_time[$i])) }}</span>
-                                                    </p>
+                                                        <p class="timings-times">
+                                                            <span>{{ date('h:i A', strtotime($showTitme)) }} - {{ date('h:i A', strtotime($end_time[$i])) }}</span>
+                                                        </p>
                                                     @else
                                                         <p class="timings-times">
                                                             {{ __('Off Day') }}
@@ -372,145 +372,52 @@
                             <ul class="comments-list">
 
                                 <!-- Comment List -->
-                                <li>
-                                    <div class="comment">
-                                        <img class="avatar avatar-sm rounded-circle" alt="User Image"
-                                            src="assets/img/patients/patient.jpg">
-                                        <div class="comment-body">
-                                            <div class="meta-data">
-                                                <span class="comment-author">Richard Wilson</span>
-                                                <span class="comment-date">Reviewed 2 Days ago</span>
-                                                <div class="review-count rating">
-                                                    <i class="fas fa-star filled"></i>
-                                                    <i class="fas fa-star filled"></i>
-                                                    <i class="fas fa-star filled"></i>
-                                                    <i class="fas fa-star filled"></i>
-                                                    <i class="fas fa-star"></i>
-                                                </div>
-                                            </div>
-                                            <p class="recommended"><i class="far fa-thumbs-up"></i> I recommend the
-                                                doctor</p>
-                                            <p class="comment-content">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                                Ut enim ad minim veniam, quis nostrud exercitation.
-                                                Curabitur non nulla sit amet nisl tempus
-                                            </p>
-                                            <div class="comment-reply">
-                                                <a class="comment-btn" href="#">
-                                                    <i class="fas fa-reply"></i> Reply
-                                                </a>
-                                                <p class="recommend-btn">
-                                                    <span>Recommend?</span>
-                                                    <a href="#" class="like-btn">
-                                                        <i class="far fa-thumbs-up"></i> Yes
-                                                    </a>
-                                                    <a href="#" class="dislike-btn">
-                                                        <i class="far fa-thumbs-down"></i> No
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Comment Reply -->
-                                    <ul class="comments-reply">
+                                @if($doctor?->doctorReviews->where('is_approved', 1)->isNotEmpty())
+                                    @foreach($doctor?->doctorReviews->where('is_approved', 1) as $review)
                                         <li>
                                             <div class="comment">
                                                 <img class="avatar avatar-sm rounded-circle" alt="User Image"
-                                                    src="assets/img/patients/patient1.jpg">
+                                                    src="{{ asset($review->user?->photo ?? 'frontend/assets/img/doctors/doctor-thumb-02.jpg') }}">
                                                 <div class="comment-body">
                                                     <div class="meta-data">
-                                                        <span class="comment-author">Charlene Reed</span>
-                                                        <span class="comment-date">Reviewed 3 Days ago</span>
+                                                        <span class="comment-author">{{ $review->user?->name }}</span>
+                                                        <span class="comment-date">Reviewed {{ Carbon\Carbon::parse($review->created_at)->diffForHumans() }}</span>
                                                         <div class="review-count rating">
-                                                            <i class="fas fa-star filled"></i>
-                                                            <i class="fas fa-star filled"></i>
-                                                            <i class="fas fa-star filled"></i>
-                                                            <i class="fas fa-star filled"></i>
+                                                            @php
+                                                                $rating=$review->rating;
+                                                                $fullstar=floor($rating);
+                                                                $emptyStar=5-$fullstar;
+                                                            @endphp
+                                                            @for ($i = 0; $i < $fullstar; $i++)
+                                                                <i class="fas fa-star filled"></i>
+                                                            @endfor
+                                                            @for ($i = 0; $i < $emptyStar; $i++)
                                                             <i class="fas fa-star"></i>
+                                                            @endfor
                                                         </div>
                                                     </div>
                                                     <p class="comment-content">
-                                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                                                        aliqua.
-                                                        Ut enim ad minim veniam.
-                                                        Curabitur non nulla sit amet nisl tempus
+                                                        {{ $review->comment }}
                                                     </p>
-                                                    <div class="comment-reply">
-                                                        <a class="comment-btn" href="#">
-                                                            <i class="fas fa-reply"></i> Reply
-                                                        </a>
-                                                        <p class="recommend-btn">
-                                                            <span>Recommend?</span>
-                                                            <a href="#" class="like-btn">
-                                                                <i class="far fa-thumbs-up"></i> Yes
-                                                            </a>
-                                                            <a href="#" class="dislike-btn">
-                                                                <i class="far fa-thumbs-down"></i> No
-                                                            </a>
-                                                        </p>
-                                                    </div>
                                                 </div>
                                             </div>
+
                                         </li>
-                                    </ul>
-                                    <!-- /Comment Reply -->
-
-                                </li>
-                                <!-- /Comment List -->
-
-                                <!-- Comment List -->
-                                <li>
-                                    <div class="comment">
-                                        <img class="avatar avatar-sm rounded-circle" alt="User Image"
-                                            src="assets/img/patients/patient2.jpg">
-                                        <div class="comment-body">
-                                            <div class="meta-data">
-                                                <span class="comment-author">Travis Trimble</span>
-                                                <span class="comment-date">Reviewed 4 Days ago</span>
-                                                <div class="review-count rating">
-                                                    <i class="fas fa-star filled"></i>
-                                                    <i class="fas fa-star filled"></i>
-                                                    <i class="fas fa-star filled"></i>
-                                                    <i class="fas fa-star filled"></i>
-                                                    <i class="fas fa-star"></i>
-                                                </div>
-                                            </div>
-                                            <p class="comment-content">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                                Ut enim ad minim veniam, quis nostrud exercitation.
-                                                Curabitur non nulla sit amet nisl tempus
-                                            </p>
-                                            <div class="comment-reply">
-                                                <a class="comment-btn" href="#">
-                                                    <i class="fas fa-reply"></i> Reply
-                                                </a>
-                                                <p class="recommend-btn">
-                                                    <span>Recommend?</span>
-                                                    <a href="#" class="like-btn">
-                                                        <i class="far fa-thumbs-up"></i> Yes
-                                                    </a>
-                                                    <a href="#" class="dislike-btn">
-                                                        <i class="far fa-thumbs-down"></i> No
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <!-- /Comment List -->
+                                    @endforeach
+                                @else
+                                    <h4 class="card-title text-center">No Review Data Found</h4>
+                                @endif
 
                             </ul>
 
                             <!-- Show All -->
+                            @if($doctor?->doctorReviews->where('is_approved', 1)->isNotEmpty())
                             <div class="all-feedback text-center">
                                 <a href="#" class="btn btn-primary btn-sm">
-                                    Show all feedback <strong>(167)</strong>
+                                    {{ __('Show all feedback') }} <strong>({{ $doctor?->doctorReviews->where('is_approved', 1)->count() }})</strong>
                                 </a>
                             </div>
+                            @endif
                             <!-- /Show All -->
 
                         </div>
@@ -518,56 +425,42 @@
 
                         <!-- Write Review -->
                         <div class="write-review">
-                            <h4>Write a review for <strong>Dr. Darren Elder</strong></h4>
+                            <h4>{{ __('Write a review for') }} <strong>{{ $doctor->name }}</strong></h4>
 
                             <!-- Write Review Form -->
-                            <form>
+                            <form action="{{ route('review.store', $doctor->id) }}" method="POST">
+                                @csrf
                                 <div class="form-group">
-                                    <label>Review</label>
+                                    <label>{{ __('Review') }}</label>
                                     <div class="star-rating">
-                                        <input id="star-5" type="radio" name="rating" value="star-5">
+                                        <input id="star-5" type="radio" name="rating" value="5">
                                         <label for="star-5" title="5 stars">
                                             <i class="active fa fa-star"></i>
                                         </label>
-                                        <input id="star-4" type="radio" name="rating" value="star-4">
+                                        <input id="star-4" type="radio" name="rating" value="4">
                                         <label for="star-4" title="4 stars">
                                             <i class="active fa fa-star"></i>
                                         </label>
-                                        <input id="star-3" type="radio" name="rating" value="star-3">
+                                        <input id="star-3" type="radio" name="rating" value="3">
                                         <label for="star-3" title="3 stars">
                                             <i class="active fa fa-star"></i>
                                         </label>
-                                        <input id="star-2" type="radio" name="rating" value="star-2">
+                                        <input id="star-2" type="radio" name="rating" value="2">
                                         <label for="star-2" title="2 stars">
                                             <i class="active fa fa-star"></i>
                                         </label>
-                                        <input id="star-1" type="radio" name="rating" value="star-1">
+                                        <input id="star-1" type="radio" name="rating" value="1">
                                         <label for="star-1" title="1 star">
                                             <i class="active fa fa-star"></i>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Title of your review</label>
-                                    <input class="form-control" type="text"
-                                        placeholder="If you could say it in one sentence, what would you say?">
-                                </div>
-                                <div class="form-group">
                                     <label>Your review</label>
-                                    <textarea id="review_desc" maxlength="100" class="form-control"></textarea>
+                                    <textarea id="review_desc" maxlength="300" name="comment" class="form-control"></textarea>
 
                                     <div class="d-flex justify-content-between mt-3"><small class="text-muted"><span
-                                                id="chars">100</span> characters remaining</small></div>
-                                </div>
-                                <hr>
-                                <div class="form-group">
-                                    <div class="terms-accept">
-                                        <div class="custom-checkbox">
-                                            <input type="checkbox" id="terms_accept">
-                                            <label for="terms_accept">I have read and accept <a href="#">Terms &amp;
-                                                    Conditions</a></label>
-                                        </div>
-                                    </div>
+                                                id="chars">300</span> characters remaining</small></div>
                                 </div>
                                 <div class="submit-section">
                                     <button type="submit" class="btn btn-primary submit-btn">Add Review</button>
@@ -594,19 +487,29 @@
                                             <div class="listing-day current">
                                                 <div class="day">{{ Carbon\Carbon::now()->format('l') }} <span>{{ Carbon\Carbon::now()->format('d M Y') }}</span></div>
                                                 @if($todayHours)
-                                                @php
-                                                    $startTimes = collect(json_decode($todayHours->start_time,true))->map(function ($time) {
-                                                        return date('h:i A', strtotime($time));
-                                                    });
-                                                @endphp
 
                                                 @if($todayHours->is_active == 1)
                                                     <div class="time-items">
-                                                        <span class="open-status"><span class="badge bg-{{ $isOpen == 1 ? 'success' : 'danger' }}-light">{{ $isOpen == 1 ? 'Open' : 'Closed'.' Open in '. date('h:i A', strtotime($startTimes[0])) }}</span></span>
+                                                        <span class="open-status">
+                                                            @php
+                                                                $start_time=json_decode($todayHours->start_time,true);
+                                                            @endphp
+
+                                                            <span class="badge bg-{{ $isOpen == 1 ? 'success' : 'danger' }}-light">
+                                                                {{ $isOpen == 1 ? 'Open Now' : 'Closed' }}
+                                                            </span>
+                                                            @if($open == 1)
+                                                                Open Will Be {{ date('h:i A', strtotime($start_time[0])) }}
+                                                            @else
+                                                                Closed
+                                                            @endif
+
+                                                        </span>
+
                                                         @foreach(json_decode($todayHours->start_time,true) as $i=>$hour)
-                                                        @php
-                                                            $end=json_decode($todayHours->end_time,true);
-                                                        @endphp
+                                                            @php
+                                                                $end=json_decode($todayHours->end_time,true);
+                                                            @endphp
                                                             <span class="time">{{ date('h:i A', strtotime($hour)) }} - {{ date('h:i A', strtotime($end[$i])) }}</span>
                                                         @endforeach
                                                     </div>

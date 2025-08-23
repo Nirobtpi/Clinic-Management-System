@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Auth\ReviewController;
 use App\Http\Controllers\Auth\UserController as AuthUserController;
 use App\Http\Controllers\Doctor\DoctorLogInfoController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
@@ -49,6 +50,8 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
         Route::resource('schedule', ScheduleTimingController::class);
         Route::get('schedule/update/data/{day}', [ScheduleTimingController::class, 'scheduleUpdate'])->name('schedule.update.data');
         Route::resource('social-medai',SocialMediaController::class)->names('doctor.socialmedia');
+        Route::get('reviews',[ReviewController::class,'index'])->name('doctor.reviews');
+        Route::get('review/{id}',[ReviewController::class,'statusUpdate'])->name('status.update');
 
 
     });
@@ -62,6 +65,7 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
         Route::get('/',[UserDashboardController::class,'dashboard'])->name('user.dashboard');
         Route::get('profile/view',[UserProfileController::class,'profileView'])->name('user.profile');
         Route::put('profile/update/{id}',[UserProfileController::class,'profileUpdate'])->name('user.update');
+        Route::post('review/store/{id}',[ReviewController::class,'reviewStore'])->name('review.store');
 
 
     });
@@ -69,7 +73,7 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
 
 Route::prefix('user')->group(function(){
     Route::get('doctor/{id}/proofile/view',[DashboardController::class,'doctorProfileView'])->name('user.doctor.profile');
-}); 
+});
 
 
 // user route

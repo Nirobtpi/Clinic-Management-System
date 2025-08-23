@@ -60,9 +60,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="reviews.html">
+                    <a href="{{ route('doctor.reviews') }}">
                         <i class="fas fa-star"></i>
-                        <span>Reviews</span>
+                        <span>{{ __('Reviews') }}</span>
                     </a>
                 </li>
                 <li>

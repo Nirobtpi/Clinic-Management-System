@@ -21,34 +21,44 @@ class DashboardController extends Controller
     }
     public function doctorProfileView($id){
 
-        $doctor=User::where('id', $id)->where('role', 'doctor')->with('scheduleTimings','profile','socialMedia','department')->first();
+        $doctor=User::where('id', $id)->where('role', 'doctor')->with('scheduleTimings','profile','socialMedia','department','doctorReviews.user')->first();
         $clicnic=json_decode($doctor->profile->clinic_id ?? '[]', true);
         $clicnics=Clinic::whereIn('id',$clicnic)->get();
         $scheduleTimings=ScheduleTiming::where('user_id', $id)->get();
-        // return $scheduleTimings;
+        // $reviews=User::where('id', $id)->with('doctorReviews','reviews.user')->get();
+        // $get_user
 
+        // return $doctor;
 
         $today = Carbon::now()->format('l'); // Sunday, Monday etc.
         $currentTime = Carbon::now()->format('H:i');
 
         $hours = ScheduleTiming::where('user_id', $id)->get()->keyBy('day_of_week');
         $todayHours = $hours[$today] ?? null;
-        // return now()->format('h:i A');
         $isOpen = false;
+        $open=false;
 
         if ($todayHours && $todayHours->is_active == 1 && !empty($todayHours->start_time)) {
-            foreach (json_decode($todayHours->start_time, true) as $i => $start) {
-                $end = $todayHours->end_time[$i] ?? null;
+            $endTimes = json_decode($todayHours->end_time, true) ?? [];
+            $startTimes = json_decode($todayHours->start_time, true) ?? [];
 
-                if ($end && $currentTime >= $start && $currentTime <= $end) {
+            foreach ($startTimes as $i => $start) {
+                $startTime = Carbon::createFromFormat('H:i', $start);
+                $endTime   = isset($endTimes[$i]) ? Carbon::createFromFormat('H:i', $endTimes[$i]) : null;
+                $now = Carbon::now();
+
+                if ($endTime && $now->between($startTime, $endTime)) {
                     $isOpen = true;
+                    break;
+                }
+                if($now->lessThan($startTime)){
+                    $open = true;
                     break;
                 }
             }
         }
-        // return $isOpen == true ?'Open':'Close';
 
 
-        return view('doctor_profile', compact('doctor','clicnics','scheduleTimings','isOpen','todayHours'));
+        return view('doctor_profile', compact('doctor','clicnics','scheduleTimings','isOpen','todayHours','open'));
     }
 }
