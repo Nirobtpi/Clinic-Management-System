@@ -93,10 +93,10 @@ class User extends Authenticatable
     }
 
     public function reviews(){
-        return $this->hasMany(Review::class,'user_id');
+        return $this->hasMany(Review::class,'user_id')->where('is_approved', 1);
     }
     public function doctorReviews(){
-        return $this->hasMany(Review::class,'doctor_id');
+        return $this->hasMany(Review::class,'doctor_id')->where('is_approved', 1);
     }
     public function getAvgRatingAttribute(){
         return $this->doctorReviews()->avg('rating');

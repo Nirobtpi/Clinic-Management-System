@@ -103,12 +103,25 @@
                                 </h3>
                                 <p class="speciality">{{ $doctor->biography }}</p>
                                 <div class="rating">
-                                    <i class="fas fa-star filled"></i>
-                                    <i class="fas fa-star filled"></i>
-                                    <i class="fas fa-star filled"></i>
-                                    <i class="fas fa-star filled"></i>
-                                    <i class="fas fa-star filled"></i>
-                                    <span class="d-inline-block average-rating">(17)</span>
+                                    @php
+                                        $rating = $doctor->avg_rating;
+                                        $fullstar = floor($rating);
+                                        $halfstar = ceil($rating - $fullstar);
+                                        $emptyStar = 5 - $fullstar - $halfstar;
+                                    @endphp
+
+                                    @for ($i = 0; $i < $fullstar; $i++)
+                                        <i class="fas fa-star filled"></i>
+                                    @endfor
+
+                                    @if ($halfstar > 0)
+                                       <i class="fas fa-star-half-alt"></i>
+                                    @endif
+
+                                    @for ($i = 0; $i < $emptyStar; $i++)
+                                        <i class="fas fa-star"></i>
+                                    @endfor
+                                    <span class="d-inline-block average-rating">({{ number_format($doctor->avg_rating,1) }})</span>
                                 </div>
                                 <ul class="available-info">
                                     <li>
@@ -127,7 +140,7 @@
                                         <a href="{{ route('user.doctor.profile', $doctor->id) }}" class="btn view-btn">{{ __('View Profile') }}</a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="booking.html" class="btn book-btn">{{ __('Book Now') }}</a>
+                                        <a href="{{ route('user.doctor.appointment', $doctor->id) }}" class="btn book-btn">{{ __('Book Now') }}</a>
                                     </div>
                                 </div>
                             </div>

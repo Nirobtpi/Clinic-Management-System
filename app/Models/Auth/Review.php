@@ -15,6 +15,6 @@ class Review extends Model
     }
     public function doctor()
     {
-        return $this->belongsTo(User::class)->where('role', 'doctor');
+        return $this->belongsTo(User::class)->where('role', 'doctor')->where('is_active', 1);
     }
 }

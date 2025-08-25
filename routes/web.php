@@ -66,6 +66,9 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
         Route::get('profile/view',[UserProfileController::class,'profileView'])->name('user.profile');
         Route::put('profile/update/{id}',[UserProfileController::class,'profileUpdate'])->name('user.update');
         Route::post('review/store/{id}',[ReviewController::class,'reviewStore'])->name('review.store');
+        Route::get('booking/{id}',[DashboardController::class,'booking'])->name('user.doctor.appointment');
+        Route::post('booking/{id}/store',[DashboardController::class,'bookingStore'])->name('user.booking.store');
+        Route::get('checkout',[DashboardController::class,'checkout'])->name('user.checkout');
 
 
     });
@@ -73,6 +76,7 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
 
 Route::prefix('user')->group(function(){
     Route::get('doctor/{id}/proofile/view',[DashboardController::class,'doctorProfileView'])->name('user.doctor.profile');
+    Route::get('checkday/{id}',[DashboardController::class,'checkDay'])->name('user.checkday');
 });
 
 

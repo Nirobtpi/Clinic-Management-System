@@ -26,12 +26,22 @@
                             <p class="doc-department"><img src="{{ asset($doctor?->department->logo ?? 'frontend/assets/img/specialities/specialities-01.jpg') }}"
                                     class="img-fluid" alt="Speciality">{{ $doctor?->department->name }}</p>
                             <div class="rating">
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star"></i>
-                                <span class="d-inline-block average-rating">(35)</span>
+                                @php
+                                    $rating = $doctor->avg_rating;
+                                    $fullstar = floor($rating);
+                                    $halfstar =  ($rating - $fullstar >= 0.5) ? 1 : 0;
+                                    $emptyStar = 5 - $fullstar - $halfstar;
+                                @endphp
+                                @for ($i = 0; $i < $fullstar; $i++)
+                                    <i class="fas fa-star filled"></i>
+                                @endfor
+                                @if ($halfstar > 0)
+                                    <i class="fas fa-star-half-alt"></i>
+                                @endif
+                                @for ($i = 0; $i < $emptyStar; $i++)
+                                    <i class="fas fa-star"></i>
+                                @endfor
+                                <span class="d-inline-block average-rating">({{ number_format($doctor->avg_rating,1) }})</span>
                             </div>
                             <div class="clinic-details">
                                 <p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $doctor?->address_line_one }} - <a
@@ -282,14 +292,7 @@
                                     <div class="clinic-content">
                                         <h4 class="clinic-name"><a href="#">{{ $clicnic?->name }}</a></h4>
                                         <p class="doc-speciality">{{ $doctor?->biography }}</p>
-                                        <div class="rating">
-                                            <i class="fas fa-star filled"></i>
-                                            <i class="fas fa-star filled"></i>
-                                            <i class="fas fa-star filled"></i>
-                                            <i class="fas fa-star filled"></i>
-                                            <i class="fas fa-star"></i>
-                                            <span class="d-inline-block average-rating">(4)</span>
-                                        </div>
+
                                         <div class="clinic-details mb-0">
                                             <h5 class="clinic-direction"> <i class="fas fa-map-marker-alt"></i>{{ $clicnic?->address }}<br><a
                                                     href="javascript:void(0);">Get Directions</a></h5>
@@ -498,10 +501,8 @@
                                                             <span class="badge bg-{{ $isOpen == 1 ? 'success' : 'danger' }}-light">
                                                                 {{ $isOpen == 1 ? 'Open Now' : 'Closed' }}
                                                             </span>
-                                                            @if($open == 1)
-                                                                Open Will Be {{ date('h:i A', strtotime($start_time[0])) }}
-                                                            @else
-                                                                Closed
+                                                            @if($isOpen == 0 )
+                                                                <p style="font-size: 12px">Open Will Be {{ date('h:i A', strtotime($start_time[0])) }}</p>
                                                             @endif
 
                                                         </span>
