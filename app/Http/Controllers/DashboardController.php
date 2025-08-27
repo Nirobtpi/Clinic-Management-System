@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Appointment;
 use Carbon\Carbon;
 use App\Models\User;
 use Nette\Utils\Json;
 use App\Models\Clinic;
 use App\Models\Department;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Models\StripePayment;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Doctor\ScheduleTiming;
 use Illuminate\Contracts\Session\Session;
@@ -123,42 +124,21 @@ class DashboardController extends Controller
 
     // booking create
     public function bookingStore(Request $request,$id){
-
         $request->validate([
             'patient_phone'=>'required|string',
             'date'=>'required|date',
             'clicnic'=>'required|integer',
             'time'=>'required|string',
         ]);
-        $time=Carbon::createFromFormat('h:i A', $request->time)->format('H:i');
+        $doctor=User::where('id',$request->doctor_id)->where('role','doctor')->with('doctorReviews')->first();
+        $stripe=StripePayment::first();
 
-    //    $appointment= Appointment::create([
-    //         'user_id'=>Auth::id(),
-    //         'appointment_date'=>$request->date,
-    //         'clinic_id'=>$request->clicnic,
-    //         'appointment_time'=>$time,
-    //         'doctor_id'=>$id,
-    //         'fee'=>$request->fee
-    //     ]);
-
-
-
-        $userData=[
-            'user_id'=>Auth::id(),
-            'appointment_date'=>$request->date,
-            'clinic_id'=>$request->clicnic,
-            'appointment_time'=>$time,
-            'doctor_id'=>$id,
-            'fee'=>$request->fee
-        ];
-        Session([
-            'bookingData'=> $userData
-        ]);
-        return redirect()->route('user.checkout');
+        $info=json_encode($request->all());
+        return view('checkout',compact('id','doctor','info','stripe'));
     }
     public function checkout(){
 
-        return view('checkout');
+        // return view('checkout');
     }
 
     // protected function create_order($user, array $orderData, $payment_method, $payment_status, $tnx_info = null){

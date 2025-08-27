@@ -109,8 +109,8 @@ $user=auth()->user();
                             <div class="col-md-12">
 
                                 <!-- Time Slot -->
-                                <form action="{{ route('user.booking.store',Auth::user()->id) }}" method="POST">
-                                    @csrf
+                                <form action="{{ route('user.booking.store',Auth::user()->id) }}" method="GET">
+                                    
                                     <div class="mb-3">
                                         <label for="patient_phone">Fee</label>
                                         <input type="text" class="form-control" value="{{ $doctor?->profile?->custom_price }}" name="fee" readonly>
@@ -124,18 +124,18 @@ $user=auth()->user();
                                     {{-- Patient Phone --}}
                                     <div class="mb-3">
                                         <label for="patient_phone">Phone Number</label>
-                                        <input type="text" class="form-control" name="patient_phone" required>
+                                        <input type="text" class="form-control" name="patient_phone">
                                     </div>
 
                                     {{-- Select Date --}}
                                     <div class="mb-3">
                                         <label for="date">Choose Date</label>
-                                        <input type="date" id="check_day" class="form-control" name="date" required>
+                                        <input type="date" id="check_day" class="form-control" name="date">
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="time">Choose Time</label>
-                                        <select class="form-control" id="clicnic" name="clicnic" required>
+                                        <select class="form-control" id="clicnic" name="clicnic" >
                                             <option value="" disabled selected>Select Time Slot</option>
                                             @foreach ($clinics as $clicnic)
                                                 <option value="{{ $clicnic->id }}">{{ $clicnic->name }}</option>
@@ -146,7 +146,7 @@ $user=auth()->user();
                                     {{-- Select Time Slot --}}
                                     <div class="mb-3">
                                         <label for="time">Choose Time</label>
-                                        <select class="form-control" id="time" name="time" required>
+                                        <select class="form-control" id="time" name="time" >
                                             <option value="" disabled selected>Select Time Slot</option>
                                         </select>
                                     </div>

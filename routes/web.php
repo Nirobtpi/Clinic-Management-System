@@ -3,11 +3,13 @@
 use App\Models\User;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StripeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\User\loginController;
 use App\Http\Controllers\Admin\StateController;
+use App\Http\Controllers\Auth\ReviewController;
 use App\Http\Controllers\Admin\ClinicController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DoctorsController;
@@ -15,14 +17,13 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\Doctor\SocialMediaController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Auth\ReviewController;
-use App\Http\Controllers\Auth\UserController as AuthUserController;
 use App\Http\Controllers\Doctor\DoctorLogInfoController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
 use App\Http\Controllers\Doctor\ScheduleTimingController;
-use App\Http\Controllers\Doctor\SocialMediaController;
+use App\Http\Controllers\Auth\UserController as AuthUserController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 
 Route::get('/',[DashboardController::class,'index'])->name('home');
@@ -67,8 +68,13 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
         Route::put('profile/update/{id}',[UserProfileController::class,'profileUpdate'])->name('user.update');
         Route::post('review/store/{id}',[ReviewController::class,'reviewStore'])->name('review.store');
         Route::get('booking/{id}',[DashboardController::class,'booking'])->name('user.doctor.appointment');
-        Route::post('booking/{id}/store',[DashboardController::class,'bookingStore'])->name('user.booking.store');
+        Route::get('booking/{id}/store',[DashboardController::class,'bookingStore'])->name('user.booking.store');
         Route::get('checkout',[DashboardController::class,'checkout'])->name('user.checkout');
+
+        // stripe payment
+        Route::post('stripe/post',[stripeController::class,'stripe_post'])->name('stripe.post');
+        Route::get('success',[StripeController::class,'success'])->name('payment.success');
+        Route::get('cancle',[StripeController::class,'cancle'])->name('payment.cancel');
 
 
     });
@@ -116,5 +122,8 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
     Route::get('country/{id}/cities', [StateController::class, 'getCityByCountry'])->name('country.cities');
 
     Route::resource('clinics', ClinicController::class);
+
+    Route::get('stripe-config',[StripeController::class,'index'])->name('stripe.config');
+    Route::put('stripe-config/update',[StripeController::class,'update'])->name('stripe.update');
 
 });

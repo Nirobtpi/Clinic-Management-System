@@ -13,118 +13,90 @@ $user=auth()->user();
             <div class="col-md-7 col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        {{ session('bookingData.fee') }}
-
                         <!-- Checkout Form -->
-                        <form action="https://dreamguys.co.in/demo/doccure/booking-success.html">
+                        {{-- <form action="{{ route('stripe.post') }}" data-cc-on-file="false" method="POST"
+                        id="payment-form" data-stripe-publishable-key="{{ $stripe?->stripe_key }}">
+                        @csrf
+                        <div class="payment-widget">
+                            <h4 class="card-title">Payment Method</h4>
 
-                            <!-- Personal Information -->
-                            <div class="info-widget">
-                                <h4 class="card-title">Personal Information</h4>
+                            <!-- Credit Card Payment -->
+                            <div class="payment-list">
+                                <label class="payment-radio credit-card-option">
+                                    <input type="radio" name="radio" checked="">
+                                    <span class="checkmark"></span>
+                                    Credit card
+                                </label>
                                 <div class="row">
-                                    <div class="col-md-6 col-sm-12">
+                                    <div class="col-md-12">
                                         <div class="form-group card-label">
-                                            <label>First Name</label>
-                                            <input class="form-control" type="text">
+                                            <label for="card_number">Card Number</label>
+                                            <input class="form-control" name="card_number" id="card_number"
+                                                placeholder="1234  5678  9876  5432" type="text">
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-12">
+                                    <div class="col-md-4">
                                         <div class="form-group card-label">
-                                            <label>Last Name</label>
-                                            <input class="form-control" type="text">
+                                            <label for="expiry_month">Expiry Month</label>
+                                            <input class="form-control" name="expiry_month" id="expiry_month"
+                                                placeholder="MM" type="text">
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-12">
+                                    <div class="col-md-4">
                                         <div class="form-group card-label">
-                                            <label>Email</label>
-                                            <input class="form-control" type="email">
+                                            <label for="expiry_year">Expiry Year</label>
+                                            <input class="form-control" name="expiry_year" id="expiry_year"
+                                                placeholder="YY" type="text">
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-12">
+                                    <div class="col-md-4">
                                         <div class="form-group card-label">
-                                            <label>Phone</label>
-                                            <input class="form-control" type="text">
+                                            <label for="cvv">CVV</label>
+                                            <input class="form-control" name="cvv" id="cvv" type="text">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="exist-customer">Existing Customer? <a href="#">Click here to login</a></div>
                             </div>
-                            <!-- /Personal Information -->
+                            <input type="hidden" name="amount" value="{{ request()->get('fee') +10 }}">
+                            <div id="card-element" class="form-control p-3"></div>
+                            <!-- /Credit Card Payment -->
 
+                            <!-- Submit Section -->
+                            <div class="submit-section mt-4">
+                                <button type="submit" class="btn btn-primary submit-btn">Confirm and Pay</button>
+                            </div>
+                            <!-- /Submit Section -->
+
+                        </div>
+                        </form> --}}
+
+                        <form id="payment-form" method="POST" action="{{ route('stripe.post') }}">
+                            @csrf
                             <div class="payment-widget">
                                 <h4 class="card-title">Payment Method</h4>
 
-                                <!-- Credit Card Payment -->
-                                <div class="payment-list">
-                                    <label class="payment-radio credit-card-option">
-                                        <input type="radio" name="radio" checked="">
-                                        <span class="checkmark"></span>
-                                        Credit card
-                                    </label>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group card-label">
-                                                <label for="card_name">Name on Card</label>
-                                                <input class="form-control" id="card_name" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group card-label">
-                                                <label for="card_number">Card Number</label>
-                                                <input class="form-control" id="card_number"
-                                                    placeholder="1234  5678  9876  5432" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group card-label">
-                                                <label for="expiry_month">Expiry Month</label>
-                                                <input class="form-control" id="expiry_month" placeholder="MM"
-                                                    type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group card-label">
-                                                <label for="expiry_year">Expiry Year</label>
-                                                <input class="form-control" id="expiry_year" placeholder="YY"
-                                                    type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group card-label">
-                                                <label for="cvv">CVV</label>
-                                                <input class="form-control" id="cvv" type="text">
-                                            </div>
-                                        </div>
-                                    </div>
+                                <!-- Stripe Card Element -->
+                                <div class="form-group">
+                                    <label for="card-element">Card Details</label>
+                                    <div id="card-element" class="form-control p-2"></div>
                                 </div>
-                                <!-- /Credit Card Payment -->
 
-                                <!-- Paypal Payment -->
-                                <div class="payment-list">
-                                    <label class="payment-radio paypal-option">
-                                        <input type="radio" name="radio">
-                                        <span class="checkmark"></span>
-                                        Paypal
-                                    </label>
+                                <!-- Error message -->
+                                <div id="card-errors" class="text-danger mt-2"></div>
+
+                                <!-- Hidden Amount -->
+                                <input type="hidden" name="amount" value="{{ request()->get('fee') + 10 }}">
+                                <input type="hidden" name="stripeToken" id="stripeToken">
+                                <input type="hidden" name="date" value="{{ request()->get('date') }}">
+                                <input type="hidden" name="time" value="{{ request()->get('time') }}">
+                                <input type="hidden" name="patient_name" value="{{ request()->get('patient_name') }}">
+                                <input type="hidden" name="doctor_id" value="{{ request()->get('doctor_id') }}">
+                                <input type="hidden" name="clicnic" value="{{ request()->get('clicnic') }}">
+
+                                <!-- Submit -->
+                                <div class="submit-section mt-3">
+                                    <button type="button" id="payment-button" class="btn btn-primary">Confirm and Pay</button>
                                 </div>
-                                <!-- /Paypal Payment -->
-
-                                <!-- Terms Accept -->
-                                <div class="terms-accept">
-                                    <div class="custom-checkbox">
-                                        <input type="checkbox" id="terms_accept">
-                                        <label for="terms_accept">I have read and accept <a href="#">Terms &amp;
-                                                Conditions</a></label>
-                                    </div>
-                                </div>
-                                <!-- /Terms Accept -->
-
-                                <!-- Submit Section -->
-                                <div class="submit-section mt-4">
-                                    <button type="submit" class="btn btn-primary submit-btn">Confirm and Pay</button>
-                                </div>
-                                <!-- /Submit Section -->
-
                             </div>
                         </form>
                         <!-- /Checkout Form -->
@@ -152,10 +124,11 @@ $user=auth()->user();
                             <!-- Booking Doctor Info -->
                             <div class="booking-doc-info">
                                 <a href="doctor-profile.html" class="booking-doc-img">
-                                    <img src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+                                    <img src="{{ asset($doctor?->photo ?? 'frontend/assets/img/doctors/doctor-thumb-02.jpg') }}"
+                                        alt="User Image">
                                 </a>
                                 <div class="booking-info">
-                                    <h4><a href="doctor-profile.html">Dr. Darren Elder</a></h4>
+                                    <h4><a href="doctor-profile.html">{{ $doctor?->name }}</a></h4>
                                     <div class="rating">
                                         <i class="fas fa-star filled"></i>
                                         <i class="fas fa-star filled"></i>
@@ -165,7 +138,8 @@ $user=auth()->user();
                                         <span class="d-inline-block average-rating">35</span>
                                     </div>
                                     <div class="clinic-details">
-                                        <p class="doc-location"><i class="fas fa-map-marker-alt"></i> Newyork, USA</p>
+                                        <p class="doc-location"><i
+                                                class="fas fa-map-marker-alt"></i>{{ $doctor?->address_line_one }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -174,19 +148,21 @@ $user=auth()->user();
                             <div class="booking-summary">
                                 <div class="booking-item-wrap">
                                     <ul class="booking-date">
-                                        <li>Date <span>16 Nov 2019</span></li>
-                                        <li>Time <span>10:00 AM</span></li>
+                                        <li>Date <span>{{ date('d M Y',strtotime(request()->get('date'))) }}</span></li>
+                                        <li>Time
+                                            <span>{{ \Carbon\Carbon::parse(request()->get('time'))->format('g:i A') }}</span>
+                                        </li>
                                     </ul>
                                     <ul class="booking-fee">
-                                        <li>Consulting Fee <span>$100</span></li>
+                                        <li>Consulting Fee <span>${{ request()->get('fee') }}</span></li>
                                         <li>Booking Fee <span>$10</span></li>
-                                        <li>Video Call <span>$50</span></li>
+                                        {{-- <li>Video Call <span>$50</span></li> --}}
                                     </ul>
                                     <div class="booking-total">
                                         <ul class="booking-total-list">
                                             <li>
                                                 <span>Total</span>
-                                                <span class="total-cost">$160</span>
+                                                <span class="total-cost">${{ request()->get('fee')+10 }}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -218,3 +194,59 @@ $user=auth()->user();
 
 
 @endsection
+@push('js')
+<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+
+<script>
+$(function() {
+   var stripe=Stripe("{{ $stripe->stripe_key }}");
+   var elements = stripe.elements();
+   var cardElement = elements.create('card');
+   cardElement.mount('#card-element');
+
+   $('#payment-button').on('click',function(e){
+       payWithStripe();
+   });
+
+   function payWithStripe(){
+    stripe.createToken(cardElement).then(function(result) {
+        // console.log(result.token.id);
+        if(result.token){
+            $('#stripeToken').val(result.token.id);
+            $('#payment-form').submit();
+        }else{
+            toastr.error(result.error.message);
+        }
+    });
+    }
+});
+
+// custom card code
+// $(function () {
+//     var stripe = Stripe("{{ $stripe->stripe_key }}");
+
+//     $('#payment-button').on('click', function (e) {
+//         e.preventDefault();
+
+//         var cardData = {
+//             number: $('#card-number').val(),
+//             exp_month: $('#card-exp-month').val(),
+//             exp_year: $('#card-exp-year').val(),
+//             cvc: $('#card-cvc').val(),
+//         };
+
+//         stripe.createToken('card', cardData).then(function (result) {
+//             if (result.token) {
+//                 $('#stripeToken').val(result.token.id);
+//                 $('#payment-form').submit();
+//             } else {
+//                 toastr.error(result.error.message);
+//             }
+//         });
+//     });
+// });
+
+</script>
+
+
+@endpush

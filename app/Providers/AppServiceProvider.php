@@ -4,7 +4,9 @@ namespace App\Providers;
 
 
 use Carbon\Carbon;
+use App\Models\StripePayment;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,3 +30,4 @@ class AppServiceProvider extends ServiceProvider
         date_default_timezone_set('Asia/Dhaka');
     }
 }
+
