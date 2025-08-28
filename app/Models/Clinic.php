@@ -12,4 +12,9 @@ class Clinic extends Model
     {
         return $this->hasMany(DoctorProfile::class);
     }
+
+    public function apportments()
+    {
+        return $this->hasMany(Appointment::class,'clinic_id');
+    }
 }

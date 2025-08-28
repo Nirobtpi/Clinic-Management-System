@@ -76,6 +76,10 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
         Route::get('success',[StripeController::class,'success'])->name('payment.success');
         Route::get('cancle',[StripeController::class,'cancle'])->name('payment.cancel');
 
+        // check time
+
+        Route::get('check-time/{id}',[DashboardController::class,'checkTime'])->name('user.check.time');
+
 
     });
 });

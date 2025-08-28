@@ -91,7 +91,17 @@ class DashboardController extends Controller
 
         $ajaxDate = Carbon::parse($request->date)->format('l');
         $scheduleTiming = $scheduleTimings[$ajaxDate] ?? null;
+        $selectedDate=Carbon::parse($request->date);
 
+        $apportment = Appointment::where('user_id', Auth::user()->id)
+            ->where('appointment_date', $selectedDate->format('Y-m-d'))->where('doctor_id', $request->doctor_id)
+            ->first();
+        if($apportment){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You already have an appointment on this date.',
+            ]);
+        }
         $timeSlots = [];
 
         if ($scheduleTiming && $scheduleTiming->is_active == 1) {
@@ -101,6 +111,10 @@ class DashboardController extends Controller
             foreach ($startTimes as $i => $start) {
                 $startTime = Carbon::createFromFormat('H:i', $start);
                 $endTime   = isset($endTimes[$i]) ? Carbon::createFromFormat('H:i', $endTimes[$i]) : null;
+
+                if ($selectedDate->isToday() && $startTime->lt(Carbon::now())) {
+                    continue;
+                }
 
                 if ($endTime) {
                     while ($startTime < $endTime) {
@@ -122,6 +136,22 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function checkTime(Request $request,$id){
+        $appointment = Appointment::where('doctor_id', $request->doctor_id)->where('appointment_date', $request->date)->where('appointment_time', $request->time)->first();
+
+        if($appointment){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This time slot is already booked.',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'This time slot is available.',
+        ]);
+    }
+
     // booking create
     public function bookingStore(Request $request,$id){
         $request->validate([
@@ -129,21 +159,17 @@ class DashboardController extends Controller
             'date'=>'required|date',
             'clicnic'=>'required|integer',
             'time'=>'required|string',
+            'select_patient'=>'required',
         ]);
         $doctor=User::where('id',$request->doctor_id)->where('role','doctor')->with('doctorReviews')->first();
         $stripe=StripePayment::first();
+        // return $doctor;
 
         $info=json_encode($request->all());
         return view('checkout',compact('id','doctor','info','stripe'));
     }
-    public function checkout(){
 
-        // return view('checkout');
-    }
 
-    // protected function create_order($user, array $orderData, $payment_method, $payment_status, $tnx_info = null){
-
-    // }
 
 
 }

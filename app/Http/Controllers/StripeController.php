@@ -52,6 +52,9 @@ class StripeController extends Controller
             'date'=>$request->date,
             'clicnic'=>$request->clicnic,
             'doctor'=>$request->doctor_id,
+            'patient_number'=>$request->number_patient,
+            'phone'=>$request->phone_number,
+            'fee'=>$request->amount,
 
         ];
 
@@ -76,7 +79,7 @@ class StripeController extends Controller
     }
 
     public function success(){
-        return redirect()->route('home')->with(['message'=>'Payment successful','alert-type'=>'success']);
+        return redirect()->route('user.dashboard')->with(['message'=>'Payment successful','alert-type'=>'success']);
     }
     public function cancle(){
         return redirect()->route('user.checkout')->with(['message'=>'Payment Unsuccessful','alert-type'=>'error']);
@@ -94,6 +97,10 @@ class StripeController extends Controller
         $apportment->payment_status=$payment_status;
         $apportment->transaction_id=$tnx_info;
         $apportment->appointment_status=1;
+        $apportment->patient_number=$data['patient_number'];
+        $apportment->phone_number=$data['phone'];
+        $apportment->fee=$data['fee'];
+        $apportment->total_ammount=$data['fee'];
         $apportment->save();
 
         return $apportment;

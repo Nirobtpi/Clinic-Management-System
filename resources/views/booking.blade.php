@@ -110,11 +110,7 @@ $user=auth()->user();
 
                                 <!-- Time Slot -->
                                 <form action="{{ route('user.booking.store',Auth::user()->id) }}" method="GET">
-                                    
-                                    <div class="mb-3">
-                                        <label for="patient_phone">Fee</label>
-                                        <input type="text" class="form-control" value="{{ $doctor?->profile?->custom_price }}" name="fee" readonly>
-                                    </div>
+
                                     {{-- Patient Name --}}
                                     <div class="mb-3">
                                         <label for="patient_name">Your Name</label>
@@ -124,7 +120,22 @@ $user=auth()->user();
                                     {{-- Patient Phone --}}
                                     <div class="mb-3">
                                         <label for="patient_phone">Phone Number</label>
-                                        <input type="text" class="form-control" name="patient_phone">
+                                        <input type="text" class="form-control" value="{{ old('phone', $user?->phone) }}" name="patient_phone">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="select_patient">{{ __('Select Number Patient') }}</label>
+                                        <select class="form-control" id="select_patient" name="select_patient" >
+                                            <option value="" disabled selected>Select Patient</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="fee">Fee</label>
+                                        <input type="text" id="fee" data-price="{{ $doctor?->profile?->custom_price }}" class="form-control" value="{{ $doctor?->profile?->custom_price }}" name="fee" readonly>
                                     </div>
 
                                     {{-- Select Date --}}
@@ -134,7 +145,7 @@ $user=auth()->user();
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="time">Choose Time</label>
+                                        <label for="time">Choose Clinic</label>
                                         <select class="form-control" id="clicnic" name="clicnic" >
                                             <option value="" disabled selected>Select Time Slot</option>
                                             @foreach ($clinics as $clicnic)
@@ -184,6 +195,11 @@ $user=auth()->user();
             var clinicId = $(this).val();
             var doctor_id = "{{ $doctor->id }}";
             var date=$('#check_day').val();
+            if (!date) {
+                toastr.error('Please Select Date!');
+                $('#check_day').focus();
+                return;
+            }
             // alert(doctor_id);
             // alert(doctor_id);
             var url = '{{ route("user.checkday", ":id") }}';
@@ -207,6 +223,39 @@ $user=auth()->user();
                             });
                         } else {
                             toastr.error(data.message || 'No available slots found!');
+                        }
+                    }
+                });
+            }
+        })
+
+        $('#select_patient').on('change', function () {
+            var patient = $(this).val();
+            var price =$('#fee').data('price');
+            var total=patient*price;
+            $('#fee').val(total);
+        })
+
+        $('#time').on('change', function () {
+            let date=$('#check_day').val();
+            let time=$(this).val();
+            let doctor_id = "{{ $doctor->id }}";
+            let url = '{{ route("user.check.time", ':id') }}';
+            url = url.replace(':id', doctor_id);
+            if (time) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        date: date,
+                        time: time,
+                        doctor_id: doctor_id
+                    },
+                    success: function (data) {
+                        if (data.status === 'success') {
+                            toastr.success(data.message);
+                        } else {
+                            toastr.error(data.message);
                         }
                     }
                 });

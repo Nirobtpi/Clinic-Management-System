@@ -13,62 +13,19 @@ $user=auth()->user();
             <div class="col-md-7 col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <!-- Checkout Form -->
-                        {{-- <form action="{{ route('stripe.post') }}" data-cc-on-file="false" method="POST"
-                        id="payment-form" data-stripe-publishable-key="{{ $stripe?->stripe_key }}">
-                        @csrf
-                        <div class="payment-widget">
-                            <h4 class="card-title">Payment Method</h4>
-
-                            <!-- Credit Card Payment -->
-                            <div class="payment-list">
-                                <label class="payment-radio credit-card-option">
-                                    <input type="radio" name="radio" checked="">
-                                    <span class="checkmark"></span>
-                                    Credit card
-                                </label>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group card-label">
-                                            <label for="card_number">Card Number</label>
-                                            <input class="form-control" name="card_number" id="card_number"
-                                                placeholder="1234  5678  9876  5432" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group card-label">
-                                            <label for="expiry_month">Expiry Month</label>
-                                            <input class="form-control" name="expiry_month" id="expiry_month"
-                                                placeholder="MM" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group card-label">
-                                            <label for="expiry_year">Expiry Year</label>
-                                            <input class="form-control" name="expiry_year" id="expiry_year"
-                                                placeholder="YY" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group card-label">
-                                            <label for="cvv">CVV</label>
-                                            <input class="form-control" name="cvv" id="cvv" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <input type="hidden" name="amount" value="{{ request()->get('fee') +10 }}">
-                            <div id="card-element" class="form-control p-3"></div>
-                            <!-- /Credit Card Payment -->
-
-                            <!-- Submit Section -->
-                            <div class="submit-section mt-4">
-                                <button type="submit" class="btn btn-primary submit-btn">Confirm and Pay</button>
-                            </div>
-                            <!-- /Submit Section -->
-
+                        <div class="card-header mb-4">
+                                <ul class="booking-date">
+                                    <li>Date <span>{{ date('d M Y',strtotime(request()->get('date'))) }}</span></li>
+                                    <li>Time
+                                        <span>{{ \Carbon\Carbon::parse(request()->get('time'))->format('g:i A') }}</span>
+                                    </li>
+                                </ul>
+                                <ul class="booking-fee">
+                                    <li>Consulting Fee <span>${{ request()->get('fee') }}</span></li>
+                                    <li>Booking Fee <span>$10</span></li>
+                                    {{-- <li>Video Call <span>$50</span></li> --}}
+                                </ul>
                         </div>
-                        </form> --}}
 
                         <form id="payment-form" method="POST" action="{{ route('stripe.post') }}">
                             @csrf
@@ -92,6 +49,8 @@ $user=auth()->user();
                                 <input type="hidden" name="patient_name" value="{{ request()->get('patient_name') }}">
                                 <input type="hidden" name="doctor_id" value="{{ request()->get('doctor_id') }}">
                                 <input type="hidden" name="clicnic" value="{{ request()->get('clicnic') }}">
+                                <input type="hidden" name="number_patient" value="{{ request()->get('select_patient') }}">
+                                <input type="hidden" name="phone_number" value="{{ request()->get('patient_phone') }}">
 
                                 <!-- Submit -->
                                 <div class="submit-section mt-3">
@@ -130,12 +89,22 @@ $user=auth()->user();
                                 <div class="booking-info">
                                     <h4><a href="doctor-profile.html">{{ $doctor?->name }}</a></h4>
                                     <div class="rating">
-                                        <i class="fas fa-star filled"></i>
-                                        <i class="fas fa-star filled"></i>
-                                        <i class="fas fa-star filled"></i>
-                                        <i class="fas fa-star filled"></i>
-                                        <i class="fas fa-star"></i>
-                                        <span class="d-inline-block average-rating">35</span>
+                                        @php
+                                            $rating = $doctor?->avg_rating;
+                                            $fullstar = floor($rating);
+                                            $halfstar =  ($rating - $fullstar >= 0.5) ? 1 : 0;
+                                            $emptyStar = 5 - $fullstar - $halfstar;
+                                        @endphp
+                                        @for ($i = 0; $i < $fullstar; $i++)
+                                            <i class="fas fa-star filled"></i>
+                                        @endfor
+                                        @if ($halfstar)
+                                            <i class="fas fa-star half-filled"></i>
+                                        @endif
+                                        @for ($i = 0; $i < $emptyStar; $i++)
+                                            <i class="fas fa-star"></i>
+                                        @endfor
+                                        <span class="d-inline-block average-rating">{{ number_format($doctor?->avg_rating,1) }}</span>
                                     </div>
                                     <div class="clinic-details">
                                         <p class="doc-location"><i
