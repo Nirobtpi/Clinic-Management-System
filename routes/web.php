@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Doctor\DoctorDashboardController;
 use App\Models\User;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Doctor\DoctorProfileController;
 use App\Http\Controllers\Doctor\ScheduleTimingController;
 use App\Http\Controllers\Auth\UserController as AuthUserController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
+use App\Models\Appointment;
 
 Route::get('/',[DashboardController::class,'index'])->name('home');
 Route::get('user/login',[loginController::class,'loginPage'])->name('user.login');
@@ -39,7 +41,7 @@ Route::get('logout',[loginController::class,'logout'])->name('user.logout')->mid
 Route::middleware('auth:web')->prefix('auth')->group(function () {
     Route::group(['prefix' => 'doctor'], function () {
 
-        Route::get('/',[DoctorLogInfoController::class,'dashboard'])->name('doctor.dashboard');
+        Route::get('/',[DoctorDashboardController::class,'dashboard'])->name('doctor.dashboard');
         Route::get('profile/view',[DoctorProfileController::class,'profile'])->name('doctor.profile');
 
         Route::get('get-city/{id}',[DoctorProfileController::class,'getCity'])->name('doctor.get.city');
@@ -53,6 +55,10 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
         Route::resource('social-medai',SocialMediaController::class)->names('doctor.socialmedia');
         Route::get('reviews',[ReviewController::class,'index'])->name('doctor.reviews');
         Route::get('review/{id}',[ReviewController::class,'statusUpdate'])->name('status.update');
+
+        // Appointment status manage route
+        Route::get('appointment/status/{id}',[DoctorDashboardController::class,'appointmentStatus'])->name('doctor.appointment.status');
+        Route::get('appointment/cancel/{id}',[DoctorDashboardController::class,'appointmentCancel'])->name('doctor.appointment.cancel');
 
 
     });

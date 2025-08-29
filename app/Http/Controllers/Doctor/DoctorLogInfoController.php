@@ -48,11 +48,4 @@ class DoctorLogInfoController extends Controller
         return redirect()->route('user.login')->with($notification);
     }
 
-    public function dashboard(){
-        if(!Auth::check()){
-            return redirect()->route('user.login');
-        }
-        return view('doctor.doctor_dashboard');
-    }
-
 }

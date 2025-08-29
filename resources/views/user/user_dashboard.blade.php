@@ -77,12 +77,16 @@
                                                                 <td>${{ $appointment?->total_ammount }}</td>
                                                                 <td>{{ $appointment?->transaction_id }}</td>
                                                                 <td>
-                                                                    @if($appointment->status == 'approved')
-                                                                    <span class="badge badge-pill bg-success-light">Approve</span>
+                                                                    @if($appointment->status == 'expired')
+                                                                        <span class="badge badge-pill bg-danger-light">Expired</span>
+                                                                    @elseif($appointment->status == 'approved')
+                                                                        <span class="badge badge-pill bg-success-light">Approve</span>
                                                                     @elseif($appointment->status == 'pending')
-                                                                    <span class="badge badge-pill bg-info-light">Panding</span>
+                                                                        <span class="badge badge-pill bg-info-light">Panding</span>
+                                                                    @elseif($appointment->status == 'completed')
+                                                                        <span class="badge badge-pill bg-danger-light">Completed</span>
                                                                     @else
-                                                                    <span class="badge badge-pill bg-danger-light">Cancel</span>
+                                                                     <span class="badge badge-pill bg-danger-light">Cancel</span>
                                                                     @endif
                                                                 </td>
                                                                 <td class="text-right">

@@ -42,32 +42,37 @@ class StripeController extends Controller
 
     public function stripe_post(Request $request){
         // dd($request->all());
-        $stripe = StripePayment::first();
-        Stripe::setApiKey($stripe->stripe_secret_key);
-        $amount=$request->amount*100;
-        $user=Auth::user();
-        $data=[
-            'amount'=>$amount,
-            'time'=>$request->time,
-            'date'=>$request->date,
-            'clicnic'=>$request->clicnic,
-            'doctor'=>$request->doctor_id,
-            'patient_number'=>$request->number_patient,
-            'phone'=>$request->phone_number,
-            'fee'=>$request->amount,
+        try {
+            $stripe = StripePayment::first();
+            Stripe::setApiKey($stripe->stripe_secret_key);
+            $amount=$request->amount*100;
+            $user=Auth::user();
+            $data=[
+                'amount'=>$amount,
+                'time'=>$request->time,
+                'date'=>$request->date,
+                'clicnic'=>$request->clicnic,
+                'doctor'=>$request->doctor_id,
+                'patient_number'=>$request->number_patient,
+                'phone'=>$request->phone_number,
+                'fee'=>$request->amount,
 
-        ];
+            ];
 
-        $charge = Charge::create([
-            'amount' => $amount,
-            'currency' => 'usd',
-            'source' => $request->stripeToken,
-            'description' => 'Payment from Nirob',
-        ]);
+            $charge = Charge::create([
+                'amount' => $amount,
+                'currency' => 'usd',
+                'source' => $request->stripeToken,
+                'description' => 'Payment from Nirob',
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with(['message'=>$e->getMessage(),'alert-type'=>'error']);
+        }
         // dd($charge);
 
         if($charge->status == 'succeeded'){
-            $this->create_appointment($data,$user,"stripe",'1',$charge->balance_transaction);
+            $this->create_appointment($data,$user,"stripe",'1',$charge->balance_transaction,$charge->id);
         }
 
         if ($charge->status == 'succeeded') {
@@ -82,10 +87,10 @@ class StripeController extends Controller
         return redirect()->route('user.dashboard')->with(['message'=>'Payment successful','alert-type'=>'success']);
     }
     public function cancle(){
-        return redirect()->route('user.checkout')->with(['message'=>'Payment Unsuccessful','alert-type'=>'error']);
+        return redirect()->back()->with(['message'=>'Payment Unsuccessful','alert-type'=>'error']);
     }
 
-    protected function create_appointment(array $data, $user,$payment_method,$payment_status,$tnx_info=null)
+    protected function create_appointment(array $data, $user,$payment_method,$payment_status,$tnx_info=null,$charge_id=null)
     {
         $apportment=new Appointment();
         $apportment->user_id=$user->id;
@@ -101,6 +106,7 @@ class StripeController extends Controller
         $apportment->phone_number=$data['phone'];
         $apportment->fee=$data['fee'];
         $apportment->total_ammount=$data['fee'];
+        $apportment->charge_id=$charge_id;
         $apportment->save();
 
         return $apportment;
