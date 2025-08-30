@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Appointment;
-use Str;
+use Carbon\Carbon;
 use Stripe\Charge;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
+use App\Models\Appointment;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\StripePayment;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class StripeController extends Controller
@@ -94,6 +94,7 @@ class StripeController extends Controller
     {
         $apportment=new Appointment();
         $apportment->user_id=$user->id;
+        $apportment->app_id='#APT'.Str::random(4);
         $apportment->appointment_time=Carbon::parse($data['time'])->format('H:i');
         $apportment->appointment_date=$data['date'];
         $apportment->clinic_id=$data['clicnic'];

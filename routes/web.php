@@ -59,6 +59,9 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
         // Appointment status manage route
         Route::get('appointment/status/{id}',[DoctorDashboardController::class,'appointmentStatus'])->name('doctor.appointment.status');
         Route::get('appointment/cancel/{id}',[DoctorDashboardController::class,'appointmentCancel'])->name('doctor.appointment.cancel');
+        Route::get('all-appointment',[DoctorDashboardController::class,'allAppointment'])->name('doctor.all.appointment');
+        Route::get('appointment/{id}',[DoctorDashboardController::class,'appointmentView'])->name('doctor.appointment.view');
+        Route::get('my-patient',[DoctorDashboardController::class,'myPatient'])->name('doctor.my.patient');
 
 
     });

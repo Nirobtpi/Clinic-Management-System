@@ -19,11 +19,6 @@
                                 <div class="row">
                                     <div class="col-md-12 col-lg-4">
                                         <div class="dash-widget dct-border-rht">
-                                            <div class="circle-bar circle-bar1">
-                                                <div class="circle-graph1" data-percent="75">
-                                                    <img src="assets/img/icon-01.png" class="img-fluid" alt="patient">
-                                                </div>
-                                            </div>
                                             <div class="dash-widget-info">
                                                 <h6>{{ __('Total Patient') }}</h6>
                                                 <h3>{{ $today_patient }}</h3>
@@ -34,11 +29,6 @@
 
                                     <div class="col-md-12 col-lg-4">
                                         <div class="dash-widget dct-border-rht">
-                                            <div class="circle-bar circle-bar2">
-                                                <div class="circle-graph2" data-percent="65">
-                                                    <img src="assets/img/icon-02.png" class="img-fluid" alt="Patient">
-                                                </div>
-                                            </div>
                                             <div class="dash-widget-info">
                                                 <h6>{{ __('Today Patient') }}</h6>
                                                 <h3>{{ $today_patient }}</h3>
@@ -49,12 +39,6 @@
 
                                     <div class="col-md-12 col-lg-4">
                                         <div class="dash-widget">
-                                            <div class="circle-bar circle-bar3">
-                                                <div class="circle-graph3" data-percent="50">
-                                                    <img src="{{ asset('frontend/assets/img/icon-03.png') }}"
-                                                        class="img-fluid" alt="Patient">
-                                                </div>
-                                            </div>
                                             <div class="dash-widget-info">
                                                 <h6>{{ __('Appoinments') }}</h6>
                                                 <h3>{{ $total_appointment }}</h3>
@@ -156,12 +140,12 @@
                                                                 <td class="text-center">${{ $apportment->total_ammount }}</td>
                                                                 <td class="text-right">
                                                                     <div class="table-action">
-                                                                        <a href="javascript:void(0);"
-                                                                            class="btn btn-sm bg-info-light">
+                                                                        <a data-url="{{ route('doctor.appointment.view', $apportment->id) }}" class="btn btn-sm bg-info-light appointment_view" data-toggle="modal"
+                                                                            data-target="#appt_details">
                                                                             <i class="far fa-eye"></i> View
                                                                         </a>
-                                                                        @if($apportment->status != 'cancelled' && $apportment->status != 'completed')
-                                                                            <a href="{{ route('doctor.appointment.status', $apportment->id) }}"
+                                                                        @if($apportment->status != 'cancelled')
+                                                                            <a href="{{ $apportment->status == 'completed' ? 'javascript:void(0);' : route('doctor.appointment.status', $apportment->id) }}"
                                                                                 class="btn btn-sm bg-success-light">
                                                                                 <i class="fas fa-check"></i>
                                                                                 @if($apportment->status == 'approved')
@@ -231,7 +215,7 @@
                                                             <tr>
                                                                 <td>
                                                                     <h2 class="table-avatar">
-                                                                        <a href="patient-profile.html"
+                                                                        <a href=""
                                                                             class="avatar avatar-sm mr-2"><img
                                                                                 class="avatar-img rounded-circle"
                                                                                 src="{{ $apportment->user->photo ? asset($apportment->user->photo) : asset('frontend/assets/img/patients/patient.jpg')   }}"
@@ -276,11 +260,11 @@
                                                                 <td class="text-center">${{ $apportment->total_ammount }}</td>
                                                                 <td class="text-right">
                                                                     <div class="table-action">
-                                                                        <a href="javascript:void(0);"
-                                                                            class="btn btn-sm bg-info-light">
+                                                                        <a data-url="{{ route('doctor.appointment.view', $apportment->id) }}" class="btn btn-sm bg-info-light appointment_view" data-toggle="modal"
+                                                                            data-target="#appt_details">
                                                                             <i class="far fa-eye"></i> View
                                                                         </a>
-                                                                        @if($apportment->status != 'completed' && $apportment->status != 'approved')
+                                                                        @if($apportment->status != 'completed')
                                                                             <a href="{{ route('doctor.appointment.status', $apportment->id) }}"
                                                                                 class="btn btn-sm bg-success-light">
                                                                                 <i class="fas fa-check"></i>
@@ -341,6 +325,41 @@
 <!-- /Page Content -->
 @endsection
 
+@section('modal')
+<div class="modal fade custom-modal" id="appt_details" style="display: none;" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Appointment Details</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+                    <div class="modal-body">
+                        <div id="appt_data"></div>
+                    </div>
+				</div>
+			</div>
+</div>
+@endsection
 @push('js')
-<script src="{{ asset('/frontend/assets/js/circle-progress.min.js') }}"></script>
+        <script>
+            $(document).ready(function () {
+                $('.appointment_view').click(function () {
+                    let url = $(this).data('url');
+                    $.ajax({
+                        type: 'get',
+                        url: url,
+                        success: function (response) {
+                             if (response.status === 'success') {
+                                console.log(response.html);
+                                $('#appt_data').html(response.html);
+                            }
+                        }
+                    })
+
+                });
+            })
+        </script>
 @endpush
+

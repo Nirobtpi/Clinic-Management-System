@@ -32,19 +32,19 @@
                 <li class="{{ Route::is('doctor.dashboard') ? 'active' : '' }}">
                     <a href="{{ route('doctor.dashboard') }}">
                         <i class="fas fa-columns"></i>
-                        <span>Dashboard</span>
+                        <span>{{ __('Dashboard') }}</span>
                     </a>
                 </li>
-                <li>
-                    <a href="appointments.html">
+                <li class="{{ Route::is('doctor.all.appointment') ? 'active' : '' }}">
+                    <a href="{{ route('doctor.all.appointment') }}">
                         <i class="fas fa-calendar-check"></i>
-                        <span>Appointments</span>
+                        <span>{{ __('Appointments') }}</span>
                     </a>
                 </li>
-                <li>
-                    <a href="my-patients.html">
+                <li class="{{ Route::is('doctor.my.patient') ? 'active' : '' }}">
+                    <a href="{{ route('doctor.my.patient') }}">
                         <i class="fas fa-user-injured"></i>
-                        <span>My Patients</span>
+                        <span>{{ __('My Patients') }}</span>
                     </a>
                 </li>
                 <li class="{{ Route::is('schedule.index') ? 'active' : '' }}">

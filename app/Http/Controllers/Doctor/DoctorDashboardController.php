@@ -96,4 +96,35 @@ class DoctorDashboardController extends Controller
             ]);
         }
     }
+
+    public function allAppointment(){
+        $appointments = Appointment::where('doctor_id',Auth::user()->id)->with('user')->orderBy('appointment_date','desc')->paginate(6);
+        // return $appointments;
+        return view('doctor.all_appointment',compact('appointments'));
+    }
+
+    public function appointmentView($id){
+
+        $appointment=Appointment::findOrFail($id);
+
+        $html= view('doctor._appointment_view',compact('appointment'))->render();
+
+        return response()->json([
+            'status' => 'success',
+            'html'   => $html
+        ]);
+    }
+
+    public function myPatient(){
+        $my_patients = Appointment::where('doctor_id',Auth::user()->id)->with('user')
+        ->whereIn('id',function($query){
+            $query->selectRaw('max(id) as id')
+            ->from('appointments')
+            ->groupBy('user_id');
+        })
+        ->orderBy('appointment_date','desc')
+        ->paginate(10);
+        // return $appointments;
+        return view('doctor.my_patient',compact('my_patients'));
+    }
 }
