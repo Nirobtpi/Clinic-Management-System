@@ -32,6 +32,17 @@
                                             @method('PUT')
                                             <input type="hidden" class="day" name="day">
 
+                                            <div class="col-lg-12 mb-6">
+                                            <div class="form-group">
+                                                    <label>Add Clinic</label>
+                                                    <select class="select form-control" name="clinic_id">
+                                                        <option value="">Select Clinic</option>
+                                                        @foreach($clinics as $clinic)
+                                                        <option @selected($shedudelData->clinic_id == $clinic->id) value="{{ $clinic->id }}">{{ $clinic->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                            </div>
+
                                             <div class="hours-info">
                                                  @foreach (json_decode($shedudelData->start_time) as $i=>$sc_time)
                                                 <div class="row form-row hours-cont">
@@ -43,7 +54,7 @@
                                                                 <div class="form-group">
                                                                     <label>Start Time</label>
 
-                                                                    <select class="form-control" id="startTimeSelect"
+                                                                     <select class="form-control" id="startTimeSelect"
                                                                         name="start_time[]">
                                                                         <option value="">Select One</option>
                                                                         @php

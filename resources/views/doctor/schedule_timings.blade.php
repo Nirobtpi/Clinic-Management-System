@@ -20,22 +20,6 @@
                                 <h4 class="card-title">Schedule Timings</h4>
                                 <div class="profile-box">
                                     <div class="row">
-
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label>Timing Slot Duration</label>
-                                                <select class="select form-control">
-                                                    <option>-</option>
-                                                    <option>15 mins</option>
-                                                    <option selected="selected">30 mins</option>
-                                                    <option>45 mins</option>
-                                                    <option>1 Hour</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-12">
                                             <div class="card schedule-widget mb-0">
 
@@ -402,8 +386,18 @@
                     <input type="hidden" class="day" name="day">
                     <div class="hours-info">
                         <div class="row form-row hours-cont">
+                            <div class="col-lg-12 mb-6">
+                                    <div class="form-group">
+                                        <label>Add Clinic</label>
+                                        <select class="select form-control" name="clinic_id">
+                                            <option>Select Clinic</option>
+                                            @foreach($clinics as $clinic)
+                                            <option value="{{ $clinic->id }}">{{ $clinic->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                            </div>
                             <div class="col-12 col-md-10">
-
                                 <div class="row form-row">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">

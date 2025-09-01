@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Doctor\DoctorDashboardController;
 use App\Models\User;
 use App\Models\Admin\Admin;
+use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CityController;
@@ -24,9 +25,9 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Doctor\DoctorLogInfoController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
 use App\Http\Controllers\Doctor\ScheduleTimingController;
+use App\Http\Controllers\Doctor\DoctorDashboardController;
 use App\Http\Controllers\Auth\UserController as AuthUserController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
-use App\Models\Appointment;
 
 Route::get('/',[DashboardController::class,'index'])->name('home');
 Route::get('user/login',[loginController::class,'loginPage'])->name('user.login');
@@ -88,6 +89,12 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
         // check time
 
         Route::get('check-time/{id}',[DashboardController::class,'checkTime'])->name('user.check.time');
+
+        // cart controller
+        Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+        Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+        Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+        Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 
     });

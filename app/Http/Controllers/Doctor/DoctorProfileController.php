@@ -125,7 +125,7 @@ class DoctorProfileController extends Controller
                 'user_id'          => $id,
                 'clinic_id'        => json_encode($request->clinic_name ?? []),
                 'custom_price'     => $request->price ?? null, // scalar
-                'services'         => json_encode($request->services ?? []),
+                'services'         => $request->services ?? null,
                 'degree'           => json_encode($request->degree ?? []),
                 'collage'          => json_encode($request->college ?? []),
                 'completion_year'  => json_encode($request->completion_year ?? []),
@@ -139,7 +139,7 @@ class DoctorProfileController extends Controller
                 'registrations'    => json_encode($request->registrations ?? []),
                 'registration_date'=> json_encode($request->registration_year ?? []),
                 'about_me'         => $request->about_me ?? null, // scalar
-                'specialization'   => json_encode($request->specialization ?? []),
+                'specialization'   => $request->specialization ?? null,
             ]);
         }
 

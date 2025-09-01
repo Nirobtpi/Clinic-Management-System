@@ -25,7 +25,7 @@
                                                     <img src="{{ asset($patient?->user?->photo) ?? asset('frontend/assets/img/patients/patient.jpg') }}" alt="User Image">
                                                 </a>
                                                 <div class="profile-det-info">
-                                                    <h3><a href="patient-profile.html">{{ $patient?->user?->name }}</a></h3>
+                                                    <h3><a href="#">{{ $patient?->user?->name }}</a></h3>
 
                                                     <div class="patient-details">
                                                         <h5><b>Patient ID :</b> P00{{ $patient?->id }}</h5>

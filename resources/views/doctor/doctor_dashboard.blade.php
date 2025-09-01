@@ -115,22 +115,19 @@
                                                                         $currentAppointmentDate = Carbon\Carbon::parse($apportment->appointment_date);
 
 
-                                                                        $lastAppointment = \App\Models\Appointment::where('user_id', $patientId)
-                                                                                            ->where('appointment_date', '<', $currentAppointmentDate)
-                                                                                            ->orderBy('appointment_date', 'desc')
-                                                                                            ->first();
+                                                                        $lastAppointment = \App\Models\Appointment::where('user_id', $patientId)->where('appointment_date', '<', $currentAppointmentDate)->orderBy('appointment_date', 'desc')->first();
                                                                         if (!$lastAppointment) {
                                                                             $patientType = 'New Patient';
                                                                         } else {
                                                                             $lastAppointmentDate = Carbon\Carbon::parse($lastAppointment->appointment_date);
                                                                             $newPeriodEnd = $lastAppointmentDate->copy()->addDays(30);
 
-                                                                            if ($currentAppointmentDate > $newPeriodEnd) {
+                                                                            if ($currentAppointmentDate < $newPeriodEnd) {
 
-                                                                                $patientType = 'New Patient';
+                                                                                $patientType = 'Old Patient';
 
                                                                             } else {
-                                                                                $patientType = 'Old Patient';
+                                                                                $patientType = 'New Patient';
                                                                             }
                                                                         }
                                                                     @endphp

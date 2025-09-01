@@ -144,6 +144,14 @@
                                     </div>
                                 </div>
                             </div>
+                            {{-- <form action="{{ route('cart.add') }}" method="POST" class="mt-3">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $doctor->id }}">
+                                <input type="hidden" name="name" value="{{ $doctor->name }}">
+                                <input type="hidden" name="price" value="{{ $doctor?->profile?->custom_price ?? 'Free' }}">
+                                <input type="number" class="form-control" name="qty" value="1" min="1">
+                                <button type="submit" class="btn btn-primary mt-3">Add to Cart</button>
+                            </form> --}}
                         </div>
                         <!-- /Doctor Widget -->
                     @endforeach
@@ -216,6 +224,5 @@
     </div>
 </section>
 <!-- Availabe Features -->
-
 
 @endsection

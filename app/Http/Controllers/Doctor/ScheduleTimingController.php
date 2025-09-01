@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Clinic;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Doctor\ScheduleTiming;
 
@@ -32,10 +33,11 @@ class ScheduleTimingController extends Controller
 
         // $endTime=['9:00','10:00','11:00','12:00','5:00','6:00','7:00','8:00'];
         $endTime = ['09:00','10:00','11:00','12:00','17:00','18:00','19:00','20:00'];
+        $clinics=Clinic::all();
 
         // return $sundayData;
 
-        return view('doctor.schedule_timings',compact('sheduels','weekdays','startTime','endTime','sundayData','mondayData','tuesdayData','thursdayData','wednesdayData','fridayData','saturdayData'));
+        return view('doctor.schedule_timings',compact('sheduels','weekdays','startTime','endTime','sundayData','mondayData','tuesdayData','thursdayData','wednesdayData','fridayData','saturdayData','clinics'));
     }
 
     /**
@@ -59,6 +61,7 @@ class ScheduleTimingController extends Controller
                 'end_time'   => 'required|array',
                 'end_time.*' => 'required|date_format:H:i|after:start_time.*',
                 'day' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
+                'clinic_id'=>'required'
             ]);
         }
 
@@ -71,6 +74,7 @@ class ScheduleTimingController extends Controller
                 'start_time' =>json_encode($request->start_time),
                 'end_time' => json_encode($request->end_time),
                 'is_active' => $request->status,
+                'clinic_id'=>$request->clinic_id
             ]
         );
         $notification = [
@@ -103,7 +107,8 @@ class ScheduleTimingController extends Controller
         $startTime = ['08:00','09:00','10:00','11:00','16:00','17:00','18:00','19:00'];
         $endTime = ['09:00','10:00','11:00','12:00','17:00','18:00','19:00','20:00'];
         $shedudelData=ScheduleTiming::where('user_id',Auth::id())->where('day_of_week',$schedule_day)->first();
-         return view('doctor.schedule_edit',compact('shedudelData','weekdays','startTime','endTime'));
+        $clinics=Clinic::all();
+        return view('doctor.schedule_edit',compact('shedudelData','weekdays','startTime','endTime','clinics'));
     }
 
     /**
@@ -111,12 +116,17 @@ class ScheduleTimingController extends Controller
      */
     public function update(Request $request, string $schedule_day)
     {
+        $request->validate([
+            'clinic_id'=>'required',
+        ]);
+
         $getData=ScheduleTiming::where('user_id',Auth::id())->where('day_of_week',$schedule_day)->first();
 
         $getData->update([
             'start_time'=>$request->start_time,
             'end_time'=>$request->end_time,
             'is_active'=>$request->status,
+            'clinic_id'=>$request->clinic_id
         ]);
 
         $notification = [

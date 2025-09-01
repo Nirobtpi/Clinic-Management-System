@@ -48,60 +48,6 @@ $user=auth()->user();
                 <!-- Schedule Widget -->
                 <div class="card booking-schedule schedule-widget">
 
-                    <!-- Schedule Header -->
-                    {{-- <div class="schedule-header">
-                        <div class="row">
-                            <div class="col-md-12">
-
-                                <!-- Day Slot -->
-                                <div class="day-slot">
-                                    <ul>
-                                        <li class="left-arrow">
-                                            <a href="#">
-                                                <i class="fa fa-chevron-left"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <span>Mon</span>
-                                            <span class="slot-date">11 Nov <small class="slot-year">2019</small></span>
-                                        </li>
-                                        <li>
-                                            <span>Tue</span>
-                                            <span class="slot-date">12 Nov <small class="slot-year">2019</small></span>
-                                        </li>
-                                        <li>
-                                            <span>Wed</span>
-                                            <span class="slot-date">13 Nov <small class="slot-year">2019</small></span>
-                                        </li>
-                                        <li>
-                                            <span>Thu</span>
-                                            <span class="slot-date">14 Nov <small class="slot-year">2019</small></span>
-                                        </li>
-                                        <li>
-                                            <span>Fri</span>
-                                            <span class="slot-date">15 Nov <small class="slot-year">2019</small></span>
-                                        </li>
-                                        <li>
-                                            <span>Sat</span>
-                                            <span class="slot-date">16 Nov <small class="slot-year">2019</small></span>
-                                        </li>
-                                        <li>
-                                            <span>Sun</span>
-                                            <span class="slot-date">17 Nov <small class="slot-year">2019</small></span>
-                                        </li>
-                                        <li class="right-arrow">
-                                            <a href="#">
-                                                <i class="fa fa-chevron-right"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <!-- /Day Slot -->
-
-                            </div>
-                        </div>
-                    </div> --}}
-                    <!-- /Schedule Header -->
 
                     <!-- Schedule Content -->
                     <div class="schedule-cont">
@@ -147,7 +93,7 @@ $user=auth()->user();
                                     <div class="mb-3">
                                         <label for="time">Choose Clinic</label>
                                         <select class="form-control" id="clicnic" name="clicnic" >
-                                            <option value="" disabled selected>Select Time Slot</option>
+                                            <option value=""  selected>Select Time Slot</option>
                                             @foreach ($clinics as $clicnic)
                                                 <option value="{{ $clicnic->id }}">{{ $clicnic->name }}</option>
                                             @endforeach

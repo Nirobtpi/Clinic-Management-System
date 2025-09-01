@@ -16,11 +16,11 @@
                         <!-- Appointment List -->
                             <div class="appointment-list">
                                 <div class="profile-info-widget">
-                                    <a href="patient-profile.html" class="booking-doc-img">
+                                    <a href="" class="booking-doc-img">
                                         <img src="{{ asset($appointment?->user?->photo ?? 'frontend/assets/img/patients/patient1.jpg') }}" alt="User Image">
                                     </a>
                                     <div class="profile-det-info">
-                                        <h3><a href="patient-profile.html">{{ $appointment?->user?->name }}</a></h3>
+                                        <h3><a href="">{{ $appointment?->user?->name }}</a></h3>
                                         <div class="patient-details">
                                             <h5><i class="far fa-clock"></i>{{ Carbon\Carbon::parse($appointment?->appointment_date)->format('d M Y') }} {{ Carbon\Carbon::parse($appointment?->appointment_time)->format('h:i A') }} </h5>
                                             <h5><i class="fas fa-map-marker-alt"></i> {{ $appointment?->user?->address_line_one }}</h5>
