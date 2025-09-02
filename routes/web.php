@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\SslCommerzPaymentController;
 use App\Http\Controllers\Doctor\SocialMediaController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -147,3 +148,18 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
     Route::put('stripe-config/update',[StripeController::class,'update'])->name('stripe.update');
 
 });
+
+
+// SSLCommerz
+// SSLCOMMERZ Start
+Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+
+Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
+Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+
+Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+
+Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);

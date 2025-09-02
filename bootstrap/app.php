@@ -13,7 +13,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'auth'=> \App\Http\Middleware\Authenticate::class,
-            'admin.redirect'=> \App\Http\Middleware\AdminRedirectMiddleware::class
+            'admin.redirect'=> \App\Http\Middleware\AdminRedirectMiddleware::class,
+
+        ]);
+        $middleware->group('web', [
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
