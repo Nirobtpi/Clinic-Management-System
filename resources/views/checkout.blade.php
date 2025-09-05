@@ -5,6 +5,8 @@
 @section('content')
 @php
 $user=auth()->user();
+$doctor=session()->get('doctor');
+$session=session()->get('info');
 @endphp
 <div class="content" style="transform: none; min-height: 149px;">
     <div class="container" style="transform: none;">
@@ -21,43 +23,44 @@ $user=auth()->user();
                                     </li>
                                 </ul>
                                 <ul class="booking-fee">
-                                    <li>Consulting Fee <span>${{ request()->get('fee') }}</span></li>
+                                    <li>Consulting Fee <span>${{ $session['fee'] }}</span></li>
                                     <li>Booking Fee <span>$10</span></li>
                                     {{-- <li>Video Call <span>$50</span></li> --}}
                                 </ul>
                         </div>
+                         @if($stripe->status == 1)
+                            <form id="payment-form" method="POST" action="{{ route('stripe.post') }}">
+                                @csrf
+                                <div class="payment-widget">
+                                    <h4 class="card-title">Payment Method</h4>
 
-                        <form id="payment-form" method="POST" action="{{ route('stripe.post') }}">
-                            @csrf
-                            <div class="payment-widget">
-                                <h4 class="card-title">Payment Method</h4>
+                                    <!-- Stripe Card Element -->
+                                    <div class="form-group">
+                                        <label for="card-element">Card Details</label>
+                                        <div id="card-element" class="form-control p-2"></div>
+                                    </div>
 
-                                <!-- Stripe Card Element -->
-                                <div class="form-group">
-                                    <label for="card-element">Card Details</label>
-                                    <div id="card-element" class="form-control p-2"></div>
+                                    <!-- Error message -->
+
+                                    <div id="card-errors" class="text-danger mt-2"></div>
+                                    <!-- Hidden Amount -->
+                                    <input type="hidden" name="amount" value="{{ $session['fee'] + 10 }}">
+                                    <input type="hidden" name="stripeToken" id="stripeToken">
+                                    <input type="hidden" name="date" value="{{ $session['date'] }}">
+                                    <input type="hidden" name="time" value="{{ $session['time'] }}">
+                                    <input type="hidden" name="patient_name" value="{{ $session['patient_name'] }}">
+                                    <input type="hidden" name="doctor_id" value="{{ $session['doctor_id'] }}">
+                                    <input type="hidden" name="clicnic" value="{{ $session['clinic'] }}">
+                                    <input type="hidden" name="number_patient" value="{{ $session['select_patient'] }}">
+                                    <input type="hidden" name="phone_number" value="{{ $session['patient_phone'] }}">
+
+                                    <!-- Submit -->
+                                    <div class="submit-section mt-3">
+                                        <button type="button" id="payment-button" class="btn btn-primary">Confirm and Pay</button>
+                                    </div>
                                 </div>
-
-                                <!-- Error message -->
-                                <div id="card-errors" class="text-danger mt-2"></div>
-
-                                <!-- Hidden Amount -->
-                                <input type="hidden" name="amount" value="{{ request()->get('fee') + 10 }}">
-                                <input type="hidden" name="stripeToken" id="stripeToken">
-                                <input type="hidden" name="date" value="{{ request()->get('date') }}">
-                                <input type="hidden" name="time" value="{{ request()->get('time') }}">
-                                <input type="hidden" name="patient_name" value="{{ request()->get('patient_name') }}">
-                                <input type="hidden" name="doctor_id" value="{{ request()->get('doctor_id') }}">
-                                <input type="hidden" name="clicnic" value="{{ request()->get('clicnic') }}">
-                                <input type="hidden" name="number_patient" value="{{ request()->get('select_patient') }}">
-                                <input type="hidden" name="phone_number" value="{{ request()->get('patient_phone') }}">
-
-                                <!-- Submit -->
-                                <div class="submit-section mt-3">
-                                    <button type="button" id="payment-button" class="btn btn-primary">Confirm and Pay</button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        @endif
                         <!-- /Checkout Form -->
 
                     </div>
@@ -72,87 +75,31 @@ $user=auth()->user();
 
                 <!-- /Booking Summary -->
 
-                <div class="theiaStickySidebar"
-                    style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none; left: 1165px; top: 0px;">
+                <div class="theiaStickySidebar">
                     <div class="card booking-card">
                         <div class="card-header">
-                            <h4 class="card-title">Booking Summary</h4>
+                            <h4 class="card-title">Payment Getway</h4>
                         </div>
                         <div class="card-body">
-
-                            <!-- Booking Doctor Info -->
-                            <div class="booking-doc-info">
-                                <a href="doctor-profile.html" class="booking-doc-img">
-                                    <img src="{{ asset($doctor?->photo ?? 'frontend/assets/img/doctors/doctor-thumb-02.jpg') }}"
-                                        alt="User Image">
-                                </a>
-                                <div class="booking-info">
-                                    <h4><a href="doctor-profile.html">{{ $doctor?->name }}</a></h4>
-                                    <div class="rating">
-                                        @php
-                                            $rating = $doctor?->avg_rating;
-                                            $fullstar = floor($rating);
-                                            $halfstar =  ($rating - $fullstar >= 0.5) ? 1 : 0;
-                                            $emptyStar = 5 - $fullstar - $halfstar;
-                                        @endphp
-                                        @for ($i = 0; $i < $fullstar; $i++)
-                                            <i class="fas fa-star filled"></i>
-                                        @endfor
-                                        @if ($halfstar)
-                                            <i class="fas fa-star half-filled"></i>
-                                        @endif
-                                        @for ($i = 0; $i < $emptyStar; $i++)
-                                            <i class="fas fa-star"></i>
-                                        @endfor
-                                        <span class="d-inline-block average-rating">{{ number_format($doctor?->avg_rating,1) }}</span>
-                                    </div>
-                                    <div class="clinic-details">
-                                        <p class="doc-location"><i
-                                                class="fas fa-map-marker-alt"></i>{{ $doctor?->address_line_one }}</p>
-                                    </div>
+                            <div class="row">
+                                {{-- @if($stripe->status == 1)
+                                <div class="col-12">
+                                    <a href="#" class="btn btn-lg bg-info-light" data-toggle="modal" data-target="#appt_details">
+											<img width="60px" src="{{ asset($stripe?->icon) }}" alt="">
+										</a>
+                                </div> --}}
+                                @if($stripe->status == 1)
+                                <div class="col-12">
+                                    <a href="{{ route('mollie.payment',auth()->user()->id) }}" class="btn btn-lg bg-info-light">
+											Mollie
+										</a>
                                 </div>
+                                @endif
                             </div>
-                            <!-- Booking Doctor Info -->
 
-                            <div class="booking-summary">
-                                <div class="booking-item-wrap">
-                                    <ul class="booking-date">
-                                        <li>Date <span>{{ date('d M Y',strtotime(request()->get('date'))) }}</span></li>
-                                        <li>Time
-                                            <span>{{ \Carbon\Carbon::parse(request()->get('time'))->format('g:i A') }}</span>
-                                        </li>
-                                    </ul>
-                                    <ul class="booking-fee">
-                                        <li>Consulting Fee <span>${{ request()->get('fee') }}</span></li>
-                                        <li>Booking Fee <span>$10</span></li>
-                                        {{-- <li>Video Call <span>$50</span></li> --}}
-                                    </ul>
-                                    <div class="booking-total">
-                                        <ul class="booking-total-list">
-                                            <li>
-                                                <span>Total</span>
-                                                <span class="total-cost">${{ request()->get('fee')+10 }}</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                    <div class="resize-sensor"
-                        style="position: absolute; inset: 0px; overflow: hidden; z-index: -1; visibility: hidden;">
-                        <div class="resize-sensor-expand"
-                            style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;">
-                            <div
-                                style="position: absolute; left: 0px; top: 0px; transition: all; width: 390px; height: 758px;">
-                            </div>
-                        </div>
-                        <div class="resize-sensor-shrink"
-                            style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;">
-                            <div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%">
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -161,8 +108,68 @@ $user=auth()->user();
 
 </div>
 
+@endsection
+
+@section('modal')
+
+
+    <div class="modal fade custom-modal" id="appt_details" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Stripe Payment Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="info-details">
+                       <form method="POST" id="custom_form" action="{{ route('stripe.post') }}">
+                        @csrf
+                         <!-- #region -->
+                         <div class="form-group">
+                             <label for="card-element">Card Number</label>
+                             <input type="text" id='card-number' name="card_number" class="form-control ">
+                         </div>
+                         <div class="row">
+                           <div class="col-6">
+                             <div class="form-group">
+                                <label for="card-element">Expiry Month</label>
+                                <input type="text" id='card-exp-month' name="expiry_date" class="form-control">
+                             </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="card-element">Expiry Year</label>
+                                    <input type="text" id='card-exp-year' name="expiry_date" class="form-control">
+                                    <input type="hidden" id="stripeToken" name="stripeToken">
+                                </div>
+                            </div>
+                         </div>
+
+                         <div class="form-group">
+                             <label for="card-element">CVC</label>
+                             <input type="text" id='card-cvc' name="cvc" class="form-control">
+                         </div>
+
+                        <div class="form-group" id='card-errors'>
+                            <div  class="alert-danger alert"></div>
+                        </div>
+
+                         <div class="form-group">
+                            <button type="submit" id='payment-button' class="btn btn-primary">Pay Now</button>
+                         </div>
+                         <!-- #endregion -->
+                       </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
+
+
 @push('js')
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 
@@ -190,30 +197,6 @@ $(function() {
     }
 });
 
-// custom card code
-// $(function () {
-//     var stripe = Stripe("{{ $stripe->stripe_key }}");
-
-//     $('#payment-button').on('click', function (e) {
-//         e.preventDefault();
-
-//         var cardData = {
-//             number: $('#card-number').val(),
-//             exp_month: $('#card-exp-month').val(),
-//             exp_year: $('#card-exp-year').val(),
-//             cvc: $('#card-cvc').val(),
-//         };
-
-//         stripe.createToken('card', cardData).then(function (result) {
-//             if (result.token) {
-//                 $('#stripeToken').val(result.token.id);
-//                 $('#payment-form').submit();
-//             } else {
-//                 toastr.error(result.error.message);
-//             }
-//         });
-//     });
-// });
 
 </script>
 

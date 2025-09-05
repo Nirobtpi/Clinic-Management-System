@@ -13,6 +13,7 @@ use App\Models\StripePayment;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Doctor\ScheduleTiming;
 use Illuminate\Contracts\Session\Session;
+use Stripe\Stripe;
 
 class DashboardController extends Controller
 {
@@ -161,15 +162,34 @@ class DashboardController extends Controller
             'time'=>'required|string',
             'select_patient'=>'required',
         ]);
-        $doctor=User::where('id',$request->doctor_id)->where('role','doctor')->with('doctorReviews')->first();
+        $doctor=User::where('id',$id)->where('role','doctor')->with('doctorReviews')->first();
         $stripe=StripePayment::first();
-        // return $doctor;
 
-        $info=json_encode($request->all());
-        return view('checkout',compact('id','doctor','info','stripe'));
+        $amount=$request->fee;
+
+
+         $info = [
+            'patient_name' => $request->patient_name ?? '',
+            'patient_phone' => $request->patient_phone,
+            'select_patient' => $request->select_patient,
+            'fee' => $amount, // override the user-input fee
+            'date' => $request->date,
+            'clinic' => $request->clicnic,
+            'time' => $request->time,
+            'doctor_id' => $request->doctor_id,
+        ];
+        session()->put('info', $info);
+        session()->put('doctor', $doctor);
+
+
+        return redirect()->route('user.checkout');
     }
 
+    function checkout(){
 
+        $stripe=StripePayment::first();
+        return view('checkout',compact('stripe'));
+    }
 
 
 }

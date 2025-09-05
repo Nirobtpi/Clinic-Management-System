@@ -1,11 +1,13 @@
 <?php
 
 use App\Models\User;
+use App\Models\Payment;
 use App\Models\Admin\Admin;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\UserController;
@@ -79,13 +81,17 @@ Route::middleware('auth:web')->prefix('auth')->group(function () {
         Route::put('profile/update/{id}',[UserProfileController::class,'profileUpdate'])->name('user.update');
         Route::post('review/store/{id}',[ReviewController::class,'reviewStore'])->name('review.store');
         Route::get('booking/{id}',[DashboardController::class,'booking'])->name('user.doctor.appointment');
-        Route::get('booking/{id}/store',[DashboardController::class,'bookingStore'])->name('user.booking.store');
+        Route::post('booking/{id}/store',[DashboardController::class,'bookingStore'])->name('user.booking.store');
         Route::get('checkout',[DashboardController::class,'checkout'])->name('user.checkout');
 
         // stripe payment
         Route::post('stripe/post',[stripeController::class,'stripe_post'])->name('stripe.post');
         Route::get('success',[StripeController::class,'success'])->name('payment.success');
         Route::get('cancle',[StripeController::class,'cancle'])->name('payment.cancel');
+
+        // mollie payment
+        Route::get('mollie/payment/{id}',[PaymentController::class,'molliePayment'])->name('mollie.payment');
+        Route::get('/mollie/callback', [PaymentController::class, 'mollieCallback'])->name('mollie.callback');
 
         // check time
 

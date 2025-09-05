@@ -55,8 +55,8 @@ $user=auth()->user();
                             <div class="col-md-12">
 
                                 <!-- Time Slot -->
-                                <form action="{{ route('user.booking.store',Auth::user()->id) }}" method="GET">
-
+                                <form action="{{ route('user.booking.store',Auth::user()->id) }}" method="post">
+                                    @csrf
                                     {{-- Patient Name --}}
                                     <div class="mb-3">
                                         <label for="patient_name">Your Name</label>

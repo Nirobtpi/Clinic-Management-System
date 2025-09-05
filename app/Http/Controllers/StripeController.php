@@ -29,7 +29,25 @@ class StripeController extends Controller
                 'stripe_key'=>$request->stripe_key,
                 'stripe_secret_key'=>$request->stripe_secret_key,
             ]);
+            if($request->hasFile('stripe_icon')){
+                $file=$request->file('stripe_icon');
+                $file_name=$file->getClientOriginalName();
+                $file->move(public_path('uploads/stripe'),$file_name);
+               StripePayment::create([
+                    'icon'=>'uploads/stripe/'.$file_name,
+                ]);
+            }
        }else{
+
+            if($request->hasFile('stripe_icon')){
+                $file=$request->file('stripe_icon');
+                $file_name=$file->getClientOriginalName();
+                $file->move(public_path('uploads/stripe'),$file_name);
+                $data->update([
+                    'icon'=>'uploads/stripe/'.$file_name,
+                ]);
+            }
+
             $data->update([
                 'stripe_key'=>$request->stripe_key,
                 'stripe_secret_key'=>$request->stripe_secret_key,
@@ -45,22 +63,26 @@ class StripeController extends Controller
         try {
             $stripe = StripePayment::first();
             Stripe::setApiKey($stripe->stripe_secret_key);
-            $amount=$request->amount*100;
+
             $user=Auth::user();
+            $data=session()->get('info');
+            $amount=$data['fee'];
+
             $data=[
                 'amount'=>$amount,
-                'time'=>$request->time,
+                'time'=>$data['time'],
                 'date'=>$request->date,
                 'clicnic'=>$request->clicnic,
                 'doctor'=>$request->doctor_id,
                 'patient_number'=>$request->number_patient,
                 'phone'=>$request->phone_number,
-                'fee'=>$request->amount,
+                'fee'=>$amount,
 
             ];
+            // return $data;
 
             $charge = Charge::create([
-                'amount' => $amount,
+                'amount' => $amount * 100,
                 'currency' => 'usd',
                 'source' => $request->stripeToken,
                 'description' => 'Payment from Nirob',
@@ -76,6 +98,7 @@ class StripeController extends Controller
         }
 
         if ($charge->status == 'succeeded') {
+            session()->forget('info');
             return redirect()->route('payment.success');
         } else {
             return redirect()->route('payment.cancel');

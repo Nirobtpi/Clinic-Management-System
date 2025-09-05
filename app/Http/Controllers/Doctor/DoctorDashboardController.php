@@ -8,9 +8,10 @@ use Stripe\Stripe;
 use App\Models\Refund;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
-use App\Models\StripePayment;
-use App\Http\Controllers\Controller;
 use App\Models\RefundRequest;
+use App\Models\StripePayment;
+use Mollie\Laravel\Facades\Mollie;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class DoctorDashboardController extends Controller
@@ -66,18 +67,33 @@ class DoctorDashboardController extends Controller
         // return $stripe;
 
         try{
-            $refund = \Stripe\Refund::create([
-                'charge' => $appointment->charge_id
-            ]);
-            // return $refund;
+            if($appointment->payment_method == 'stripe'){
 
-            RefundRequest::create([
-                'charge_id' => $appointment->charge_id,
-                'appointment_id'=>$id,
-                'doctor_id'=>$appointment->doctor_id,
-                'user_id'=>$appointment->user_id,
-                'status'=>'refunded',
-            ]);
+                $refund = \Stripe\Refund::create([
+                    'charge' => $appointment->charge_id
+                ]);
+                // return $refund;
+
+                RefundRequest::create([
+                    'charge_id' => $appointment->charge_id,
+                    'appointment_id'=>$id,
+                    'doctor_id'=>$appointment->doctor_id,
+                    'user_id'=>$appointment->user_id,
+                    'status'=>'refunded',
+                ]);
+            }
+
+            if($appointment->payment_method == 'mollie'){
+                $payment = Mollie::api()->payments->get($appointment->transaction_id);
+                $amount=$payment->amount->value * 0.85;
+                $refund = $payment->refund([
+                    "amount" => [
+                        "currency" => $payment->amount->currency,
+                        "value"    => $amount,
+                    ],
+                ]);
+
+            }
 
 
             $appointment->status = "cancelled";
