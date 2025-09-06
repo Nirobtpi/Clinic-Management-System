@@ -252,17 +252,14 @@
                             </ul>
                         </li>
                         <li class="menu-title">
-                            <span>Pages</span>
-                        </li>
-                        <li>
-                            <a href="profile.html"><i class="fe fe-user-plus"></i> <span>Profile</span></a>
+                            <span>Theme Settings</span>
                         </li>
                         <li class="submenu">
-                            <a href="#"><i class="fe fe-document"></i> <span> Authentication </span> <span
+                            <a href="#"><i class="fe fe-book"></i> <span> Language </span> <span
                                     class="menu-arrow"></span></a>
-                            <ul style="display: none;">
-                                <li><a href="login.html"> Login </a></li>
-                                <li><a href="register.html"> Register </a></li>
+                            <ul style="display: {{ Route::is('language.*') || Route::is('theme-language') || Route::is('heme-language.update') || Route::is('lock-screen') ? 'block' : 'none' }};">
+                                <li class="{{ Route::is('language.index') ? 'active' : '' }}"><a href="{{ route('language.index') }}"> Languages </a></li>
+                                <li class="{{ Route::is('theme-language') ? 'active' : '' }}"><a href="{{ route('theme-language',['theme_lang'=>'en']) }}"> Theme Languages </a></li>
                                 <li><a href="forgot-password.html"> Forgot Password </a></li>
                                 <li><a href="lock-screen.html"> Lock Screen </a></li>
                             </ul>
