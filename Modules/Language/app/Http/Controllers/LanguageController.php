@@ -115,7 +115,9 @@ class LanguageController extends Controller
         if($request->is_default == 1) {
             Language::where('default', 1)->update(['default' => 0]);
         }
-
+        if($request->is_default == '') {
+            Language::where('id',1)->update(['default' => 1]);
+        }
 
         Language::findOrFail($id)->update([
             'name' => $request->name,
@@ -123,6 +125,10 @@ class LanguageController extends Controller
             'default' => $request->is_default == 1 ? 1 : 0,
             'language_direction' => $request->language_direction
         ]);
+
+        if($id ==1) {
+            Language::where('id',1)->update(['default' => 1]);
+        }
 
         $notification = array(
             'message' => 'Language updated successfully.',

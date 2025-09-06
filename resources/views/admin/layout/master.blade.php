@@ -259,7 +259,7 @@
                                     class="menu-arrow"></span></a>
                             <ul style="display: {{ Route::is('language.*') || Route::is('theme-language') || Route::is('heme-language.update') || Route::is('lock-screen') ? 'block' : 'none' }};">
                                 <li class="{{ Route::is('language.index') ? 'active' : '' }}"><a href="{{ route('language.index') }}"> Languages </a></li>
-                                <li class="{{ Route::is('theme-language') ? 'active' : '' }}"><a href="{{ route('theme-language',['theme_lang'=>'en']) }}"> Theme Languages </a></li>
+                                <li class="{{ Route::is('theme-language') ? 'active' : '' }}"><a href="{{ route('theme-language',['theme_lang'=>session()->get('admin_lang')]) }}"> Theme Languages </a></li>
                                 <li><a href="forgot-password.html"> Forgot Password </a></li>
                                 <li><a href="lock-screen.html"> Lock Screen </a></li>
                             </ul>

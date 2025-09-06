@@ -26,6 +26,9 @@ class TranslateJsonCommand extends Command
 
         $source = json_decode(File::get($sourcePath), true);
         $translated = [];
+        // $translated = File::exists($targetPath)
+        //     ? json_decode(File::get($targetPath), true)
+        //     : [];
 
         $tr = new GoogleTranslate($toLang);
         $tr->setSource($fromLang);
@@ -33,9 +36,20 @@ class TranslateJsonCommand extends Command
         $this->info("Translating from {$fromLang} to {$toLang}...");
 
         foreach ($source as $key => $value) {
-            $translated[$key] = $tr->translate($value);
-            $this->line("Translated: {$value} → {$translated[$key]}");
-            sleep(1); // Google rate limit guard
+
+            if (isset($translated[$key]) && !empty($translated[$key])) {
+                $this->line("Skipped (already translated): {$value}");
+                continue;
+            }
+
+            try {
+                $translated[$key] = $tr->translate($value);
+                $this->line("Translated: {$value} → {$translated[$key]}");
+                sleep(1);
+            } catch (\Exception $e) {
+                $this->error("Failed to translate: {$value} ({$e->getMessage()})");
+                $translated[$key] = $value;
+            }
         }
 
         File::put($targetPath, json_encode($translated, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
