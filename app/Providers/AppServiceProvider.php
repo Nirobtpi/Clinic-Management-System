@@ -5,6 +5,8 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use App\Models\StripePayment;
+use Illuminate\Support\Composer;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +30,10 @@ class AppServiceProvider extends ServiceProvider
 
         // PHP এর default timezone set
         date_default_timezone_set('Asia/Dhaka');
+
+        View::composer('*', function ($view) {
+
+        });
     }
 }
 

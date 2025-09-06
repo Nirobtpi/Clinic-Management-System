@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="banner-wrapper">
             <div class="banner-header text-center">
-                <h1>Search Doctor, Make an Appointment</h1>
+                <h1>{{ __('Search Doctor, Make an Appointment') }}</h1>
                 <p>Discover the best doctors, clinic & hospital the city nearest to you.</p>
             </div>
 

@@ -21,7 +21,7 @@ class DashboardController extends Controller
     {
         $departments = Department::all();
         $doctors=User::where('role', 'doctor')->with('scheduleTimings','profile','reviews.doctor')->get();
-        // return $doctors;
+        // return base_path();
 
         return view('home', compact('departments','doctors'));
     }
