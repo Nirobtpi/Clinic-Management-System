@@ -34,9 +34,8 @@
 <section class="section section-specialities">
     <div class="container-fluid">
         <div class="section-header text-center">
-            <h2>Clinic and Specialities</h2>
-            <p class="sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua.</p>
+            <h2>{{ __('Clinic and Specialities') }}</h2>
+            <p class="sub-title">{{ __('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.') }}</p>
         </div>
         <div class="row justify-content-center">
             <div class="col-md-9">
@@ -68,15 +67,12 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="section-header ">
-                    <h2>Book Our Doctor</h2>
-                    <p>Lorem Ipsum is simply dummy text </p>
+                    <h2>{{ __('Book Our Doctor') }}</h2>
+                    <p>{{ __('Lorem Ipsum is simply dummy text') }} </p>
                 </div>
                 <div class="about-content">
-                    <p>It is a long established fact that a reader will be distracted by the readable content of a
-                        page when looking at its layout. The point of using Lorem Ipsum.</p>
-                    <p>web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem
-                        ipsum' will uncover many web sites still in their infancy. Various versions have evolved
-                        over the years, sometimes</p>
+                    <p>{{ __('It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.') }}</p>
+                    <p>{{ __("web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes") }}</p>
                     <a href="javascript:;">Read More..</a>
                 </div>
             </div>
@@ -172,9 +168,8 @@
             </div>
             <div class="col-md-7">
                 <div class="section-header">
-                    <h2 class="mt-2">Availabe Features in Our Clinic</h2>
-                    <p>It is a long established fact that a reader will be distracted by the readable content of a
-                        page when looking at its layout. </p>
+                    <h2 class="mt-2">{{ __('Availabe Features in Our Clinic') }}</h2>
+                    <p>{{ __('It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.') }}</p>
                 </div>
                 <div class="features-slider slider">
                     <!-- Slider Item -->

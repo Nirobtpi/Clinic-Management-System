@@ -1,8 +1,12 @@
 {
-    "Search Doctor, Make an Appointment": "ডাক্তার খুঁজুন, অ্যাপয়েন্টমেন্ট করুন",
-    "Discover the best doctors, clinic & hospital the city nearest to you.": "আপনার নিকটতম শহরের সেরা ডাক্তার, ক্লিনিক এবং হাসপাতাল আবিষ্কার করুন।",
+    "Search Doctor, Make an Appointment": "ডাক্তার অনুসন্ধান করুন, একটি অ্যাপয়েন্টমেন্ট করুন",
+    "Discover the best doctors, clinic & hospital the city nearest to you.": "আপনার নিকটতম শহরটি সেরা ডাক্তার, ক্লিনিক এবং হাসপাতাল আবিষ্কার করুন।",
     "Clinic and Specialities": "ক্লিনিক এবং বিশেষত্ব",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-     "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.":"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.",
-    "web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes":"web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes"
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.": "লোরেম ইপসাম ডলর সিট অ্যামেট, কনসেক্টর অ্যাডিপিসিং এলিট, সেড ডু আইয়াসমড টেম্পোর ইনসিডান্ট ইউটি ল্যাবোর এট ডলোর ম্যাগনা অ্যালিকা।",
+    "Book Our Doctor": "আমাদের ডাক্তার বুক করুন",
+    "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.": "এটি একটি দীর্ঘ প্রতিষ্ঠিত সত্য যে কোনও পাঠক তার লেআউটটি দেখার সময় কোনও পৃষ্ঠার পঠনযোগ্য সামগ্রী দ্বারা বিভ্রান্ত হবে। লোরেম ইপসাম ব্যবহারের বিষয়টি।",
+    "web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes": "ওয়েব পৃষ্ঠার সম্পাদকরা এখন তাদের ডিফল্ট মডেল পাঠ্য হিসাবে লরেম ইপসাম ব্যবহার করেন এবং 'লোরেম ইপসাম' এর জন্য অনুসন্ধান তাদের শৈশবে এখনও অনেকগুলি ওয়েব সাইট উদ্ঘাটিত করবে। বিভিন্ন সংস্করণ কয়েক বছর ধরে বিকশিত হয়েছে, কখনও কখনও",
+    "Availabe Features in Our Clinic": "আমাদের ক্লিনিকে উপলব্ধ বৈশিষ্ট্য",
+    "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.": "এটি একটি দীর্ঘ প্রতিষ্ঠিত সত্য যে কোনও পাঠক তার লেআউটটি দেখার সময় কোনও পৃষ্ঠার পঠনযোগ্য সামগ্রী দ্বারা বিভ্রান্ত হবে।",
+    "Lorem Ipsum is simply dummy text": "লোরেম ইপসাম কেবল ডামি পাঠ্য"
 }
