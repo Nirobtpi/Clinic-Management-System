@@ -45,7 +45,7 @@ class TranslateJsonCommand extends Command
             try {
                 $translated[$key] = $tr->translate($value);
                 $this->line("Translated: {$value} → {$translated[$key]}");
-                sleep(1);
+                sleep(2);
             } catch (\Exception $e) {
                 $this->error("Failed to translate: {$value} ({$e->getMessage()})");
                 $translated[$key] = $value;

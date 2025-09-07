@@ -169,3 +169,10 @@ Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
 Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
 
 Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+
+
+Route::get('/test-lang', function () {
+//    return File::get(base_path('lang/en/messages.php'));
+    return generateLang();
+
+});
