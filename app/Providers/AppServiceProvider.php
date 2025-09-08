@@ -8,6 +8,7 @@ use Hamcrest\Core\Set;
 use App\Models\StripePayment;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;

@@ -40,7 +40,7 @@ function getRegexBetween($text){
     return $data;
 }
 
-function generateLang($path=''){
+function generateLangJson($path=''){
     $paths=getAllResourceFiles(resource_path('views'));
 
     $paths = array_merge($paths, getAllResourceFiles(base_path('Modules')));
@@ -83,6 +83,41 @@ function generateLang($path=''){
     // file_put_contents(base_path('lang/bn/messages.php'), "<?php\n return " . var_export($modifiedData, true) . ";\n");
 
     return "en.json updated successfully!";
+
+}
+function generateLangPhp($path=''){
+
+    $paths=getAllResourceFiles(resource_path('views'));
+
+    $paths = array_merge($paths, getAllResourceFiles(base_path('Modules')));
+    $paths = array_merge($paths, getAllResourceFiles(base_path('app')));
+
+
+    $AllData = [];
+
+    foreach ($paths as $key => $path) {
+        $AllData[] = getRegexBetween(file_get_contents($path));
+    }
+
+    $modifiedData = [];
+
+    foreach ($AllData as  $value) {
+        if (!empty($value)) {
+            foreach ($value as $val) {
+                $modifiedData[$val] = $val;
+            }
+        }
+    }
+
+    $modifiedData = var_export($modifiedData, true);
+    $lanPath=base_path('lang/en');
+    if(!is_dir($lanPath)){
+        mkdir($lanPath, 0777, true);
+    }
+
+    file_put_contents(base_path('lang/en/messages.php'), "<?php\n return " . $modifiedData . ";\n");
+
+    return "messages.php updated successfully!";
 
 }
 
