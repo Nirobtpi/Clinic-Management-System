@@ -1,12 +1,12 @@
 @extends('admin.layout.master')
-@section('title', 'Doctor List')
+@section('title', 'Admins List')
 @section('content')
 <div class="row">
     <div class="col-sm-12">
         <div class="card">
             <div class="row">
                 <div class="col-sm-12 col px-5">
-                    <a href="{{ route('doctors.create') }}"
+                    <a href="{{ route('team.create') }}"
                         class="btn btn-primary float-right mt-2">Add</a>
                 </div>
             </div>
@@ -16,42 +16,39 @@
                         <thead>
                             <tr>
                                 <th>Sl no</th>
-                                <th>Doctor Name</th>
-                                <th>Department Name</th>
-                                <th>Patient Name</th>
-                                <th>Status</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Permission</th>
+                                <th>Created At</th>
                                 <th class="text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($doctors as $doctor)
+                            @foreach ($admins as $admin)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     <h2 class="table-avatar">
                                         <a href="" class="avatar avatar-sm mr-2"><img
                                                 class="avatar-img rounded-circle"
-                                                src="{{ asset($doctor->photo) }}" alt="User Image"></a>
-                                        <a href="">{{ $doctor->name }}</a>
+                                                src="{{ asset($admin->photo) }}" alt="User Image"></a>
+                                        <a href="">{{ $admin->name }}</a>
                                     </h2>
                                 </td>
-                                <td>{{ $doctor->department->name }}</td>
-                                <td>{{ $doctor->created_at->format('d M Y') }}</td>
-                                <td>
-                                        <div class="status-toggle">
-                                            <input type="checkbox" data-url="{{ route('doctor.status', $doctor->id) }}" id="status_update{{ $doctor->id }}" class="check status_update" {{ $doctor->status == 'active' ? 'checked' : '' }}>
-                                            <label for="status_update{{ $doctor->id }}" class="checktoggle">checkbox</label>
-                                        </div>
-                                </td>
+                                <td>Admin</td>
+                                <td>User</td>
+                                <td>{{ $admin->created_at->format('d M Y') }}</td>
                                 <td class="text-right">
                                     <div class="actions d-flex justify-content-end gap-3">
-                                        @role('writer')
-                                            <a class="btn btn-sm bg-success-light mr-3"
-                                                href="{{ route('doctors.edit', $doctor->id) }}">
-                                                <i class="fe fe-pencil"></i> Edit
-                                            </a>
-                                        @endrole
-                                        <form action="{{ route('doctors.destroy', $doctor->id) }}" id="delete-form" method="POST">
+                                        <a class="btn btn-sm bg-success-light mr-3"
+                                            href="{{ route('team.permission', $admin->id) }}">
+                                            <i class="fe fe-pencil"></i> Add Role
+                                        </a>
+                                        <a class="btn btn-sm bg-success-light mr-3"
+                                            href="{{ route('team.edit', $admin->id) }}">
+                                            <i class="fe fe-pencil"></i> Edit
+                                        </a>
+                                        <form action="{{ route('team.destroy', $admin->id) }}" id="delete-form" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm bg-danger-light delete-btn">

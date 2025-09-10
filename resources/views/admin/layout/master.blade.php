@@ -241,9 +241,11 @@
                             <a href="transactions-list.html"><i class="fe fe-activity"></i>
                                 <span>Transactions</span></a>
                         </li>
+
                         <li>
                             <a href="settings.html"><i class="fe fe-vector"></i> <span>Settings</span></a>
                         </li>
+                    @if(Auth::guard('admin')->user()->isSuperAdmin())
                         <li class="submenu">
                             <a href="#"><i class="fe fe-document"></i> <span> Payment Getway</span> <span
                                     class="menu-arrow"></span></a>
@@ -251,6 +253,16 @@
                                 <li><a href="{{ route('stripe.config') }}">Stripe</a></li>
                             </ul>
                         </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fe fe-users"></i> <span> Add Team Member</span> <span
+                                    class="menu-arrow"></span></a>
+                            <ul style="display: {{ Route::is('team.*') || Route::is('role.*') || Route::is('permission.*') ? 'block' : 'none' }};">
+                                <li class="{{ Route::is('team.*') ? 'active' : '' }}"><a href="{{ route('team.index') }}">All Team Member</a></li>
+                                <li class="{{ Route::is('role.*') ? 'active' : '' }}"><a href="{{ route('role.index') }}">All Role</a></li>
+                                <li class="{{ Route::is('permission.*') ? 'active' : '' }}"><a href="{{ route('permission.index') }}">All Permission</a></li>
+                            </ul>
+                        </li>
+                    @endif
                         <li class="menu-title">
                             <span>Theme Settings</span>
                         </li>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\TeamMemberController;
 use App\Models\User;
 use App\Models\Payment;
 use App\Models\Admin\Admin;
@@ -152,6 +153,29 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
 
     Route::get('stripe-config',[StripeController::class,'index'])->name('stripe.config');
     Route::put('stripe-config/update',[StripeController::class,'update'])->name('stripe.update');
+
+    // team route
+
+    Route::resource('team',TeamMemberController::class);
+
+    // role route
+    Route::get('role',[TeamMemberController::class,'role'])->name('role.index');
+    Route::get('role-add',[TeamMemberController::class,'role_add'])->name('role.add');
+    Route::post('role-store',[TeamMemberController::class,'role_store'])->name('role.store');
+    Route::get('role-edit/{id}',[TeamMemberController::class,'role_edit'])->name('role.edit');
+    Route::put('role-edit/{id}',[TeamMemberController::class,'role_update'])->name('role.update');
+    Route::delete('role-delete/{id}',[TeamMemberController::class,'role_delete'])->name('role.delete');
+
+    Route::get('role-assain-user/{id}',[TeamMemberController::class,'assign_role_user'])->name('team.permission');
+    Route::post('role-assain-user/{id}',[TeamMemberController::class,'assign_role_user_store'])->name('team.role.store');
+
+    // permission route
+    Route::get('permission',[TeamMemberController::class,'permission'])->name('permission.index');
+    Route::get('permission-add',[TeamMemberController::class,'permission_add'])->name('permission.add');
+    Route::post('permission-store',[TeamMemberController::class,'permission_store'])->name('permission.store');
+    Route::get('permission-edit/{id}',[TeamMemberController::class,'permission_edit'])->name('permission.edit');
+    Route::put('permission-edit/{id}',[TeamMemberController::class,'permission_update'])->name('permission.update');
+    Route::delete('permission-delete/{id}',[TeamMemberController::class,'permission_delete'])->name('permission.delete');
 
 });
 
