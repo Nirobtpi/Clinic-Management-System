@@ -4,12 +4,14 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card">
+            @can('super-admin')
             <div class="row">
                 <div class="col-sm-12 col px-5">
                     <a href="{{ route('team.create') }}"
                         class="btn btn-primary float-right mt-2">Add</a>
                 </div>
             </div>
+            @endcan
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="datatable table table-hover table-center mb-0">
@@ -35,26 +37,36 @@
                                         <a href="">{{ $admin->name }}</a>
                                     </h2>
                                 </td>
-                                <td>Admin</td>
-                                <td>User</td>
+                                <td>
+                                    @foreach($admin->roles as $role)
+                                        <span class="badge bg-info text-white">{{ $role->name }}</span>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach($admin->getAllPermissions() as $permission)
+                                        <span class="badge bg-info text-white">{{ $permission->name }}</span>
+                                    @endforeach
+                                </td>
                                 <td>{{ $admin->created_at->format('d M Y') }}</td>
                                 <td class="text-right">
                                     <div class="actions d-flex justify-content-end gap-3">
-                                        <a class="btn btn-sm bg-success-light mr-3"
-                                            href="{{ route('team.permission', $admin->id) }}">
-                                            <i class="fe fe-pencil"></i> Add Role
-                                        </a>
-                                        <a class="btn btn-sm bg-success-light mr-3"
-                                            href="{{ route('team.edit', $admin->id) }}">
-                                            <i class="fe fe-pencil"></i> Edit
-                                        </a>
-                                        <form action="{{ route('team.destroy', $admin->id) }}" id="delete-form" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm bg-danger-light delete-btn">
-                                            <i class="fe fe-trash"></i> Delete
-                                        </button>
-                                        </form>
+                                        @can('super-admin')
+                                            <a class="btn btn-sm bg-success-light mr-3"
+                                                href="{{ route('team.permission', $admin->id) }}">
+                                                <i class="fe fe-pencil"></i> Add Role
+                                            </a>
+                                            <a class="btn btn-sm bg-success-light mr-3"
+                                                href="{{ route('team.edit', $admin->id) }}">
+                                                <i class="fe fe-pencil"></i> Edit
+                                            </a>
+                                            <form action="{{ route('team.destroy', $admin->id) }}" id="delete-form" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm bg-danger-light delete-btn">
+                                                <i class="fe fe-trash"></i> Delete
+                                            </button>
+                                            </form>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

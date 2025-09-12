@@ -8,6 +8,7 @@
                 <div class="col-sm-12 col px-5">
                     <a href="{{ route('countries.create') }}"
                         class="btn btn-primary float-right mt-2">Add</a>
+                        <a href="{{ route('export.country') }}" class="btn btn-primary float-right mt-2 mr-2">Export/Import</a>
                 </div>
             </div>
             <div class="card-body">

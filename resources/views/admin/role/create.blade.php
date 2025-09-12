@@ -21,7 +21,7 @@
                         <div class="col-md-12 mb-3">
                             <div class="checkbox">
                                 @foreach($permissions as $permission)
-                                    <label class="mr-3"><input type="checkbox"  value="{{ $permission->name }}" name="permission[]"> {{ $permission->name }}</label>
+                                    <label class="mr-3"><input type="checkbox"  value="{{ $permission->name }}" name="permission[{{ $permission->name }}]"> {{ $permission->name }}</label>
                                 @endforeach
                             </div>
                         </div>

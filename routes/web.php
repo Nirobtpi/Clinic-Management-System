@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\TeamMemberController;
+use App\Http\Controllers\Export\AllExportController;
 use App\Models\User;
 use App\Models\Payment;
 use App\Models\Admin\Admin;
@@ -176,6 +177,13 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
     Route::get('permission-edit/{id}',[TeamMemberController::class,'permission_edit'])->name('permission.edit');
     Route::put('permission-edit/{id}',[TeamMemberController::class,'permission_update'])->name('permission.update');
     Route::delete('permission-delete/{id}',[TeamMemberController::class,'permission_delete'])->name('permission.delete');
+
+    Route::controller(AllExportController::class)->group(function () {
+        Route::get('export-import','import_export_country')->name('export.country');
+        Route::get('export-import/download','import_export_country_download')->name('export.country.download');
+        Route::get('export/download','sample_data')->name('export.sample.data');
+        Route::post('import','import_export_country_store')->name('import.country');
+    });
 
 });
 

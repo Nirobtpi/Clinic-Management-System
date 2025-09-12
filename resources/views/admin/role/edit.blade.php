@@ -24,7 +24,7 @@
                                     @foreach($permissions as $permission)
                                         <label class="mr-3"><input type="checkbox" @php
                                            in_array($permission->id, $role_permissions) ? print("checked") : print("");
-                                        @endphp  value="{{ $permission->id }}" name="permission[]"> {{ $permission->name }}</label>
+                                        @endphp  value="{{ $permission->name }}" name="permission[{{ $permission->name }}]"> {{ $permission->name }}</label>
                                     @endforeach
                                 </div>
                             </div>

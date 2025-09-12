@@ -45,19 +45,19 @@
                                 </td>
                                 <td class="text-right">
                                     <div class="actions d-flex justify-content-end gap-3">
-                                        @role('writer')
+                                        @can('super-admin')
                                             <a class="btn btn-sm bg-success-light mr-3"
                                                 href="{{ route('doctors.edit', $doctor->id) }}">
                                                 <i class="fe fe-pencil"></i> Edit
                                             </a>
-                                        @endrole
-                                        <form action="{{ route('doctors.destroy', $doctor->id) }}" id="delete-form" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm bg-danger-light delete-btn">
-                                            <i class="fe fe-trash"></i> Delete
-                                        </button>
-                                        </form>
+                                            <form action="{{ route('doctors.destroy', $doctor->id) }}" id="delete-form" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm bg-danger-light delete-btn">
+                                                <i class="fe fe-trash"></i> Delete
+                                            </button>
+                                            </form>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

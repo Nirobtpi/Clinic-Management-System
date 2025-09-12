@@ -6,7 +6,7 @@
         <div class="card">
             <div class="row">
                 <div class="col-sm-12 col px-5">
-                    <a href="{{ route('appointment.create') }}"
+                        <a href="{{ route('appointment.create') }}"
                         class="btn btn-primary float-right mt-2">Add</a>
                 </div>
             </div>
@@ -27,24 +27,25 @@
                         <tbody>
                             @foreach ($appointments as $appointment)
                             <tr>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>
                                     <h2 class="table-avatar">
                                         <a href="profile.html" class="avatar avatar-sm mr-2"><img
                                                 class="avatar-img rounded-circle"
-                                                src="assets/img/doctors/doctor-thumb-01.jpg" alt="User Image"></a>
-                                        <a href="profile.html">Dr. Ruby Perrin</a>
+                                                src="{{ asset($appointment->doctor?->photo ?? 'frontend/assets/img/doctors/doctor-thumb-01.jpg') }}" alt="User Image"></a>
+                                        <a href="{{ route('user.doctor.profile', $appointment->doctor?->id) }}">{{ $appointment->doctor?->name }}</a>
                                     </h2>
                                 </td>
-                                <td>Dental</td>
+                                <td>{{ $appointment->doctor?->department->name }}</td>
                                 <td>
                                     <h2 class="table-avatar">
                                         <a href="profile.html" class="avatar avatar-sm mr-2"><img
-                                                class="avatar-img rounded-circle" src="assets/img/patients/patient1.jpg"
+                                                class="avatar-img rounded-circle" src="{{ asset($appointment->user?->photo ?? 'frontend/assets/img/patients/patient1.jpg') }}"
                                                 alt="User Image"></a>
-                                        <a href="profile.html">Charlene Reed </a>
+                                        <a href="profile.html">{{ $appointment->user?->name }}</a>
                                     </h2>
                                 </td>
-                                <td>9 Nov 2019 <span class="text-primary d-block">11.00 AM - 11.15 AM</span></td>
+                                <td>{{ date('d M Y', strtotime($appointment->appointment_date)) }}9 Nov 2019 <span class="text-primary d-block">{{ date('g:i A', strtotime($appointment->appointment_time)) }} - {{ date('g:i A', strtotime($appointment->appointment_time . ' +30 minutes')) }}</span></td>
                                 <td>
                                     <div class="status-toggle">
                                         <input type="checkbox" id="status_1" class="check" checked>

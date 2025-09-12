@@ -245,7 +245,7 @@
                         <li>
                             <a href="settings.html"><i class="fe fe-vector"></i> <span>Settings</span></a>
                         </li>
-                    @if(Auth::guard('admin')->user()->isSuperAdmin())
+                    {{-- @if(Auth::guard('admin')->user()->isSuperAdmin()) --}}
                         <li class="submenu">
                             <a href="#"><i class="fe fe-document"></i> <span> Payment Getway</span> <span
                                     class="menu-arrow"></span></a>
@@ -262,7 +262,7 @@
                                 <li class="{{ Route::is('permission.*') ? 'active' : '' }}"><a href="{{ route('permission.index') }}">All Permission</a></li>
                             </ul>
                         </li>
-                    @endif
+                    {{-- @endif --}}
                         <li class="menu-title">
                             <span>Theme Settings</span>
                         </li>

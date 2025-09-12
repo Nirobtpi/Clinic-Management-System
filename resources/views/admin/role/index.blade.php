@@ -5,10 +5,13 @@
     <div class="col-sm-12">
         <div class="card">
             <div class="row">
+                @can('super-admin')
                 <div class="col-sm-12 col px-5">
+
                     <a href="{{ route('role.add') }}"
                         class="btn btn-primary float-right mt-2">Add</a>
                 </div>
+                @endcan
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -36,17 +39,19 @@
                                             href="{{ route('role.permission', $role->id) }}">
                                             <i class="fe fe-pencil"></i> Add Permission
                                         </a> --}}
+                                        @can('super-admin')
                                         <a class="btn btn-sm bg-success-light mr-3"
                                             href="{{ route('role.edit', $role->id) }}">
                                             <i class="fe fe-pencil"></i> Edit
                                         </a>
-                                        <form action="{{ route('role.delete', $role->id) }}" id="delete-form" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm bg-danger-light delete-btn">
-                                            <i class="fe fe-trash"></i> Delete
-                                        </button>
-                                        </form>
+                                            <form action="{{ route('role.delete', $role->id) }}" id="delete-form" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm bg-danger-light delete-btn">
+                                                <i class="fe fe-trash"></i> Delete
+                                            </button>
+                                            </form>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

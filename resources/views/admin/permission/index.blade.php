@@ -5,10 +5,12 @@
     <div class="col-sm-12">
         <div class="card">
             <div class="row">
-                <div class="col-sm-12 col px-5">
-                    <a href="{{ route('permission.add') }}"
-                        class="btn btn-primary float-right mt-2">Add</a>
-                </div>
+                @can('super-admin')
+                    <div class="col-sm-12 col px-5">
+                        <a href="{{ route('permission.add') }}"
+                            class="btn btn-primary float-right mt-2">Add</a>
+                    </div>
+                @endcan
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -30,6 +32,7 @@
 
                                 <td class="text-right">
                                     <div class="actions d-flex justify-content-end gap-3">
+                                        @can('super-admin')
                                         <a class="btn btn-sm bg-success-light mr-3"
                                             href="{{ route('permission.edit', $permission->id) }}">
                                             <i class="fe fe-pencil"></i> Edit
@@ -41,6 +44,7 @@
                                             <i class="fe fe-trash"></i> Delete
                                         </button>
                                         </form>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>
