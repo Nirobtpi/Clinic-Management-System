@@ -31,6 +31,7 @@ class CountryImport implements ToModel,WithStartRow
             $country->name=$row[1];
             $country->status=strtolower($row[2]);
             $country->save();
+            return $country;
         }catch(\Exception $e){
           Log::error("Error in country import file: ".$e->getMessage());
         }

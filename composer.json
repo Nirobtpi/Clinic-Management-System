@@ -11,15 +11,18 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
+        "laravel/reverb": "^1.5",
         "laravel/tinker": "^2.10.1",
         "maatwebsite/excel": "^3.1",
         "mollie/laravel-mollie": "^3.1",
         "nwidart/laravel-modules": "^12.0",
+        "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-permission": "^6.21",
         "stichoza/google-translate-php": "^5.3",
         "stripe/stripe-php": "^17.5"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.16",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.13",
