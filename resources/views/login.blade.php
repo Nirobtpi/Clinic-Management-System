@@ -28,7 +28,7 @@
                                     <label class="focus-label">Password</label>
                                 </div>
                                 <div class="text-right">
-                                    <a class="forgot-link" href="forgot-password.html">Forgot Password ?</a>
+                                    <a class="forgot-link" href="{{ route('user.forget.password') }}">Forgot Password ?</a>
                                 </div>
                                 <button class="btn btn-primary btn-block btn-lg login-btn" type="submit">Login</button>
                                 <div class="login-or">

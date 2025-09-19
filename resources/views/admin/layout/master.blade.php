@@ -262,6 +262,14 @@
                                 <li class="{{ Route::is('permission.*') ? 'active' : '' }}"><a href="{{ route('permission.index') }}">All Permission</a></li>
                             </ul>
                         </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-envelope-o"></i><span> Email Configration</span> <span
+                                    class="menu-arrow"></span></a>
+                            <ul style="display: {{ Route::is('email.*') ? 'block' : 'none' }};">
+                                <li class="{{ Route::is('email.index') ? 'active' : '' }}"><a href="{{ route('email.index') }}">Configaration</a></li>
+                                <li class="{{ Route::is('email.template') ? 'active' : '' }}"><a href="{{ route('email.template') }}">Email Teamplate</a></li>
+                            </ul>
+                        </li>
                     {{-- @endif --}}
                         <li class="menu-title">
                             <span>Theme Settings</span>

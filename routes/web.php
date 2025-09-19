@@ -27,11 +27,13 @@ use App\Http\Controllers\SslCommerzPaymentController;
 use App\Http\Controllers\Doctor\SocialMediaController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Doctor\DoctorLogInfoController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
 use App\Http\Controllers\Doctor\ScheduleTimingController;
 use App\Http\Controllers\Doctor\DoctorDashboardController;
 use App\Http\Controllers\Auth\UserController as AuthUserController;
+use App\Http\Controllers\Email\ForgetPasswordController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 
 Route::get('/',[DashboardController::class,'index'])->name('home');
@@ -128,6 +130,13 @@ Route::post('user/register',[loginController::class,'register'])->name('user.reg
 Route::get('admin/login',[AdminLoginController::class,'loginPage'])->name('admin.login');
 Route::post('admin/login',[AdminLoginController::class,'login'])->name('admin.login.post');
 
+Route::controller(ForgetPasswordController::class)->group(function () {
+    Route::get('user/forget-password','showForgetPasswordForm')->name('user.forget.password');
+    Route::get('user/reset-password-page','showResetPasswordForm')->name('user.reset.password');
+    Route::post('user/pasword-reset','submitForgetPasswordForm')->name('user.forget.password.post');
+    Route::put('user/reset-password','submitResetPasswordForm')->name('user.reset.password.post');
+});
+
 Route::middleware('auth:admin')->prefix('admin')->group(function () {
     Route::get('/',[AdminDashboardController::class,'index'])->name('admin.dashboard');
     Route::get('logout',[AdminLoginController::class,'logout'])->name('admin.logout');
@@ -183,6 +192,14 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
         Route::get('export-import/download','import_export_country_download')->name('export.country.download');
         Route::get('export/download','sample_data')->name('export.sample.data');
         Route::post('import','import_export_country_store')->name('import.country');
+    });
+
+    Route::controller(EmailController::class)->group(function () {
+        Route::get('email-configaration','index')->name('email.index');
+        Route::post('email-configaration','update')->name('email.update');
+        Route::get('email-template','emailTemplate')->name('email.template');
+        Route::get('email-template-edit/{id}','emailTemplateEdit')->name('email.template.edit');
+        Route::put('email-template-update/{id}','emailTemplateUpdate')->name('email.template.update');
     });
 
 });
