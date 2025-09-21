@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 class loginController extends Controller
@@ -35,8 +36,12 @@ class loginController extends Controller
             if($user->status === 'active'){
                     if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
                         if($user->role === 'doctor'){
+                            $cacheKey='auth_user_id_'.$user->id;
+                            Cache::put($cacheKey,$user->id,now()->addDays(30));
                             return redirect()->route('doctor.dashboard');
                         }else{
+                            $cacheKey='auth_user_id_'.$user->id;
+                            Cache::put($cacheKey,$user->id,now()->addDays(30));
                             return redirect()->route('user.dashboard');
                         }
                     }else{
@@ -66,6 +71,12 @@ class loginController extends Controller
     }
 
     public function logout(){
+        $user = Auth::user();
+        $cacheKey = 'auth_user_id_' . $user->id;
+
+        // Remove cache
+        Cache::forget($cacheKey);
+
         Auth::logout();
         $notification = [
             'message' => 'Successfully logged out',

@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'auth'=> \App\Http\Middleware\Authenticate::class,
             'admin.redirect'=> \App\Http\Middleware\AdminRedirectMiddleware::class,
+            'login.cache'=> \App\Http\Middleware\LoginCacheMiddelware::class
 
         ]);
         $middleware->group('web', [

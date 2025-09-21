@@ -46,7 +46,7 @@ Route::get('logout',[loginController::class,'logout'])->name('user.logout')->mid
 
 
 
-Route::middleware('auth:web')->prefix('auth')->group(function () {
+Route::middleware(['auth:web','login.cache'])->prefix('auth')->group(function () {
     Route::group(['prefix' => 'doctor'], function () {
 
         Route::get('/',[DoctorDashboardController::class,'dashboard'])->name('doctor.dashboard');

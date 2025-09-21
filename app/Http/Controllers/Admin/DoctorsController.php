@@ -24,7 +24,7 @@ class DoctorsController extends Controller
      */
     public function create()
     {
-        $departments = Department::all(); // Assuming you have a Department model
+        $departments = Department::all();
         return view('admin.doctors.create', compact('departments'));
     }
 

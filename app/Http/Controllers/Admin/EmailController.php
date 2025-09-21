@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin\Email;
-use App\Models\Admin\EmailTemplate;
 use Illuminate\Http\Request;
+use App\Models\Admin\EmailTemplate;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class EmailController extends Controller
 {
