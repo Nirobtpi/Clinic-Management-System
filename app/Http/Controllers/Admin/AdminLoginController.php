@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
 class AdminLoginController extends Controller
 {
+
+    // public function __construct()
+    // {
+    //     $this->middleware('guest:admin')->except('logout','loginPage');
+    // }
     public function loginPage(){
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.dashboard');

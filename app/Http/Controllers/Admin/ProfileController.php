@@ -36,14 +36,16 @@ class ProfileController extends Controller
 
         if($request->hasFile('photo')){
             $photo=$request->file('photo');
-            $ext=$photo->getClientOriginalExtension();
-            $filename=time().'.'.$ext;
-            $photo->move('uploads/admin/',$filename);
-            $data['photo']='uploads/admin/'.$filename;
+            // $ext=$photo->getClientOriginalExtension();
+            // $filename=time().'.'.$ext;
+            // $photo->move('uploads/admin/',$filename);
+            // $data['photo']='uploads/admin/'.$filename;
+           $photodb= uploadFile($photo,'uploads/admin/',$admin->photo);
+           $data['photo']=$photodb;
 
-            if($admin->photo && file_exists(public_path('uploads/admin/'.$filename))){
-                unlink(public_path('uploads/admin/'.$filename));
-            }
+            // if($admin->photo && file_exists(public_path('uploads/admin/'.$filename))){
+            //     unlink(public_path('uploads/admin/'.$filename));
+            // }
         }
         $admin->update($data);
 

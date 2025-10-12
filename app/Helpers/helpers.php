@@ -8,6 +8,30 @@ function font_lang(){
     return Session::get('font_lang');
 }
 
+function uploadFile($file, $path, $oldFile = null)
+{
+    // Ensure path exists
+    if (!file_exists(public_path($path))) {
+        mkdir(public_path($path), 0777, true);
+    }
+
+    // Generate unique filename
+    $extension = $file->getClientOriginalExtension();
+    $fileName = time() . '_' . uniqid() . '.' . $extension;
+    $fullPath = $path . '/' . $fileName;
+
+    // Delete old file if exists
+    if ($oldFile && file_exists(public_path($oldFile))) {
+        unlink(public_path($oldFile));
+    }
+
+    // Move new file
+    $file->move($path, $fileName);
+
+    // Return relative path (for DB store)
+    return $fullPath;
+}
+
 function getAllResourceFiles($path,&$result = []){
     $files=scandir($path);
     foreach ($files as $key => $file) {

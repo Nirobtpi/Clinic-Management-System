@@ -37,7 +37,7 @@ use App\Http\Controllers\Email\ForgetPasswordController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 
 Route::get('/',[DashboardController::class,'index'])->name('home');
-Route::get('user/login',[loginController::class,'loginPage'])->name('user.login');
+Route::get('user/login',[loginController::class,'loginPage'])->name('user.login')->middleware('guest:web');
 Route::get('user/register',[loginController::class,'registerPage'])->name('user.register');
 Route::get('doctor/register',[DoctorLogInfoController::class,'registerPage'])->name('doctor.register');
 Route::post('doctor/register',[DoctorLogInfoController::class,'register'])->name('doctor.register.post');
@@ -127,7 +127,7 @@ Route::post('user/register',[loginController::class,'register'])->name('user.reg
 
 // admin route
 
-Route::get('admin/login',[AdminLoginController::class,'loginPage'])->name('admin.login');
+Route::get('admin/login',[AdminLoginController::class,'loginPage'])->name('admin.login')->middleware('guest:admin');
 Route::post('admin/login',[AdminLoginController::class,'login'])->name('admin.login.post');
 
 Route::controller(ForgetPasswordController::class)->group(function () {
