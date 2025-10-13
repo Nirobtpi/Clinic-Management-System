@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
+use App\Helpers\MailHelper;
+use App\Mail\OfferSendMail;
 use App\Models\Admin\Email;
 use Illuminate\Http\Request;
+use App\Jobs\OfferMailJobForAdmin;
 use App\Models\Admin\EmailTemplate;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 
 class EmailController extends Controller
@@ -67,4 +73,33 @@ class EmailController extends Controller
 
         return redirect()->route('email.template')->with($notification);
     }
+
+    public function offerEmail()
+    {
+
+        try{
+           User::chunk(2,function($users){
+                foreach($users as $index=>$user){
+                    OfferMailJobForAdmin::dispatch($user->email, $user->id)->delay(now()->addSeconds($index * 60));
+                }
+           });
+        
+            $notification = [
+                'message' => 'Offer emails are being sent to all users.',
+                'alert-type' => 'success'
+            ];
+
+            return redirect()->back()->with($notification);
+        }catch(\Exception $e){
+            Log::info('Error:'.$e->getMessage());
+            $notification = [
+                'message' => 'Something went wrong',
+                'alert-type' => 'error'
+            ];
+
+            return redirect()->back()->with($notification);
+        }
+
+    }
+
 }

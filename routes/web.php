@@ -38,7 +38,7 @@ use App\Http\Controllers\User\ProfileController as UserProfileController;
 
 Route::get('/',[DashboardController::class,'index'])->name('home');
 Route::get('user/login',[loginController::class,'loginPage'])->name('user.login')->middleware('guest:web');
-Route::get('user/register',[loginController::class,'registerPage'])->name('user.register');
+Route::get('user/register',[loginController::class,'registerPage'])->name('user.register')->middleware('guest:web');
 Route::get('doctor/register',[DoctorLogInfoController::class,'registerPage'])->name('doctor.register');
 Route::post('doctor/register',[DoctorLogInfoController::class,'register'])->name('doctor.register.post');
 Route::post('user/login',[loginController::class,'login'])->name('user.login.post');
@@ -131,10 +131,10 @@ Route::get('admin/login',[AdminLoginController::class,'loginPage'])->name('admin
 Route::post('admin/login',[AdminLoginController::class,'login'])->name('admin.login.post');
 
 Route::controller(ForgetPasswordController::class)->group(function () {
-    Route::get('user/forget-password','showForgetPasswordForm')->name('user.forget.password');
-    Route::get('user/reset-password-page','showResetPasswordForm')->name('user.reset.password');
-    Route::post('user/pasword-reset','submitForgetPasswordForm')->name('user.forget.password.post');
-    Route::put('user/reset-password','submitResetPasswordForm')->name('user.reset.password.post');
+    Route::get('user/forget-password','showForgetPasswordForm')->name('user.forget.password')->middleware('guest:web');
+    Route::get('user/reset-password-page','showResetPasswordForm')->name('user.reset.password')->middleware('guest:web');
+    Route::post('user/pasword-reset','submitForgetPasswordForm')->name('user.forget.password.post')->middleware('guest:web');
+    Route::put('user/reset-password','submitResetPasswordForm')->name('user.reset.password.post')->middleware('guest:web');
 });
 
 Route::middleware('auth:admin')->prefix('admin')->group(function () {
@@ -201,6 +201,8 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
         Route::get('email-template-edit/{id}','emailTemplateEdit')->name('email.template.edit');
         Route::put('email-template-update/{id}','emailTemplateUpdate')->name('email.template.update');
     });
+
+    Route::get('offer-email', [EmailController::class, 'offerEmail'])->name('offer.email');
 
 });
 

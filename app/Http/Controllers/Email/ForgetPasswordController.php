@@ -11,6 +11,7 @@ use App\Mail\ResetPasswordMail;
 use App\Models\Admin\EmailTemplate;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
@@ -53,23 +54,24 @@ class ForgetPasswordController extends Controller
         $user->forget_password_token = Str::random(100);
         $user->save();
 
-        MailHelper::mailable();
-
+        // MailHelper::mailable();
         try{
 
-            $reset_link=route('user.reset.password').'?token='.$user->forget_password_token.'&email='.$user->email;
-            $link = "<a target='_blank' href='{$reset_link}'>{$reset_link}</a>";
+            // $reset_link=route('user.reset.password').'?token='.$user->forget_password_token.'&email='.$user->email;
+            // $link = "<a target='_blank' href='{$reset_link}'>{$reset_link}</a>";
 
-            $template=EmailTemplate::where('name','Reset Password')->first();
-            $subject=$template->subject;
-            $message= $template->description;
-            $message = str_replace('{{user_name}}',$user->name,$message);
-            $message = str_replace('{{verification_link}}',$link,$message);
+            // $template=EmailTemplate::where('name','Reset Password')->first();
+            // $subject=$template->subject;
+            // $message= $template->description;
+            // $message = str_replace('{{user_name}}',$user->name,$message);
+            // $message = str_replace('{{verification_link}}',$link,$message);
 
-            Mail::to($user->email)->send(new ResetPasswordMail($user,$message,$subject));
+            SendEmailJob::dispatch($user->email, $user->id);
+
+            // Mail::to($user->email)->send(new ResetPasswordMail($user,$message,$subject));
 
         }catch(Exception $e){
-            Log::info('Order confirmation mail faild'.$e->getMessage());
+            Log::info('Error:'.$e->getMessage());
 
         }
 

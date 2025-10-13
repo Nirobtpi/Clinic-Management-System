@@ -268,6 +268,7 @@
                             <ul style="display: {{ Route::is('email.*') ? 'block' : 'none' }};">
                                 <li class="{{ Route::is('email.index') ? 'active' : '' }}"><a href="{{ route('email.index') }}">Configaration</a></li>
                                 <li class="{{ Route::is('email.template') ? 'active' : '' }}"><a href="{{ route('email.template') }}">Email Teamplate</a></li>
+                                <li class="{{ Route::is('offer.email') ? 'active' : '' }}"><a href="{{ route('offer.email') }}">Send Offer Mail</a></li>
                             </ul>
                         </li>
                     {{-- @endif --}}
