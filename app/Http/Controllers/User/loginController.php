@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
+use App\Notifications\UserCreateNotification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -38,10 +39,12 @@ class loginController extends Controller
                         if($user->role === 'doctor'){
                             $cacheKey='auth_user_id_'.$user->id;
                             Cache::put($cacheKey,$user->id,now()->addDays(30));
+                            $user->notify(new UserCreateNotification());
                             return redirect()->route('doctor.dashboard');
                         }else{
                             $cacheKey='auth_user_id_'.$user->id;
                             Cache::put($cacheKey,$user->id,now()->addDays(30));
+                            $user->notify(new UserCreateNotification());
                             return redirect()->route('user.dashboard');
                         }
                     }else{
@@ -98,7 +101,7 @@ class loginController extends Controller
         ]);
 
         if(Route::has('user.register.post')){
-            User::create([
+          $user=  User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,

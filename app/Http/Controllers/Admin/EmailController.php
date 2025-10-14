@@ -78,12 +78,15 @@ class EmailController extends Controller
     {
 
         try{
-           User::chunk(2,function($users){
+            User::chunk(2,function($users){
                 foreach($users as $index=>$user){
                     OfferMailJobForAdmin::dispatch($user->email, $user->id)->delay(now()->addSeconds($index * 60));
                 }
            });
-        
+        //    $user=User::where('email','nurutpi1@gmail.com')->first();
+        //     OfferMailJobForAdmin::dispatch($user->email, $user->id);
+
+
             $notification = [
                 'message' => 'Offer emails are being sent to all users.',
                 'alert-type' => 'success'
