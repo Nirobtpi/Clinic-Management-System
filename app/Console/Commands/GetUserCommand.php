@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class GetUserCommand extends Command
 {
@@ -26,9 +27,21 @@ class GetUserCommand extends Command
      */
     public function handle()
     {
-        $user = User::select('name')->get();
+          $users = User::all();
 
-        $this->info($user);
+        // Console output (pretty format)
+        $this->info("Total Users: " . $users->count());
+        $this->line("User List:");
+        $this->line($users->toJson(JSON_PRETTY_PRINT));
+
+        // Log in file
+        Log::info('User command executed at: ' . now());
+        Log::info('Users:', $users->toArray());
+
+        // Indicate success
+        $this->info('✅ User command executed successfully!');
+
+        return 0;
 
     }
 }

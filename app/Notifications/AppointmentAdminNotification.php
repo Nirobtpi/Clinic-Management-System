@@ -2,22 +2,22 @@
 
 namespace App\Notifications;
 
-use App\Helpers\MailHelper;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
-class UserCreateNotification extends Notification
+class AppointmentAdminNotification extends Notification
 {
     use Queueable;
+    public $appointment;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($appointment)
     {
-        //
+       $this->appointment = $appointment;
     }
 
     /**
@@ -27,21 +27,7 @@ class UserCreateNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        MailHelper::mailable();
-
-        return (new MailMessage)
-
-            ->line('Your account has been login.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+        return ['database'];
     }
 
     /**
@@ -52,7 +38,11 @@ class UserCreateNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'appointment_id' => $this->appointment->id,
+            'user_name'      => $this->appointment->user->name ?? 'Unknown',
+            'user_email'     => $this->appointment->user->email ?? '',
+            'service'        => $this->appointment->service ?? '',
+            'message'        => 'এর একটি নতুন Appointment বুক করা হয়েছে!',
         ];
     }
 }

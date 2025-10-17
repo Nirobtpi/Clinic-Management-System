@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\TeamMemberController;
-use App\Http\Controllers\Export\AllExportController;
 use App\Models\User;
 use App\Models\Payment;
 use App\Models\Admin\Admin;
@@ -14,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\User\loginController;
+use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Auth\ReviewController;
 use App\Http\Controllers\Admin\ClinicController;
@@ -22,18 +21,20 @@ use App\Http\Controllers\Admin\DoctorsController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\TeamMemberController;
+use App\Http\Controllers\Export\AllExportController;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\SslCommerzPaymentController;
 use App\Http\Controllers\Doctor\SocialMediaController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Doctor\DoctorLogInfoController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
+use App\Http\Controllers\Email\ForgetPasswordController;
 use App\Http\Controllers\Doctor\ScheduleTimingController;
 use App\Http\Controllers\Doctor\DoctorDashboardController;
+use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Auth\UserController as AuthUserController;
-use App\Http\Controllers\Email\ForgetPasswordController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 
 Route::get('/',[DashboardController::class,'index'])->name('home');
@@ -203,6 +204,7 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
     });
 
     Route::get('offer-email', [EmailController::class, 'offerEmail'])->name('offer.email');
+    Route::get('notifications/read-all', [AdminNotificationController::class, 'readAll'])->name('notifications.read.all');
 
 });
 

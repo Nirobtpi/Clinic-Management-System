@@ -77,8 +77,8 @@
             <ul class="nav user-menu">
                 <!-- Notifications -->
                 <li class="nav-item dropdown noti-dropdown">
-                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                        <i class="fe fe-bell"></i> <span class="badge badge-pill">3</span>
+                    <a href="javascript:void(0);" class="dropdown-toggle nav-link mark-read" data-toggle="dropdown">
+                        <i class="fe fe-bell"></i> <span class="badge badge-pill">{{ Auth::guard('admin')->user()->unreadNotifications->count() }}</span>
                     </a>
                     <div class="dropdown-menu notifications">
                         <div class="topnav-dropdown-header">
@@ -87,72 +87,23 @@
                         </div>
                         <div class="noti-content">
                             <ul class="notification-list">
+                                @foreach(Auth::guard('admin')->user()->notifications as $notification)
                                 <li class="notification-message">
                                     <a href="#">
                                         <div class="media">
-                                            <span class="avatar avatar-sm">
+                                            {{-- <span class="avatar avatar-sm">
                                                 <img class="avatar-img rounded-circle" alt="User Image"
                                                     src="assets/img/doctors/doctor-thumb-01.jpg">
-                                            </span>
+                                            </span> --}}
                                             <div class="media-body">
-                                                <p class="noti-details"><span class="noti-title">Dr. Ruby Perrin</span>
-                                                    Schedule <span class="noti-title">her appointment</span></p>
-                                                <p class="noti-time"><span class="notification-time">4 mins ago</span>
+                                                <p class="noti-details"><span class="noti-title">{{ $notification->data['user_name'] }} {{ $notification->data['message'] }}  </p>
+                                                <p class="noti-time"><span class="notification-time">{{ $notification->created_at->diffForHumans() }}</span>
                                                 </p>
                                             </div>
                                         </div>
                                     </a>
                                 </li>
-                                <li class="notification-message">
-                                    <a href="#">
-                                        <div class="media">
-                                            <span class="avatar avatar-sm">
-                                                <img class="avatar-img rounded-circle" alt="User Image"
-                                                    src="assets/img/patients/patient1.jpg">
-                                            </span>
-                                            <div class="media-body">
-                                                <p class="noti-details"><span class="noti-title">Charlene Reed</span>
-                                                    has booked her appointment to <span class="noti-title">Dr. Ruby
-                                                        Perrin</span></p>
-                                                <p class="noti-time"><span class="notification-time">6 mins ago</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="notification-message">
-                                    <a href="#">
-                                        <div class="media">
-                                            <span class="avatar avatar-sm">
-                                                <img class="avatar-img rounded-circle" alt="User Image"
-                                                    src="assets/img/patients/patient2.jpg">
-                                            </span>
-                                            <div class="media-body">
-                                                <p class="noti-details"><span class="noti-title">Travis Trimble</span>
-                                                    sent a amount of $210 for his <span
-                                                        class="noti-title">appointment</span></p>
-                                                <p class="noti-time"><span class="notification-time">8 mins ago</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="notification-message">
-                                    <a href="#">
-                                        <div class="media">
-                                            <span class="avatar avatar-sm">
-                                                <img class="avatar-img rounded-circle" alt="User Image"
-                                                    src="assets/img/patients/patient3.jpg">
-                                            </span>
-                                            <div class="media-body">
-                                                <p class="noti-details"><span class="noti-title">Carl Kelly</span> send
-                                                    a message <span class="noti-title"> to his doctor</span></p>
-                                                <p class="noti-time"><span class="notification-time">12 mins ago</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
+                                @endforeach
                             </ul>
                         </div>
                         <div class="topnav-dropdown-footer">
@@ -431,6 +382,31 @@
         $('.datatable').DataTable({
             "bFilter": true,
         });
+    </script>
+    <script>
+
+        $(document).ready(function() {
+           $('.mark-read').on('click', function() {
+            // alert('clicked');
+               let url="{{ route('notifications.read.all') }}";
+
+                $.ajax({
+                   type: 'get',
+                   url: url,
+                   success: function (response) {
+                    console.log(response);
+                       if (response.status == 'success') {
+                        //    toastr.success(response.message);
+                           $('.badge-pill').html(0);
+                       } else {
+                           toastr.error("Something went wrong!");
+                       }
+                   }
+               })
+
+           });
+        })
+
     </script>
 </body>
 

@@ -6,10 +6,12 @@ use Carbon\Carbon;
 use Stripe\Charge;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
+use App\Models\Admin\Admin;
 use App\Models\Appointment;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\StripePayment;
+use App\Notifications\AppointmentAdminNotification;
 use Illuminate\Support\Facades\Auth;
 
 class StripeController extends Controller
@@ -94,7 +96,11 @@ class StripeController extends Controller
         // dd($charge);
 
         if($charge->status == 'succeeded'){
-            $this->create_appointment($data,$user,"stripe",'1',$charge->balance_transaction,$charge->id);
+            $admin=Admin::first();
+            $appointment= $this->create_appointment($data,$user,"stripe",'1',$charge->balance_transaction,$charge->id);
+            if($admin){
+                $admin->notify(new AppointmentAdminNotification($appointment));
+            }
         }
 
         if ($charge->status == 'succeeded') {
