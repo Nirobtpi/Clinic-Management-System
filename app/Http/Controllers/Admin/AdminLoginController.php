@@ -14,9 +14,9 @@ class AdminLoginController extends Controller
     //     $this->middleware('guest:admin')->except('logout','loginPage');
     // }
     public function loginPage(){
-        if (Auth::guard('admin')->check()) {
-            return redirect()->route('admin.dashboard');
-        }
+        // if (Auth::guard('admin')->check()) {
+        //     return redirect()->route('admin.dashboard');
+        // }
         return view("admin.login");
     }
 

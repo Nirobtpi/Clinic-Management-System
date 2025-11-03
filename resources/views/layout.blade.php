@@ -32,7 +32,7 @@
     $user=Auth::user();
 @endphp
 
-<body class="{{ Route::is('user.register')|| Route::is('doctor.register') || Route::is('user.login') || Route::is('user.forget.password') || Route::is('user.reset.password') ? 'account-page':'' }}">
+<body class="{{ Route::is('user.register')|| Route::is('doctor.register') || Route::is('user.login') || Route::is('user.forget.password') || Route::is('user.reset.password') ? 'account-page':'' }} {{ Route::is('user.chat.page') ? 'chat-page':'' }}">
 
     <!-- Main Wrapper -->
     <div class="main-wrapper">

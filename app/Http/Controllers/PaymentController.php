@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Admin\Admin;
 use App\Models\Appointment;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Mollie\Laravel\Facades\Mollie;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\AppointmentAdminNotification;
 
 class PaymentController extends Controller
 {
@@ -61,10 +63,13 @@ class PaymentController extends Controller
         ];
 
         if($payment->isPaid()){
-            $this->create_appointment($data,$user,'mollie','1',$paymentId,$paymentId);
+           $appointment = $this->create_appointment($data,$user,'mollie','1',$paymentId,$paymentId);
         }
 
         if ($payment->isPaid()) {
+            session()->forget('info');
+            $admin=Admin::first();
+            $admin->notify(new AppointmentAdminNotification($appointment));
             return redirect()->route('user.dashboard')->with(['message' => 'Payment successful', 'alert-type' => 'success']);
         } else {
             return back()->with(['message' => 'Payment Unsuccessful', 'alert-type' => 'error']);

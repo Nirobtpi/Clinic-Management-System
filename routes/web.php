@@ -6,6 +6,7 @@ use App\Models\Admin\Admin;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DashboardController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\User\loginController;
 use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Auth\ReviewController;
+use App\Http\Controllers\Cache\CacheController;
 use App\Http\Controllers\Admin\ClinicController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DoctorsController;
@@ -75,6 +77,8 @@ Route::middleware(['auth:web','login.cache'])->prefix('auth')->group(function ()
 
     });
 
+    // Route::get('user/chats',[UserChatController::class,'userChatPage'])->name('user.chat.page');
+
     // all user route
     Route::get('change-password',[AuthUserController::class,'changePasswordPage'])->name('change.password');
     Route::put('password/update/{id}',[AuthUserController::class,'passwordUpdate'])->name('password.update');
@@ -112,6 +116,13 @@ Route::middleware(['auth:web','login.cache'])->prefix('auth')->group(function ()
     });
 });
 
+Route::middleware(['auth:web'])->group(function(){
+    Route::get('/chat', [ChatController::class, 'index'])->name('user.chat.page');
+    Route::get('/messages/{user}', [ChatController::class, 'getMessages'])->name('user.get.messages');
+    Route::post('/messages', [ChatController::class, 'sendMessage']);
+});
+
+
 Route::prefix('user')->group(function(){
     Route::get('doctor/{id}/proofile/view',[DashboardController::class,'doctorProfileView'])->name('user.doctor.profile');
     Route::get('checkday/{id}',[DashboardController::class,'checkDay'])->name('user.checkday');
@@ -138,7 +149,7 @@ Route::controller(ForgetPasswordController::class)->group(function () {
     Route::put('user/reset-password','submitResetPasswordForm')->name('user.reset.password.post')->middleware('guest:web');
 });
 
-Route::middleware('auth:admin')->prefix('admin')->group(function () {
+Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
     Route::get('/',[AdminDashboardController::class,'index'])->name('admin.dashboard');
     Route::get('logout',[AdminLoginController::class,'logout'])->name('admin.logout');
 
@@ -229,3 +240,5 @@ Route::get('/test-lang', function () {
     return generateLangPhp();
 
 });
+
+Route::get('cache',[CacheController::class,'clearCache'])->name('clear.cache');

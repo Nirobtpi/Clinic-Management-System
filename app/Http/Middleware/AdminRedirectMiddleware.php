@@ -14,7 +14,7 @@ class AdminRedirectMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next,...$guard): Response
+    public function handle(Request $request, Closure $next,...$guards): Response
     {
         $guards = empty($guards) ? [null] : $guards;
         // if(!Auth::guard('admin')->check()) {
@@ -24,7 +24,7 @@ class AdminRedirectMiddleware
             if (Auth::guard($guard)->check()) {
                 if ($guard == 'admin') {
                     return redirect()->route('admin.dashboard');
-                }elseif ($guard == 'auth') {
+                }elseif ($guard == 'web') {
                     return redirect()->route('user.dashboard');
                 }
                  else {

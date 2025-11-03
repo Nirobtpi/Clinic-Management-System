@@ -54,9 +54,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="invoices.html">
+                    <a href="{{ route('user.chat.page') }}">
                         <i class="fas fa-file-invoice"></i>
-                        <span>Invoices</span>
+                        <span>Chats</span>
                     </a>
                 </li>
                 <li>
@@ -97,6 +97,12 @@
                     <a href="favourites.html">
                         <i class="fas fa-bookmark"></i>
                         <span>Favourites</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('user.chat.page') }}">
+                        <i class="fas fa-file-invoice"></i>
+                        <span>Chats</span>
                     </a>
                 </li>
                 <li class="">
