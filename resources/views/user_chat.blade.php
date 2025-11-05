@@ -27,6 +27,7 @@
 									</form>
 									<div class="chat-users-list">
 										<div class="chat-scroll">
+                                           <input type="hidden" id="selected-user">
                                             @foreach($users as $user)
 											<a href="javascript:void(0);" data-id="{{ $user->id }}" class="media show_chat_box">
 												<div class="media-img-wrap">
@@ -215,38 +216,21 @@
 
 @push('js')
 
-    <script src="https://js.pusher.com/8.0/pusher.min.js"></script>
-
-    <script>
-        Pusher.logToConsole = false;
-
-        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-            encrypted: true
-        });
-
-        var channel = pusher.subscribe('private-chat.{{ auth()->id() }}');
-        channel.bind('my-event', function(data) {
-            console.log(data);
-        });
-    </script>
-
-
     <script>
         $(document).ready(function(){
             $('.show_chat_box').on('click', function(){
                 var user_id = $(this).data('id');
+                $('#selected-user').val(user_id);
                 var url = "{{ route('user.get.messages', ':id') }}";
                 url = url.replace(':id', user_id);
                 $.ajax({
                     url: url,
                     type: 'GET',
                     success: function(response){
-                        console.log(response);
                         $('.chat-cont-right').html(response);
                     },
                     error: function(xhr){
-                        console.log(xhr.responseText);
+                        alert('Error fetching messages');
                     }
                 });
             });

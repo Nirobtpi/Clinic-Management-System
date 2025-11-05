@@ -28,7 +28,7 @@
 </div>
 <div class="chat-body">
     <div class="chat-scroll">
-        <ul class="list-unstyled">
+        <ul class="list-unstyled" id="messages">
             @foreach($messages as $message)
                 @if($message->sender_id == auth()->id())
                     <li class="media sent">
@@ -81,9 +81,9 @@
                 <input type="file">
             </div>
         </div>
-        <input type="text" class="input-msg-send form-control" placeholder="Type something">
+        <input type="text" id="message-input" class="input-msg-send form-control" placeholder="Type something">
         <div class="input-group-append">
-            <button type="button" class="btn msg-send-btn"><i class="fab fa-telegram-plane"></i></button>
+            <button type="button" id="send-btn" class="btn msg-send-btn"><i class="fab fa-telegram-plane"></i></button>
         </div>
     </div>
 </div>

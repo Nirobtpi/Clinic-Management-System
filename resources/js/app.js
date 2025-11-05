@@ -1,35 +1,65 @@
 import './bootstrap';
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
 
-// Make Pusher available globally
-window.Pusher = Pusher;
+//  window.Laravel = { userId: userId };
+//  alert(userId);
+// const userId = document.head.querySelector('meta[name="user-id"]').content;
+// window.Laravel = { userId: userId };
+ let id = window.Laravel.userId
 
-// Laravel Echo instance
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    forceTLS: true
+
+function handleIncomingMessage(e){
+    const msg = e.message;
+    const html = `
+        <li class="media received">
+            <div class="media-body">
+                <div class="msg-box">
+                    <div>
+                        <p>${msg.message}</p>
+                        <div class="chat-time"><span>${new Date(msg.created_at).toLocaleTimeString()}</span></div>
+                    </div>
+                </div>
+            </div>
+        </li>`;
+    $('#messages').append(html);
+    $('.chat-body').scrollTop($('#messages')[0].scrollHeight);
+}
+
+    window.Echo.private(`chat.${id}`)
+        .listen('.MessageSent', handleIncomingMessage);
+
+
+// Send message via AJAX
+$(document).on('click', '#send-btn', function(){
+    let message = $('#message-input').val();
+    let receiver_id = $('#selected-user').val();
+
+    if(!message.trim()) return;
+
+    $.ajax({
+        url: '/messages',
+        type: 'POST',
+        data: {
+            message: message,
+            receiver_id: receiver_id,
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(res){
+           const html = `
+                <li class="media sent">
+                    <div class="media-body">
+                        <div class="msg-box">
+                            <div>
+                                <p>${res.message}</p>
+                                <div class="chat-time"><span>${new Date(res.created_at).toLocaleTimeString()}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </li>`;
+            $('#messages').append(html);
+            $('#message-input').val('');
+            $('.chat-body').scrollTop($('#messages')[0].scrollHeight);
+        }
+    });
 });
 
-// Optional: Listen to messages in console for debugging
-window.Echo.channel('chat')
-    .listen('MessageSent', (e) => {
-        console.log('New message:', e.message);
-        const messagesEl = document.getElementById('messages');
-        const li = document.createElement('li');
-        li.textContent = e.message.user.name + ': ' + e.message.message;
-        messagesEl.appendChild(li);
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-    });
 
-window.Echo.channel('chat')
-    .listen('MessageSent', (e) => {
-        console.log('New message:', e.message);
-        const messagesEl = document.getElementById('messages');
-        const li = document.createElement('li');
-        li.textContent = e.message.user.name + ': ' + e.message.message;
-        messagesEl.appendChild(li);
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-    });

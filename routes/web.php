@@ -119,7 +119,7 @@ Route::middleware(['auth:web','login.cache'])->prefix('auth')->group(function ()
 Route::middleware(['auth:web'])->group(function(){
     Route::get('/chat', [ChatController::class, 'index'])->name('user.chat.page');
     Route::get('/messages/{user}', [ChatController::class, 'getMessages'])->name('user.get.messages');
-    Route::post('/messages', [ChatController::class, 'sendMessage']);
+    Route::post('/messages', [ChatController::class, 'sendMessage'])->name('user.send.message');
 });
 
 

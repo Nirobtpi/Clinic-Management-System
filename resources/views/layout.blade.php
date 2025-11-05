@@ -9,6 +9,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <title>Doccure</title>
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>
+        window.Laravel = { userId: {{ auth()->id() }} };
+    </script>
+
     <!-- Favicons -->
     <link type="image/x-icon" href="{{ asset('frontend/assets/img/favicon.png" rel="icon') }}">
 
@@ -21,11 +26,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+
 @stack('css')
 
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+    @vite(['resources/js/app.js'])
 
 </head>
 @php
