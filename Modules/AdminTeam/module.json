@@ -1,0 +1,11 @@
+{
+    "name": "AdminTeam",
+    "alias": "adminteam",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\AdminTeam\\Providers\\AdminTeamServiceProvider"
+    ],
+    "files": []
+}

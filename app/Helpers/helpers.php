@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 function admin_lang(){
     return Session::get('admin_lang');
 }
@@ -20,16 +21,28 @@ function uploadFile($file, $path, $oldFile = null)
     $fileName = time() . '_' . uniqid() . '.' . $extension;
     $fullPath = $path . '/' . $fileName;
 
-    // Delete old file if exists
-    if ($oldFile && file_exists(public_path($oldFile))) {
-        unlink(public_path($oldFile));
+    if(env('FILESYSTEM_DISK') == 's3'){
+        // Upload to S3
+        $s3 = Storage::disk('s3');
+        // Delete old file if exists
+        if ($oldFile && $s3->exists($oldFile)) {
+            $s3->delete($oldFile);
+        }
+        // Upload new file
+        $s3->put($fullPath, file_get_contents($file), 'public');
+        return $fullPath;
+    }else{
+        // Local upload
+        $file->move(public_path($path), $fileName);
+          // Delete old file if exists
+        if ($oldFile && file_exists(public_path($oldFile))) {
+            unlink(public_path($oldFile));
+        }
+
+        // Return relative path (for DB store)
+        return $fullPath;
     }
 
-    // Move new file
-    $file->move($path, $fileName);
-
-    // Return relative path (for DB store)
-    return $fullPath;
 }
 
 function getAllResourceFiles($path,&$result = []){
