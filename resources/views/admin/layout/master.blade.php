@@ -222,6 +222,29 @@
                                 <li class="{{ Route::is('offer.email') ? 'active' : '' }}"><a href="{{ route('offer.email') }}">Send Offer Mail</a></li>
                             </ul>
                         </li>
+
+                         <li class="submenu">
+                            <a href="#"><i class="fe fe-document"></i> <span> Payment Getway</span> <span
+                                    class="menu-arrow"></span></a>
+                            <ul style="display: none;">
+                                <li><a href="{{ route('stripe.config') }}">Stripe</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fe fe-users"></i> <span>Team Management</span> <span
+                                    class="menu-arrow"></span></a>
+                            <ul style="display: {{ Route::is('adminteam.*') || Route::is('team.*') ? 'block' : 'none' }};">
+                                <li class="{{ Route::is('adminteam.list') ? 'active' : '' }}"><a href="{{ route('adminteam.list') }}">All Team Member</a></li>
+
+                                <li class="{{ Route::is('adminteam.create') ? 'active' : '' }}"><a href="{{ route('adminteam.create') }}">Add Role</a></li>
+
+                                <li class="{{ Route::is('adminteam.role.list') ? 'active' : '' }}"><a href="{{ route('adminteam.role.list') }}">Role List</a></li>
+
+                                {{-- <li class="{{ Route::is('permission.*') ? 'active' : '' }}"><a href="{{ route('permission.index') }}">All Permission</a></li> --}}
+                            </ul>
+                        </li>
+
+
                     {{-- @endif --}}
                         <li class="menu-title">
                             <span>Theme Settings</span>

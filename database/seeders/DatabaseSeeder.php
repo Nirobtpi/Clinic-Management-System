@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Admin\Admin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Modules\AdminTeam\Database\Seeders\AdminTeamDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,12 +21,12 @@ class DatabaseSeeder extends Seeder
         // User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
-        // ]);
-        Admin::create([
-            "name"=> "admin",
-            "email"=> "admin@gmail.com",
-            "password"=> Hash::make("1234"),
+        // // ]);
+        // Admin::create([
+        //     "name"=> "admin",
+        //     "email"=> "admin@gmail.com",
+        //     "password"=> Hash::make("1234"),
 
-        ]);
+        // ]);
     }
 }

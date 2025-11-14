@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 class AdminDashboardController extends Controller
 {
     public function index(){
-        return view("admin.dashboard");
+        $admin = auth()->guard('admin')->user();
+        if(!$admin->hasPermission('dashboard_management')){
+            abort(403);
+        }
+        return view("admin.dashboard", compact('admin'));
     }
 }

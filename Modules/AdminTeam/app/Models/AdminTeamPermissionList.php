@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\AdminTeam\Models;
+namespace Modules\AdminTeam\App\Models;
 
 use App\Models\Admin\Admin;
 use Illuminate\Database\Eloquent\Model;
@@ -33,25 +33,25 @@ class AdminTeamPermissionList extends Model
         return $this->hasMany(AdminTeamPermissionList::class, 'parent_id');
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany(AdminRole::class,
-            'admin_role_permissions',
-            'admin_team_permission_id',
-            'admin_role_id'
-        );
-    }
+    // public function adminroles()
+    // {
+    //     return $this->belongsToMany(AdminRole::class,
+    //         'admin_role_permissions',
+    //         'admin_team_permission_id',
+    //         'admin_role_id'
+    //     );
+    // }
 
 
     public function admins()
-{
-    return $this->belongsToMany(
-        Admin::class,
-        'admin_role_assignments',
-        'admin_role_id',
-        'admin_id'
-    );
-}
+    {
+        return $this->belongsToMany(
+            Admin::class,
+            'admin_role_assignments',
+            'admin_role_id',
+            'admin_id'
+        );
+    }
 
 
 

@@ -4,6 +4,7 @@ namespace Modules\AdminTeam\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
+
 class AdminTeamDatabaseSeeder extends Seeder
 {
     /**
@@ -11,6 +12,9 @@ class AdminTeamDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            AdminTeamPermissionListSeeder::class,
+            AdminRoleSeeder::class,
+        ]);
     }
 }
