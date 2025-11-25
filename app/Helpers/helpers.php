@@ -64,6 +64,15 @@ function getRegexBetween($text){
     preg_match_all("%\{{ __\(['|\"](.*?)['\"]\) }}%i", $text, $matches1, PREG_PATTERN_ORDER);
     preg_match_all("%\@lang\(['|\"](.*?)['\"]\)%i", $text, $matches2, PREG_PATTERN_ORDER);
     preg_match_all("%trans\(['|\"](.*?)['\"]\)%i", $text, $matches3, PREG_PATTERN_ORDER);
+
+
+    // Match Blade translations like: {{ __('text') }}
+   // preg_match_all('/\{\{\s*__\(\s*[\'\"](.*?)[\'\"]\s*\)\s*\}\}/s', $text, $matches1, PREG_PATTERN_ORDER);
+    // Match @lang('text') and @lang("text")
+    //preg_match_all('/@lang\(\s*[\'\"](.*?)[\'\"]\s*\)/s', $text, $matches2, PREG_PATTERN_ORDER);
+   // // Match trans('text') and trans("text")
+   // preg_match_all('/\btrans\(\s*[\'\"](.*?)[\'\"]\s*\)/s', $text, $matches3, PREG_PATTERN_ORDER);
+
     $allData = array_merge($matches1[1], $matches2[1], $matches3[1]);
     $data=[];
 
@@ -110,8 +119,8 @@ function generateLangJson($path=''){
     $jsonData = json_encode($modifiedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
     // JSON file path
-    $lanPath = resource_path('lang/en.json');
-    $lanPath2 = resource_path('lang/bn.json');
+    $lanPath = lang_path('en.json');
+    $lanPath2 = lang_path('bn.json');
 
     file_put_contents($lanPath, $jsonData);
 

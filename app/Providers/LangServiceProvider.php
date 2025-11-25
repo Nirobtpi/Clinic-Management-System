@@ -36,7 +36,7 @@ class LangServiceProvider extends ServiceProvider
 
                 }
             };
-            
+
             $customTrans->setFallback($fallback);
             return $customTrans;
 

@@ -204,7 +204,7 @@
                                 <li><a href="{{ route('stripe.config') }}">Stripe</a></li>
                             </ul>
                         </li>
-                        <li class="submenu">
+                        {{-- <li class="submenu">
                             <a href="#"><i class="fe fe-users"></i> <span> Add Team Member</span> <span
                                     class="menu-arrow"></span></a>
                             <ul style="display: {{ Route::is('team.*') || Route::is('role.*') || Route::is('permission.*') ? 'block' : 'none' }};">
@@ -212,7 +212,7 @@
                                 <li class="{{ Route::is('role.*') ? 'active' : '' }}"><a href="{{ route('role.index') }}">All Role</a></li>
                                 <li class="{{ Route::is('permission.*') ? 'active' : '' }}"><a href="{{ route('permission.index') }}">All Permission</a></li>
                             </ul>
-                        </li>
+                        </li> --}}
                         <li class="submenu">
                             <a href="#"><i class="fa fa-envelope-o"></i><span> Email Configration</span> <span
                                     class="menu-arrow"></span></a>

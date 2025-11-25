@@ -237,7 +237,8 @@ Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
 
 Route::get('/test-lang', function () {
 //    return File::get(base_path('lang/en/messages.php'));
-    return generateLangPhp();
+    // return generateLangPhp();
+    return generateLangJson();
 
 });
 
