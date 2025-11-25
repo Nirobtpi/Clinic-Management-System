@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 function admin_lang(){
@@ -165,6 +168,88 @@ function generateLangPhp($path=''){
 
     return "messages.php updated successfully!";
 
+}
+function getDefaultLanguageByApi() {
+
+    $cookieName = 'default_language';
+    $cookieDuration = 60 * 24 * 30; // 1 month in minutes
+
+    if (Cookie::has($cookieName)) {
+        return Cookie::get($cookieName);
+    }
+
+
+    // Get the real user IP address, considering proxies and load balancers
+    $userIp = request()->ip();
+
+
+    // If we're behind a proxy/load balancer, try to get the real IP from headers
+    if (request()->hasHeader('X-Forwarded-For')) {
+        $ips = explode(',', request()->header('X-Forwarded-For'));
+        $userIp = trim($ips[0]);
+    } elseif (request()->hasHeader('X-Real-IP')) {
+        $userIp = request()->header('X-Real-IP');
+    } elseif (request()->hasHeader('CF-Connecting-IP')) {
+        // Cloudflare
+        $userIp = request()->header('CF-Connecting-IP');
+    }
+
+
+    // Validate IP address
+    if (!filter_var($userIp, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        $userIp = request()->ip(); // Fallback to default IP detection
+    }
+
+
+    // Log the IP being used for debugging
+    Log::info('Detected user IP for country detection: ' . $userIp);
+
+    try {
+        $response = Http::timeout(10)->get("http://ip-api.com/json/{$userIp}?fields=countryCode");
+
+
+        if ($response->successful()) {
+
+            $jsonData = $response->json();
+            $countryCode = $jsonData['countryCode'] ?? '';
+
+            Log::info('IP API Response: ' . json_encode($jsonData));
+
+            if ($countryCode && $countryCode !== '') {
+                Cookie::queue(Cookie::make($cookieName, $countryCode, $cookieDuration));
+                return $countryCode;
+            }
+        } else {
+            Log::warning('IP API request failed with status: ' . $response->status());
+        }
+    } catch (\Exception $e) {
+        // Log error if needed
+        Log::warning('Failed to get country code from IP API: ' . $e->getMessage());
+    }
+
+    // Fallback: try alternative API
+    try {
+        Log::info('Trying alternative IP API...');
+        $response = Http::timeout(10)->get("https://ipapi.co/{$userIp}/json/");
+
+        if ($response->successful()) {
+            $jsonData = $response->json();
+            $countryCode = $jsonData['country_code'] ?? '';
+
+            Log::info('Alternative IP API Response: ' . json_encode($jsonData));
+
+            if ($countryCode && $countryCode !== '') {
+                Cookie::queue(Cookie::make($cookieName, $countryCode, $cookieDuration));
+                return $countryCode;
+            }
+        }
+    } catch (\Exception $e) {
+        Log::warning('Alternative IP API also failed: ' . $e->getMessage());
+    }
+
+    // Final fallback: return a default country code (US)
+    Log::warning('All IP APIs failed, using default country: US');
+    return 'US';
 }
 
 ?>

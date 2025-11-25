@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Stripe\Stripe;
 use App\Models\User;
 use Nette\Utils\Json;
 use App\Models\Clinic;
@@ -12,14 +13,14 @@ use Illuminate\Http\Request;
 use App\Models\StripePayment;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Doctor\ScheduleTiming;
-use Illuminate\Contracts\Session\Session;
-use Stripe\Stripe;
+use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         $departments = Department::all();
+        // Session::put('front_lang', 'en');
         $doctors=User::where('role', 'doctor')->with('scheduleTimings','profile','reviews.doctor')->get();
         // return base_path();
 

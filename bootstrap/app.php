@@ -11,11 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
+        ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'auth'=> \App\Http\Middleware\Authenticate::class,
             'guest'=> \App\Http\Middleware\AdminRedirectMiddleware::class,
-            'login.cache'=> \App\Http\Middleware\LoginCacheMiddelware::class
+            'login.cache'=> \App\Http\Middleware\LoginCacheMiddelware::class,
+            'set.front.lang' => \App\Http\Middleware\SetFrontendLanguage::class,
 
         ]);
         $middleware->group('web', [
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\SetFrontendLanguage::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
     })

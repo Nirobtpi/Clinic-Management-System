@@ -5,6 +5,7 @@ use App\Models\Payment;
 use App\Models\Admin\Admin;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\StripeController;
@@ -238,7 +239,8 @@ Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
 Route::get('/test-lang', function () {
 //    return File::get(base_path('lang/en/messages.php'));
     // return generateLangPhp();
-    return generateLangJson();
+    // return generateLangJson();
+    return Session::all();
 
 });
 
