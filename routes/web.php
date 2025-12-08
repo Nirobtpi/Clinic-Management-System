@@ -245,3 +245,4 @@ Route::get('/test-lang', function () {
 });
 
 Route::get('cache',[CacheController::class,'clearCache'])->name('clear.cache');
+Route::get('comment',[CacheController::class,'comment'])->name('comment');

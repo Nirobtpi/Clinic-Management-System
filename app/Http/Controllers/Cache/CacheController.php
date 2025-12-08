@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Cache;
 
 use App\Models\User;
+use App\Models\Comment;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Jenssegers\Agent\Facades\Agent;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Collection;
-use Jenssegers\Agent\Facades\Agent;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class CacheController extends Controller
 {
@@ -243,4 +244,37 @@ class CacheController extends Controller
 
 
     }
+
+    public function comment(Request $request){
+
+        $comments= Comment::latest()->paginate(3);
+
+        if($request->ajax())
+        {
+            $comments= Comment::latest()->paginate(3);
+            $has_more_page = null;
+            $has_pagination = false;
+            $next_page = null;
+
+            if($comments->hasMorePages()){
+                $has_more_page = $comments->nextPageUrl();
+                $has_pagination = true;
+                $next_page = $comments->nextPageUrl();
+            }
+
+            $html = view('ajax_comment', compact('comments'))->render();
+
+            return response()->json([
+                'html' => $html,
+                'has_more_page' => $has_more_page,
+                'has_pagination' => $has_pagination,
+                'next_page_url' => $next_page,
+            ]);
+        }
+
+        return view('comment', compact('comments'));
+    }
+
+
+
 }

@@ -28,5 +28,9 @@ class DatabaseSeeder extends Seeder
         //     "password"=> Hash::make("1234"),
 
         // ]);
+        $this->call([
+            // AdminTeamDatabaseSeeder::class,
+            CommetSeeder::class,
+        ]);
     }
 }
