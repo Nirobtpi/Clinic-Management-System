@@ -1,0 +1,29 @@
+{
+    "hero_section":{
+        "builder":true,
+        "name":"Hero Section",
+        "content":{
+            "title":"text",
+            "subtitle":"text",
+            "button_text":"text",
+            "button_url":"text",
+            "images":{
+                "image_one":{
+                    "size":"1200x800"
+                },
+                "image_two":{
+                    "size":"600x400"
+                }
+            }
+        }
+
+    },
+    "about_section":{
+        "builder":true,
+        "name":"About Section",
+        "content":{
+            "title":"text"
+        }
+
+    }
+}

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 function admin_lang(){
-    return Session::get('admin_lang');
+    return Session::get('admin_lang', 'en');
 }
 function font_lang(){
     return Session::get('font_lang');
