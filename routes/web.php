@@ -240,6 +240,7 @@ Route::get('/test-lang', function () {
 //    return File::get(base_path('lang/en/messages.php'));
     // return generateLangPhp();
     // return generateLangJson();
+    // session()->put('front_lang', 'bn');
     return Session::all();
 
 });

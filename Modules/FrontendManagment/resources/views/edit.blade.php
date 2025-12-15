@@ -5,9 +5,10 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $setion['name'] ?? 'Section' }} - Edit</h5>
-                    <form action="" enctype="multipart/form-data">
+                    <h5 class="card-title">{{ $section['name'] ?? 'Section' }} - Edit</h5>
+                    <form action="{{ route('frontendmanagment.update',['frontendmanagment' => $key,'id' => $frontend->id ?? null]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         <input type="hidden" name="lang_code" value="{{ request()->get('lang_code') }}">
                         <input type="hidden" name="type" value="{{ $contentType }}">
 
@@ -23,15 +24,15 @@
                                                     @endphp
                                                     <div class="form-group">
                                                         <label
-                                                            for="image_{{ $imageKey }}">{{ ucfirst(str_replace('_', ' ', $imageKey)) }}</label>
+                                                            for="{{ $imageKey }}">{{ ucfirst(str_replace('_', ' ', $imageKey)) }}</label>
                                                         <input type="file" class="form-control"
-                                                            id="image_{{ $imageKey }}"
-                                                            name="images[{{ $imageKey }}]">
+                                                            id="{{ $imageKey }}"
+                                                            name="{{ $imageKey }}">
                                                         @if ($imagePath)
                                                             <div class="mt-2">
-                                                                <img src="{{ asset('uploads/frontend/' . $imagePath) }}"
+                                                                <img src="{{ asset($imagePath) }}"
                                                                     alt="{{ $imageKey }}"
-                                                                    style="max-width: 100%; height: auto;">
+                                                                    style="max-width: 100%; height: 100px;">
                                                             </div>
                                                         @endif
                                                     </div>
