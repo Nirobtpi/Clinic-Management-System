@@ -11,6 +11,7 @@ use Jenssegers\Agent\Facades\Agent;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
@@ -248,6 +249,13 @@ class CacheController extends Controller
     public function comment(Request $request){
 
         $comments= Comment::latest()->paginate(3);
+
+        $heroContent = getContent('hero_section.content', true);
+        Session::put('front_lang', 'bn');
+
+        $name = getTranslatedValue($heroContent, 'subtitle');
+
+        return $name;
 
         if($request->ajax())
         {

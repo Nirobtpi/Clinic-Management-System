@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Modules\FrontendManagment\App\Models\FrontendSection;
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
+
 function admin_lang(){
     return Session::get('admin_lang', 'en');
 }
@@ -47,6 +50,119 @@ function uploadFile($file, $path, $oldFile = null)
     }
 
 }
+
+
+ function getContent($key, $singleQuery = false, $limit = null , $orderById = false){
+    $query = FrontendSection::query();
+
+    if($singleQuery){
+       $content = $query->where('data_keys', $key)->orderBy('id', 'desc')->first();
+    }else{
+
+        if($limit != null){
+            $query->where('data_keys', $key)->limit($limit);
+        }
+        if($orderById){
+           $query->orderBy('id');
+        }else{
+           $query->orderBy('id', 'desc');
+        }
+
+        $content = $query->where('data_keys', $key)->get();
+    }
+    return $content;
+ }
+
+ function html_decode($text)
+{
+    $decode_text = htmlspecialchars_decode($text, ENT_QUOTES);
+    return $decode_text;
+}
+
+function getTranslatedValue($content, $key)
+{
+    if (!$content) {
+        return '';
+    }
+
+    $lang = 'en';
+
+    $front_lang = Session::get('front_lang');
+
+    if ($front_lang) {
+        $lang = $front_lang;
+    }
+
+    // If translations exist and language is not English
+    if ($lang !== 'en') {
+        $translations = json_decode($content->data_translations, true);
+        // return $translations;
+
+
+        // Loop through the translations to find the matching language code
+        foreach ($translations as $translation) {
+            if (isset($translation['language_code']) && $translation['language_code'] === $lang) {
+                // Return the translated value if it exists
+                $decode_value = isset($translation['values'][$key]) ? $translation['values'][$key] : '';
+                return html_decode($decode_value);
+            }
+        }
+
+
+        // If no translation found for requested language, return default string
+        $content= json_decode($content->data_values, true);
+
+        $decode_value = isset($content[$key]) ? $content[$key] : '';
+
+        return html_decode($decode_value);
+    }
+
+    $content= json_decode($content->data_values, true);
+
+    // Fallback to English content
+    $decode_value = isset($content[$key]) ? $content[$key] : '';
+
+    return html_decode($decode_value);
+}
+
+//   function getTranslatedValue($data, $key){
+
+
+//     if(!$data){
+//         return ""; // Return empty string if data is null
+//     }
+
+
+//     $lang = "en";
+
+//     $front_lang = session()->get('font_lang');
+//     if($front_lang){
+//         $lang = $front_lang;
+//     }
+
+//     if($lang !== 'en'){
+
+//         $translations = json_decode($data->data_translations, true);
+
+//         foreach($translations as $translation){
+//             if(isset($translation['language_code']) && $translation['language_code'] == $lang){
+//                $decodeValue = isset($translation['values'][$key]) ? $translation['values'][$key] : '';
+
+//                return html_decode($decodeValue);
+//             }
+//         }
+
+//         $decodeValue = isset($data->data_values[$key]) ? $data->data_values[$key] : '';
+
+//         return html_decode($decodeValue);
+
+//     }
+
+//     $decodeValue = isset($data->data_values[$key]) ? $data->data_values[$key] : 'okk';
+
+//     return html_decode($decodeValue);
+//   }
+
 
 function getAllResourceFiles($path,&$result = []){
     $files=scandir($path);
