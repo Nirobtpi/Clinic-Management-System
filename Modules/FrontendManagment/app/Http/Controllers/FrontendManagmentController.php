@@ -18,6 +18,9 @@ class FrontendManagmentController extends Controller
 
         $jsonUrl = resource_path('views/admin/settings.json');
         $settings = json_decode(file_get_contents($jsonUrl), true);
+        // $getcontent = getcontent('hero_section.content');
+        // $val = getTranslatedValue($getcontent, 'title');
+        // return $val;
 
         return view('frontendmanagment::index', compact('settings'));
     }
@@ -267,7 +270,7 @@ class FrontendManagmentController extends Controller
 
             Log::info('Updated English data_values with images:', ['images' => $finalData['images'] ?? []]);
         } else {
-            
+
             // Each language maintains its own independent image state
             $translationExists = false;
             $finalTranslationData = $textData;

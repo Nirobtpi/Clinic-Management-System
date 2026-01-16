@@ -68,7 +68,7 @@ function uploadFile($file, $path, $oldFile = null)
            $query->orderBy('id', 'desc');
         }
 
-        $content = $query->where('data_keys', $key)->get();
+        $content = $query->where('data_keys', $key)->first();
     }
     return $content;
  }

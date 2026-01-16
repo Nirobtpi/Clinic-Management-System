@@ -34,22 +34,22 @@ class AppServiceProvider extends ServiceProvider
         Blade::component('components.breadcrumb', 'breadcrumb');
         Session::put('admin_lang', 'en');
 
-        // PHP এর default timezone set
+        // PHP default timezone set
         date_default_timezone_set('Asia/Dhaka');
 
-        // View::composer('*', function ($view) {
+        View::composer('*', function ($view) {
 
-        //     $languages=Language::where('status','active')->get();
+            $languages=Language::where('status','active')->get();
 
-        //     $difaultLang = Language::where('default', 1)->first();
-        //     if ($difaultLang) {
-        //         Session::put('admin_lang', $difaultLang->code);
-        //         App::setLocale($difaultLang->code);
-        //     }
+            $difaultLang = Language::where('default', 1)->first();
+            if ($difaultLang) {
+                Session::put('admin_lang', $difaultLang->code);
+                App::setLocale($difaultLang->code);
+            }
 
 
-        //     $view->with('languages', $languages);
-        // });
+            $view->with('languages', $languages);
+        });
     }
 }
 

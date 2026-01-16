@@ -22,7 +22,13 @@
         "builder":true,
         "name":"About Section",
         "content":{
-            "title":"text"
+            "title":"text",
+            "images":{
+                "image_one":{
+                    "size":"800x600"
+                }
+            },
+            "description":"textarea"
         }
 
     }
