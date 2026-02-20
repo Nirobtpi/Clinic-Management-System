@@ -171,7 +171,10 @@ class FrontendManagmentController extends Controller
                    $extension = $request->file($imageKey)->getClientOriginalExtension();
 
                     if (!in_array($extension, $allowedExtensions)) {
-                        return redirect()->back()->with('error', 'Invalid image format. Allowed formats: jpeg, jpg, png, gif, webp.');
+                        $message = 'Invalid image format for ' . $imageKey . '. Allowed formats: ' . implode(', ', $allowedExtensions) . '.';
+                        $alerttype= 'error';
+                        $message = array('message' => $message, 'alert-type' => $alerttype);
+                        return redirect()->back()->with($message);
                     }
 
                     $old_file = null;
@@ -228,9 +231,9 @@ class FrontendManagmentController extends Controller
 
 
         // Separate text data from the request
-        foreach ($data as $key => $value) {
-            if ($key !== 'images') {
-                $textData[$key] = $value;
+        foreach ($data as $fieldKey  => $value) {
+            if ($fieldKey !== 'images') {
+                $textData[$fieldKey] = $value;
             }
         }
 

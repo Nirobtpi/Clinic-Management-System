@@ -283,6 +283,4 @@ class CacheController extends Controller
         return view('comment', compact('comments'));
     }
 
-
-
 }
